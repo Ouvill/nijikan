@@ -12,7 +12,7 @@ const Main = () => {
   }, []);
 
   return (
-    <div style={{ color: "#ffffff" }}>
+    <div className={"bg-red-300 text-white"}>
       {name === "aftereffects" || name === "aftereffectsbeta" ? (
         <Aeft />
       ) : name === "premierepro" || name === "premiereprobeta" ? (
