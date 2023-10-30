@@ -1313,6 +1313,11 @@
   dependencies:
     "@types/readdir-glob" "*"
 
+"@types/base64-js@^1.3.0":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@types/base64-js/-/base64-js-1.3.1.tgz#aac34ef23bfb96c33185642c11277a98007f4ecb"
+  integrity sha512-7fyfhnFLgedv3df+c6XkOQOOPrcCCFSxVfxY+HJwSXFp3GixW+DjArUIGXz8/Nqygcrl7mJLgZCO99BkRvaDYw==
+
 "@types/estree@*":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-1.0.3.tgz#2be19e759a3dd18c79f9f436bd7363556c1a73dd"
@@ -1341,6 +1346,11 @@
   version "16.18.59"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-16.18.59.tgz#4cdbd631be6d9be266a96fb17b5d0d7ad6bbe26c"
   integrity sha512-PJ1w2cNeKUEdey4LiPra0ZuxZFOGvetswE8qHRriV/sUkL5Al4tTmPV9D2+Y/TPIxTHHgxTfRjZVKWhPw/ORhQ==
+
+"@types/pako@^2.0.0":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@types/pako/-/pako-2.0.2.tgz#155edb098859d98dd598b805b27ec2bf96cc5354"
+  integrity sha512-AtTbzIwhvLMTEUPudP3hxUwNK50DoX3amfVJmmL7WQH5iF3Kfqs8pG1tStsewHqmh75ULmjjldKn/B70D6DNcQ==
 
 "@types/prop-types@*":
   version "15.7.9"
@@ -1402,6 +1412,16 @@
     "@babel/plugin-transform-react-jsx-source" "^7.19.6"
     magic-string "^0.27.0"
     react-refresh "^0.14.0"
+
+ag-psd@^18.0.1:
+  version "18.0.1"
+  resolved "https://registry.yarnpkg.com/ag-psd/-/ag-psd-18.0.1.tgz#8e2633b6f0f7923773baf975da60def465a94a3a"
+  integrity sha512-eHstELySAWEjqTgf4J5Iocnh6i7Q5cwP5Lcwpb2R6DDKwz2uF3Pbfmx9P28HGJKLP9MQ77P+lGVBzH4p+a5XJg==
+  dependencies:
+    "@types/base64-js" "^1.3.0"
+    "@types/pako" "^2.0.0"
+    base64-js "^1.5.1"
+    pako "^2.1.0"
 
 ansi-regex@^2.0.0:
   version "2.1.1"
@@ -2007,7 +2027,7 @@ balanced-match@^1.0.0:
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
 
-base64-js@^1.3.1:
+base64-js@^1.3.1, base64-js@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.5.1.tgz#1b1b440160a5bf7ad40b650f095963481903930a"
   integrity sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==
@@ -2947,6 +2967,11 @@ one-time@^1.0.0:
   integrity sha512-5DXOiRKwuSEcQ/l0kGCF6Q3jcADFv5tSmRaJck/OqkVFcOzutB134KRSfF0xDrL39MNnqxbHBbUUcjZIhTgb2g==
   dependencies:
     fn.name "1.x.x"
+
+pako@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/pako/-/pako-2.1.0.tgz#266cc37f98c7d883545d11335c00fbd4062c9a86"
+  integrity sha512-w+eufiZ1WuJYgPXbV/PO3NCMEc3xqylkKHzp8bxp1uW4qaSNQUkwmLLEc3kKsfz8lpV1F8Ht3U1Cm+9Srog2ug==
 
 pako@~1.0.2:
   version "1.0.11"
