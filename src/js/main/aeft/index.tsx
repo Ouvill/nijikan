@@ -66,6 +66,18 @@ const Aeft = () => {
       </button>
 
       <div>
+        <button
+          onClick={() => {
+            evalTS("selectAndCreatePsdComposition").catch((err) => {
+              alert(err.message);
+            });
+          }}
+        >
+          psdファイルのコンポジションを作成
+        </button>
+      </div>
+
+      <div>
         <div className={"w-40"} ref={psdRef}></div>
       </div>
 
