@@ -1,16 +1,28 @@
 import { Layer, Psd, readPsd } from "ag-psd";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { evalTS } from "../../lib/utils/bolt";
+import { fs } from "../../lib/cep/node";
 
-
-
+const LayerItem = (props: { layer: Layer }) => {
+  return (
+    <li>
+      {props.layer.children ? (
+        <ul>
+          <p>{props.layer.name}</p>
+          {props.layer.children.map((item, index) => (
+            <LayerItem key={index} layer={item} />
+          ))}
+        </ul>
+      ) : (
+        props.layer.name
+      )}
+    </li>
+  );
+};
 
 const Aeft = () => {
   const psdRef = useRef<HTMLDivElement>(null);
-
-  const [text, setText] = useState<string>("");
-
-  const [path, setPath] = useState<string>("");
+  const [psd, setPsd] = useState<Psd | null>(null);
 
   //再帰的に読み込む
   const printLayerName = (psd: Psd | Layer) => {
@@ -23,33 +35,47 @@ const Aeft = () => {
     });
   };
 
+  const addPsdCanvas = (psd: Psd) => {
+    if (psdRef.current != null && psd.canvas != null) {
+      psdRef.current.innerHTML = "";
+      psd.canvas.className = "w-40";
+      psdRef.current.appendChild(psd.canvas);
+    }
+  };
+
+  const onReadFile = async () => {
+    const path = await evalTS("selectFile");
+    const buf = await fs.promises.readFile(path);
+    return readPsd(buf);
+  };
+
   return (
     <div>
       <h1>After Effects</h1>
 
       <div ref={psdRef}></div>
 
-      <input
-        type={"file"}
-        onChange={(e) => {
-          if (e.target.files != null && e.target.files.length > 0) {
-            e.target.files[0].arrayBuffer().then((buffer) => {
-              const psd = readPsd(buffer);
-
-              printLayerName(psd);
-
-              if (psdRef.current != null && psd.canvas != null) {
-                psdRef.current.innerHTML = "";
-                psd.canvas.className = "w-40";
-                psdRef.current.appendChild(psd.canvas);
-              }
-            });
-          }
+      <button
+        onClick={async () => {
+          const psd = await onReadFile();
+          setPsd(psd);
+          addPsdCanvas(psd);
         }}
-      />
+      >
+        psd ファイル読み込み
+      </button>
 
       <div>
         <div className={"w-40"} ref={psdRef}></div>
+      </div>
+
+      <div>
+        <p>レイヤー構造</p>
+        <ul>
+          {psd?.children?.map((item, index) => (
+            <LayerItem key={index} layer={item} />
+          ))}
+        </ul>
       </div>
     </div>
   );
