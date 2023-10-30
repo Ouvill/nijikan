@@ -12,7 +12,7 @@ const Main = () => {
   }, []);
 
   return (
-    <div className={"bg-red-300 text-white"}>
+    <div className={"prose lg:prose-xl dark:prose-invert"}>
       {name === "aftereffects" || name === "aftereffectsbeta" ? (
         <Aeft />
       ) : name === "premierepro" || name === "premiereprobeta" ? (
