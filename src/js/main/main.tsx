@@ -1,7 +1,25 @@
+import { evalTS } from "../lib/utils/bolt";
+import { useEffect, useState } from "react";
+import Aeft from "./aeft";
+import Ppro from "./ppro";
+
 const Main = () => {
+  const [name, setName] = useState("");
+  useEffect(() => {
+    evalTS("appName").then((res) => {
+      setName(res);
+    });
+  }, []);
+
   return (
-    <div>
-      <h1 style={{ color: "#ff5b3b" }}>Welcome to Bolt CEP!</h1>
+    <div style={{ color: "#ffffff" }}>
+      {name === "aftereffects" || name === "aftereffectsbeta" ? (
+        <Aeft />
+      ) : name === "premierepro" || name === "premiereprobeta" ? (
+        <Ppro />
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
