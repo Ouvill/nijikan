@@ -1,7 +1,6 @@
 import { CEP_Config } from "vite-cep-plugin";
 import { version } from "./package.json";
 
-
 const config: CEP_Config = {
   version,
   id: "net.ouvill.nijikan",
@@ -14,7 +13,7 @@ const config: CEP_Config = {
   requiredRuntimeVersion: 9.0,
   hosts: [
     { name: "AEFT", version: "[0.0,99.9]" },
-    { name: "PPRO", version: "[0.0,99.9]" }
+    { name: "PPRO", version: "[0.0,99.9]" },
   ],
   type: "Panel",
   iconDarkNormal: "./src/assets/light-icon.png",
@@ -34,7 +33,6 @@ const config: CEP_Config = {
       width: 600,
       height: 650,
     },
-
   ],
   build: {
     jsxBin: "off",
@@ -50,7 +48,7 @@ const config: CEP_Config = {
     jsxBin: "off",
   },
   installModules: [],
-  copyAssets: [],
+  copyAssets: ["public"],
   copyZipAssets: [],
 };
 export default config;
