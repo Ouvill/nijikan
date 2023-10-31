@@ -4,8 +4,8 @@ import { version } from "./package.json";
 
 const config: CEP_Config = {
   version,
-  id: "net.ouvill.nijipreaf",
-  displayName: "Niji Pre Af",
+  id: "net.ouvill.nijikan",
+  displayName: "Nijikan",
   symlink: "local",
   port: 3000,
   servePort: 5000,
@@ -29,7 +29,7 @@ const config: CEP_Config = {
     {
       mainPath: "./main/index.html",
       name: "main",
-      panelDisplayName: "Niji Pre Af",
+      panelDisplayName: "Nijikan",
       autoVisible: true,
       width: 600,
       height: 650,
