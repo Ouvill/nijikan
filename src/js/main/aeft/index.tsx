@@ -68,7 +68,7 @@ const Aeft = () => {
       <div>
         <button
           onClick={() => {
-            evalTS("selectAndCreatePsdComposition").catch((err) => {
+            evalTS("createComposionForNijikan").catch((err) => {
               alert(err.message);
             });
           }}

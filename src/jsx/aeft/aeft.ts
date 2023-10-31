@@ -9,7 +9,7 @@ export const appName = () => {
 };
 
 export const selectFile = () => {
-  const filterString = Folder.fs === "Windows" ? "All files:*.*" : "";
+  const filterString = Folder.fs === "Windows" ? "photoshop file:*.psd" : "";
 
   const file = File.openDialog(
     "", //title
@@ -32,24 +32,32 @@ export const createPsdComposition = (path: string) => {
   return app.project.importFile(importOptions);
 };
 
+const getCompItemFromLayer = (layer: Layer): CompItem | undefined => {
+  if (layer instanceof AVLayer) {
+    const avItem: AVItem = layer.source;
+    if (avItem instanceof CompItem) {
+      return avItem;
+    }
+  }
+  return undefined;
+};
+
 const recursiveForEachLayer = (
   comp: CompItem,
   callback: (item: Layer, index: number) => void,
 ) => {
   forEachLayer(comp, (layer, index) => {
-    if (layer instanceof AVLayer) {
-      const avItem: AVItem = layer.source;
-      if (avItem instanceof CompItem) {
-        callback(layer, index);
-        recursiveForEachLayer(avItem, callback);
-      }
+    const comp = getCompItemFromLayer(layer);
+    if (comp) {
+      callback(layer, index);
+      recursiveForEachLayer(comp, callback);
     } else {
       callback(layer, index);
     }
   });
 };
 
-export const selectAndCreatePsdComposition = () => {
+export const createComposionForNijikan = () => {
   const path = selectFile();
   if (!path) return;
 
@@ -58,8 +66,6 @@ export const selectAndCreatePsdComposition = () => {
   if (item instanceof CompItem) {
     item.openInViewer();
 
-    recursiveForEachLayer(item, (layer, index) => {
-      layer.name = `Layer ${index}`;
-    });
+    recursiveForEachLayer(item, (layer, index) => {});
   }
 };
