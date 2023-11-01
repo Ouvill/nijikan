@@ -33,6 +33,15 @@ const config: CEP_Config = {
       width: 600,
       height: 650,
     },
+    {
+      mainPath: "./server/index.html",
+      name: "server",
+      autoVisible: false,
+      type: "Custom",
+      startOnEvents: ["com.adobe.csxs.events.ApplicationActivate"],
+      width: 100,
+      height: 100,
+    },
   ],
   build: {
     jsxBin: "off",
