@@ -2,10 +2,6 @@ import { addTime, fillMogrtText } from "./ppro-utils";
 
 export const example = () => {};
 
-export const appName = () => {
-  return BridgeTalk.appName;
-};
-
 export const importMogrt = (path: string) => {
   const playerPosition = app.project.activeSequence.getPlayerPosition();
   const clip = app.project.activeSequence.importMGT(

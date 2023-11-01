@@ -2,12 +2,6 @@ import { forEachLayer } from "./aeft-utils";
 
 export const example = () => {};
 
-export const helloAe = () => {};
-
-export const appName = () => {
-  return BridgeTalk.appName;
-};
-
 export const selectFile = () => {
   const filterString = Folder.fs === "Windows" ? "photoshop file:*.psd" : "";
 
