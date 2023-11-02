@@ -1,6 +1,7 @@
 import Button from "../../components/button";
 import { csi, evalTS } from "../../lib/utils/bolt";
 import path from "path";
+import { useState } from "react";
 
 const publicPath = "/public/";
 
@@ -12,20 +13,45 @@ const getPublicPath = () => {
 };
 
 const Ppro = () => {
-  const track = 1;
   const host = csi.hostEnvironment.appName;
+
+  const kutipakuTrack = 1;
+  const voiceTruck = 2;
+  const [kutipakuMogrtPath, setKutipakuMogrtPath] = useState<string>("");
+  const selectKutipakuMogrt = async () => {
+    const path = await evalTS("selectMogrtFile");
+    if (path !== "") {
+      setKutipakuMogrtPath(path);
+    }
+  };
 
   const importStateControllerMogrt = () => {
     const mogrtPath = path.join(getPublicPath(), state_controller_mogrt);
-    evalTS("importMogrt", mogrtPath)
-      .then((r) => {})
-      .catch((e) => {
-        alert(e.message);
-      });
+    evalTS("importMogrt", mogrtPath).catch((e) => {
+      alert(e.message);
+    });
+  };
+
+  const insertKutipakuMogrt = async () => {
+    if (kutipakuMogrtPath === "") return;
+    evalTS(
+      "insertLabMogrt",
+      kutipakuMogrtPath,
+      kutipakuTrack,
+      voiceTruck,
+    ).catch((e) => {
+      alert(e.message);
+    });
   };
 
   const moveClip = () => {
     evalTS("moveClip", 10).catch((e) => {
+      alert(e.message);
+    });
+  };
+
+  const alertClips = () => {
+    evalTS("alertTracks").catch((e) => {
       alert(e.message);
     });
   };
@@ -43,11 +69,19 @@ const Ppro = () => {
       </div>
 
       <div>
+        <p>口パク制御</p>
+        <Button onClick={selectKutipakuMogrt}>口パクMOGRT指定</Button>
+        {kutipakuMogrtPath ? <p>{kutipakuMogrtPath}</p> : <></>}
+        <Button onClick={insertKutipakuMogrt}>口パクMOGRT挿入</Button>
+      </div>
+
+      <div>
         <p>表情制御</p>
       </div>
       <div className={"flex flex-col"}>
         <Button onClick={importStateControllerMogrt}>表情クリップ挿入</Button>
-        <Button onClick={moveClip}>jikan</Button>
+        <Button onClick={moveClip}>moveClip</Button>
+        <Button onClick={alertClips}>alertClips</Button>
         <Button>表情クリップを変更/反映</Button>
       </div>
       <div>
