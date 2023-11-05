@@ -15,8 +15,9 @@ const getPublicPath = () => {
 const Ppro = () => {
   const host = csi.hostEnvironment.appName;
 
-  const kutipakuTrack = 1;
-  const voiceTruck = 2;
+  const [voiceTrack, setVoiceTrack] = useState<number>(0);
+  const [kutipakuTrack, setKutipakuTrack] = useState<number>(0);
+
   const [kutipakuMogrtPath, setKutipakuMogrtPath] = useState<string>("");
   const selectKutipakuMogrt = async () => {
     const path = await evalTS("selectMogrtFile");
@@ -38,7 +39,7 @@ const Ppro = () => {
       "insertLabMogrt",
       kutipakuMogrtPath,
       kutipakuTrack,
-      voiceTruck,
+      voiceTrack,
     ).catch((e) => {
       alert(e.message);
     });
@@ -57,22 +58,51 @@ const Ppro = () => {
   };
 
   return (
-    <div>
+    <div className={"mx-2"}>
       <h1>{host}</h1>
       <h1>Premiere Pro</h1>
 
       <div>
-        <p>動かない</p>
         <p>キャラクター設定</p>
         <p>立ち絵ファイル</p>
         <Button>立ち絵読み込み</Button>
       </div>
 
       <div>
-        <p>口パク制御</p>
-        <Button onClick={selectKutipakuMogrt}>口パクMOGRT指定</Button>
-        {kutipakuMogrtPath ? <p>{kutipakuMogrtPath}</p> : <></>}
-        <Button onClick={insertKutipakuMogrt}>口パクMOGRT挿入</Button>
+        <h2>口パク制御</h2>
+        <div className={"not-prose"}>
+          <div className={"flex justify-between"}>
+            <p>音声トラック番号</p>
+            <input
+              className={"text-black"}
+              type={"number"}
+              value={voiceTrack + 1}
+              min={1}
+              onChange={(e) => {
+                setVoiceTrack(Number(e.target.value) - 1);
+              }}
+            />
+          </div>
+          <div className={"flex justify-between"}>
+            <p>挿入先トラック番号</p>
+            <input
+              type={"number"}
+              value={kutipakuTrack + 1}
+              className={"text-black"}
+              onChange={(e) => {
+                setKutipakuTrack(Number(e.target.value) - 1);
+              }}
+            />
+          </div>
+        </div>
+
+        <div>
+          {kutipakuMogrtPath ? <p>{kutipakuMogrtPath}</p> : <></>}
+          <div className={"flex justify-end"}>
+            <Button onClick={selectKutipakuMogrt}>口パクMOGRT指定</Button>
+            <Button onClick={insertKutipakuMogrt}>口パクMOGRT挿入</Button>
+          </div>
+        </div>
       </div>
 
       <div>
