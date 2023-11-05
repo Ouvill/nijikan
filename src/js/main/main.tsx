@@ -1,5 +1,4 @@
-import { csi, evalTS } from "../lib/utils/bolt";
-import { useEffect, useState } from "react";
+import { csi } from "../lib/utils/bolt";
 import Aeft from "./aeft";
 import Ppro from "./ppro";
 
@@ -8,7 +7,7 @@ const Main = () => {
   const appId = hostEnv.appId;
 
   return (
-    <div className={"prose lg:prose-xl dark:prose-invert"}>
+    <div className={"prose lg:prose-xl dark:prose-invert max-w-none"}>
       {appId === "PPRO" ? <Ppro /> : appId === "AEFT" ? <Aeft /> : <></>}
     </div>
   );

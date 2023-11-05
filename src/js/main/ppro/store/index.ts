@@ -6,9 +6,9 @@ export type Store = {
   };
 };
 
-type Character = {
+export type Character = {
   name: string;
-  kutipakuMogrtPath: string;
-  kutipakuMogrtTrackIndex: number;
+  lipSyncMogrtPath: string;
+  lipSyncVidTrackIndex: number;
   voiceTrackIndex: number;
 };
