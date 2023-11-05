@@ -1,7 +1,8 @@
 import { csi } from "../../lib/utils/bolt";
 import React, { useState } from "react";
-import { Character, Store } from "./store";
+import { Store } from "./store";
 import { CharacterConfig } from "./components/characterConfig";
+import { Character } from "./store/characters";
 
 const Ppro = () => {
   const host = csi.hostEnvironment.appName;
@@ -9,7 +10,8 @@ const Ppro = () => {
   const [characterConfigs, setCharacterConfigs] = useState<
     Store["setting"]["characters"]
   >({
-    ずんだもん: {
+    character1: {
+      id: "character1",
       name: "ずんだもん",
       lipSyncMogrtPath: "",
       lipSyncVidTrackIndex: 0,

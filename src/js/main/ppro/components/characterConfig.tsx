@@ -1,9 +1,9 @@
 import { evalTS } from "../../../lib/utils/bolt";
 import path from "path";
-import { Character } from "../store";
 import React from "react";
 import Button from "../../../components/button";
 import { getPublicPath } from "../utils/getPublicPath";
+import { Character } from "../store/characters";
 
 const state_controller_mogrt = "nijikan_state_controller.mogrt";
 

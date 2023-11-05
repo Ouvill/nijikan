@@ -1,3 +1,5 @@
+import { Character } from "./characters";
+
 export type Store = {
   setting: {
     characters: {
@@ -6,9 +8,3 @@ export type Store = {
   };
 };
 
-export type Character = {
-  name: string;
-  lipSyncMogrtPath: string;
-  lipSyncVidTrackIndex: number;
-  voiceTrackIndex: number;
-};

@@ -14,7 +14,8 @@
   "dependencies": {
     "ag-psd": "^18.0.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.19.0",
@@ -38,6 +39,7 @@
     "@types/react": "^18.0.24",
     "@types/react-dom": "^18.0.8",
     "@types/trusted-types": "^2.0.2",
+    "@types/uuid": "^9.0.6",
     "@vitejs/plugin-react": "^3.0.1",
     "autoprefixer": "^10.4.16",
     "babel-plugin-react-require": "^3.1.3",
