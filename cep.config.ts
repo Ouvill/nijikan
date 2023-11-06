@@ -56,7 +56,7 @@ const config: CEP_Config = {
     sourceMap: false,
     jsxBin: "off",
   },
-  installModules: [],
+  installModules: ["chokidar"],
   copyAssets: ["public"],
   copyZipAssets: [],
 };
