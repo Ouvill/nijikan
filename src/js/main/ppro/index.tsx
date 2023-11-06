@@ -1,12 +1,12 @@
-import { csi, evalTS } from "../../lib/utils/bolt";
-import React, { useState, useReducer, useMemo } from "react";
+import { csi } from "../../lib/utils/bolt";
+import React, { useMemo, useReducer, useState } from "react";
 import { CharacterConfig } from "./components/characterConfig";
 import {
+  actions as characterActions,
   Character,
   characterReducer,
   createInitialState,
   defaultState as characterDefaultState,
-  actions as characterActions,
 } from "./store/characters";
 import Button from "../../components/Button";
 import { v4 as uuidv4 } from "uuid";
@@ -14,13 +14,7 @@ import {
   loadSelectedCharacterIdFromLocalStorage,
   saveSelectedCharacterIdToLocalStorage,
 } from "./store/SelectedCharacter";
-import {
-  createWatchFolderInitialState,
-  saveWatchFolderToLocalStorage,
-  watchFolderActions,
-  watchFolderDefaultState,
-  watchFolderReducer,
-} from "./store/watchFolder";
+import { WatchFolder } from "./components/WatchFolder";
 
 const Ppro = () => {
   const host = csi.hostEnvironment.appName;
@@ -82,35 +76,10 @@ const Ppro = () => {
     };
   };
 
-  const [watchFolderState, watchFolderDispatch] = useReducer(
-    watchFolderReducer,
-    watchFolderDefaultState,
-    createWatchFolderInitialState,
-  );
-
-  const onClickSelectFolder = async () => {
-    const path = await evalTS("selectFolder").catch((e) => {
-      alert(e.message);
-    });
-
-    if (path !== "") {
-      watchFolderDispatch(
-        watchFolderActions.setWatchFolder({
-          path: path,
-          saveFunc: saveWatchFolderToLocalStorage,
-        }),
-      );
-    }
-  };
-
   return (
     <div className={"mx-2"}>
       <h1>{host}</h1>
-      <div>
-        <h2>監視フォルダ</h2>
-        <p>{watchFolderState.path}</p>
-        <Button onClick={onClickSelectFolder}>フォルダ選択</Button>
-      </div>
+      <WatchFolder />
 
       <div>
         <h2>キャラクター</h2>
