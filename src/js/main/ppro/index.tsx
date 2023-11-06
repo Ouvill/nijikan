@@ -1,4 +1,4 @@
-import { csi } from "../../lib/utils/bolt";
+import { csi, evalTS } from "../../lib/utils/bolt";
 import React, { useState, useReducer, useMemo } from "react";
 import { CharacterConfig } from "./components/characterConfig";
 import {
@@ -7,7 +7,6 @@ import {
   createInitialState,
   defaultState as characterDefaultState,
   actions as characterActions,
-  actions,
 } from "./store/characters";
 import Button from "../../components/Button";
 import { v4 as uuidv4 } from "uuid";
@@ -15,6 +14,13 @@ import {
   loadSelectedCharacterIdFromLocalStorage,
   saveSelectedCharacterIdToLocalStorage,
 } from "./store/SelectedCharacter";
+import {
+  createWatchFolderInitialState,
+  saveWatchFolderToLocalStorage,
+  watchFolderActions,
+  watchFolderDefaultState,
+  watchFolderReducer,
+} from "./store/watchFolder";
 
 const Ppro = () => {
   const host = csi.hostEnvironment.appName;
@@ -72,13 +78,40 @@ const Ppro = () => {
 
   const characterConfigUpdater = (characterId: string) => {
     return (character: Character) => {
-      dispatch(actions.updateCharacter({ characterId, character }));
+      dispatch(characterActions.updateCharacter({ characterId, character }));
     };
+  };
+
+  const [watchFolderState, watchFolderDispatch] = useReducer(
+    watchFolderReducer,
+    watchFolderDefaultState,
+    createWatchFolderInitialState,
+  );
+
+  const onClickSelectFolder = async () => {
+    const path = await evalTS("selectFolder").catch((e) => {
+      alert(e.message);
+    });
+
+    if (path !== "") {
+      watchFolderDispatch(
+        watchFolderActions.setWatchFolder({
+          path: path,
+          saveFunc: saveWatchFolderToLocalStorage,
+        }),
+      );
+    }
   };
 
   return (
     <div className={"mx-2"}>
       <h1>{host}</h1>
+      <div>
+        <h2>監視フォルダ</h2>
+        <p>{watchFolderState.path}</p>
+        <Button onClick={onClickSelectFolder}>フォルダ選択</Button>
+      </div>
+
       <div>
         <h2>キャラクター</h2>
         <div className={"flex flex-col"}>

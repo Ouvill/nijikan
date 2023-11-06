@@ -131,5 +131,5 @@ export const characterReducer = (state = defaultState, action: Actions) => {
 };
 
 export const createInitialState = (initialState: Characters) => {
-  return loadCharactersFromLocalStorage() ?? initialState;
+  return loadCharactersFromLocalStorage() || initialState;
 };

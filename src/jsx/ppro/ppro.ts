@@ -1,5 +1,6 @@
 import { fillMogrtText, forEachClip } from "./ppro-utils";
 
+export { selectFolder } from "./scripts/selectFolder";
 export const example = () => {};
 
 export const importMogrt = (path: string) => {
