@@ -2,7 +2,7 @@ import { evalTS } from "../../../lib/utils/bolt";
 import path from "path";
 import React from "react";
 import Button from "../../../components/Button";
-import { getPublicPath } from "../utils/getPublicPath";
+import { getPublicPath } from "../libs/getPublicPath";
 
 import { Character } from "../store/characters/type";
 

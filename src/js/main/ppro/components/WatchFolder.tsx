@@ -8,9 +8,10 @@ import {
 } from "../store/watchFolder";
 import { evalTS } from "../../../lib/utils/bolt";
 import Button from "../../../components/Button";
-import type Chokidar from "chokidar";
+import { Characters } from "../store/characters/type";
+import { watchAddVoice } from "../libs/watchAddVoice";
 
-export const WatchFolder = () => {
+export const WatchFolder = ({ characters }: { characters: Characters }) => {
   const [watchFolderState, watchFolderDispatch] = useReducer(
     watchFolderReducer,
     watchFolderDefaultState,
@@ -35,23 +36,9 @@ export const WatchFolder = () => {
   const [isWatch, setIsWatch] = useState(false);
   useEffect(() => {
     if (isWatch) {
-      const chokidar: typeof Chokidar = require("chokidar");
-      console.log("watch start");
-      const watch = chokidar
-        .watch(watchFolderState.path, {
-          ignoreInitial: true,
-        })
-        .on("all", (event, path) => {
-          console.log(event, path);
-        });
-
-      return () => {
-        watch.close().then(() => {
-          console.log("watch close");
-        });
-      };
+      return watchAddVoice(watchFolderState.path, characters);
     }
-  }, [isWatch]);
+  }, [isWatch, characters]);
 
   const toggleWatch = () => {
     setIsWatch(!isWatch);

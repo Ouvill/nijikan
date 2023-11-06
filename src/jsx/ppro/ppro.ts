@@ -1,7 +1,36 @@
-import { fillMogrtText, forEachClip } from "./ppro-utils";
+import { fillMogrtText, findItemByPath, forEachClip } from "./ppro-utils";
+
+import { findOrCreateBin } from "./scripts/findOrCreateBin";
+import { Character } from "../../js/main/ppro/store/characters/type";
 
 export { selectFolder } from "./scripts/selectFolder";
+export { checkBeforeInsert } from "./scripts/checkBeforeInsert";
 export const example = () => {};
+
+export const insertAudio = (
+  binName: string,
+  path: string,
+  targetTime: Time,
+  trackIndex: number,
+) => {
+  const targetBin = findOrCreateBin(binName);
+  const importOk = app.project.importFiles([path], true, targetBin, false);
+  if (!importOk) return false;
+
+  const importedItem = findItemByPath(targetBin, path);
+  if (!importedItem) return false;
+
+  app.project.activeSequence.audioTracks[trackIndex].insertClip(
+    importedItem,
+    // @ts-ignore
+    targetTime.ticks,
+  );
+};
+
+export const insertCharacterTrackItems = (path: string, trackIndex: number) => {
+  const targetTime = app.project.activeSequence.getPlayerPosition();
+  insertAudio("voice", path, targetTime, trackIndex);
+};
 
 export const importMogrt = (path: string) => {
   const playerPosition = app.project.activeSequence.getPlayerPosition();

@@ -5,7 +5,6 @@ import {
   actions as characterActions,
   characterReducer,
   createInitialState,
-
 } from "./store/characters";
 import Button from "../../components/Button";
 import { v4 as uuidv4 } from "uuid";
@@ -14,8 +13,8 @@ import {
   saveSelectedCharacterIdToLocalStorage,
 } from "./store/selectedCharacter";
 import { WatchFolder } from "./components/WatchFolder";
-import {defaultState as characterDefaultState} from "./store/characters/defaultState";
-import {Character} from "./store/characters/type";
+import { defaultState as characterDefaultState } from "./store/characters/defaultState";
+import { Character } from "./store/characters/type";
 
 const Ppro = () => {
   const host = csi.hostEnvironment.appName;
@@ -80,7 +79,7 @@ const Ppro = () => {
   return (
     <div className={"mx-2"}>
       <h1>{host}</h1>
-      <WatchFolder />
+      <WatchFolder characters={characters} />
 
       <div>
         <h2>キャラクター</h2>
