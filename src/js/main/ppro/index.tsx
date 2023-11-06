@@ -83,19 +83,22 @@ const Ppro = () => {
         <h2>キャラクター</h2>
         <div className={"flex flex-col"}>
           <label>
-            キャラクター選択
-            <select
-              value={selectedCharacterId}
-              onChange={onChangeSelectedCharacterId}
-            >
-              {Object.entries(characters).map(([id, character]) => (
-                <option key={id} value={id}>
-                  {character.name}
-                </option>
-              ))}
-            </select>
+            <div className={"not-prose flex justify-between"}>
+              <p>キャラクター選択</p>
+              <select
+                value={selectedCharacterId}
+                onChange={onChangeSelectedCharacterId}
+                className={"text-black"}
+              >
+                {Object.entries(characters).map(([id, character]) => (
+                  <option key={id} value={id}>
+                    {character.name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </label>
-          <div>
+          <div className={"flex justify-end"}>
             <Button onClick={onClickAddCharacter}>+</Button>
             <Button onClick={onClickRemoveCharacter}>-</Button>
           </div>
