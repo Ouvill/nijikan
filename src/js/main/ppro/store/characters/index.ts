@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
-
 export type Characters = { [name: string]: Character };
 
 export type Character = {
@@ -21,28 +19,52 @@ const CharacterActionType = {
   UPDATE_CHARACTER: "UPDATE_CHARACTER",
 } as const;
 
-type CharacterAction =
-  | {
-      type: typeof CharacterActionType.ADD_CHARACTER;
-    }
-  | {
-      type: typeof CharacterActionType.REMOVE_CHARACTER;
-      payload: { id: number };
-    }
-  | {
-      type: typeof CharacterActionType.UPDATE_CHARACTER;
-      payload: Payload;
-    };
+export const actions = {
+  addCharacter: (id: string) => ({
+    type: CharacterActionType.ADD_CHARACTER,
+    payload: { id },
+  }),
 
-export const characterReducer = (state = initialState, action: CharacterAction) => {
+  removeCharacter: (id: string) => ({
+    type: CharacterActionType.REMOVE_CHARACTER,
+    payload: { id },
+  }),
+
+  updateCharacter: ({
+    character,
+    characterId,
+  }: {
+    characterId: string;
+    character: Character;
+  }) => ({
+    type: CharacterActionType.UPDATE_CHARACTER,
+    payload: { characterId, character },
+  }),
+};
+
+type Actions = ReturnType<(typeof actions)[keyof typeof actions]>;
+
+export const characterReducer = (state = initialState, action: Actions) => {
   switch (action.type) {
     case CharacterActionType.ADD_CHARACTER: {
-      const id = uuidv4();
+      const { id } = action.payload;
+
+      const regex = /^キャラクター_([0-9]+)$/;
+      const numbers: number[] = [0];
+      Object.values(state).forEach((character) => {
+        const match = character.name.match(regex);
+        if (match) {
+          numbers.push(Number(match[1]));
+        }
+      });
+
+      const maxNumber = Math.max(...numbers);
+
       return {
         ...state,
         [id]: {
           id: id,
-          name: "キャラクター名",
+          name: "キャラクター_" + (maxNumber + 1).toString().padStart(2, "0"),
           lipSyncMogrtPath: "",
           lipSyncVidTrackIndex: 0,
           voiceTrackIndex: 0,
@@ -70,4 +92,4 @@ export const characterReducer = (state = initialState, action: CharacterAction) 
   }
 };
 
-const initialState: Characters = {};
+export const initialState: Characters = {};

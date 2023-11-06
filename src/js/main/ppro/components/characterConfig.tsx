@@ -68,10 +68,26 @@ export function CharacterConfig(props: {
     });
   };
 
+  const changeCharacterName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    props.setCharacter({
+      ...props.character,
+      name: e.target.value,
+    });
+  };
+
   return (
     <div>
       <div>
         <p>キャラクター設定</p>
+        <div className={"not-prose flex justify-between"}>
+          <p>名前</p>
+          <input
+            className={"text-black"}
+            value={props.character.name}
+            onChange={changeCharacterName}
+          />
+        </div>
+        <p>{props.character.id}</p>
         <p>立ち絵ファイル</p>
         <Button>立ち絵読み込み</Button>
       </div>

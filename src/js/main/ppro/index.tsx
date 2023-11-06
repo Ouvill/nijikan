@@ -1,11 +1,45 @@
 import { csi } from "../../lib/utils/bolt";
-import React, { useState } from "react";
+import React, { useState, useReducer } from "react";
 import { Store } from "./store";
 import { CharacterConfig } from "./components/characterConfig";
-import { Character } from "./store/characters";
+import {
+  Character,
+  characterReducer,
+  initialState as characterInitialState,
+  actions as characterActions,
+  actions,
+} from "./store/characters";
+import Button from "../../components/button";
+import { v4 as uuidv4 } from "uuid";
 
 const Ppro = () => {
   const host = csi.hostEnvironment.appName;
+
+  const [selectedCharacterId, setSelectedCharacterId] = useState<string>("");
+
+  const [characters, dispatch] = useReducer(
+    characterReducer,
+    characterInitialState,
+  );
+
+  const onClickAddCharacter = () => {
+    const id = uuidv4();
+    dispatch(characterActions.addCharacter(id));
+    setSelectedCharacterId(id);
+  };
+
+  const onClickRemoveCharacter = () => {
+    const characterIds = Object.keys(characters);
+    const index = characterIds.indexOf(selectedCharacterId);
+    const nextIndex = index === 0 ? 1 : index - 1;
+    const nextId = characterIds[nextIndex];
+    dispatch(characterActions.removeCharacter(selectedCharacterId));
+    if (nextId) {
+      setSelectedCharacterId(nextId);
+    } else {
+      setSelectedCharacterId("");
+    }
+  };
 
   const [characterConfigs, setCharacterConfigs] = useState<
     Store["setting"]["characters"]
@@ -19,34 +53,46 @@ const Ppro = () => {
     },
   });
 
-  // update characterConfigs by character name
-  const updateCharacterConfigs = (characterName: string, config: Character) => {
-    const newCharacterConfigs = { ...characterConfigs };
-    newCharacterConfigs[characterName] = config;
-    setCharacterConfigs(newCharacterConfigs);
-  };
-
-  const characterConfigUpdater = (characterName: string) => {
-    return (config: Character) => {
-      updateCharacterConfigs(characterName, config);
+  const characterConfigUpdater2 = (characterId: string) => {
+    return (character: Character) => {
+      dispatch(actions.updateCharacter({ characterId, character }));
     };
   };
 
   return (
     <div className={"mx-2"}>
       <h1>{host}</h1>
-      <h1>Premiere Pro</h1>
-
       <div>
         <h2>キャラクター</h2>
+        <div className={"flex flex-col"}>
+          <label>
+            キャラクター選択
+            <select
+              value={selectedCharacterId}
+              onChange={(e) => {
+                setSelectedCharacterId(e.target.value);
+              }}
+            >
+              {Object.entries(characters).map(([id, character]) => (
+                <option key={id} value={id}>
+                  {character.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <div>
+            <Button onClick={onClickAddCharacter}>+</Button>
+            <Button onClick={onClickRemoveCharacter}>-</Button>
+          </div>
+        </div>
       </div>
 
-      {Object.entries(characterConfigs).map(([characterName, config]) => (
+      {characters[selectedCharacterId] && (
         <CharacterConfig
-          character={config}
-          setCharacter={characterConfigUpdater(characterName)}
-        />
-      ))}
+          character={characters[selectedCharacterId]}
+          setCharacter={characterConfigUpdater2(selectedCharacterId)}
+        ></CharacterConfig>
+      )}
     </div>
   );
 };
