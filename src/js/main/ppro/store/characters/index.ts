@@ -39,7 +39,45 @@ export const actions = {
 
 type Actions = ReturnType<(typeof actions)[keyof typeof actions]>;
 
-export const characterReducer = (state = initialState, action: Actions) => {
+const localStorageKey = "characters";
+
+const saveCharactersToLocalStorage = (characters: Characters) => {
+  localStorage.setItem(localStorageKey, JSON.stringify(characters));
+};
+
+const loadCharactersFromLocalStorage = (): Characters => {
+  const characters = localStorage.getItem(localStorageKey);
+  if (characters) {
+    return JSON.parse(characters) as Characters;
+  }
+  return {};
+};
+
+export const defaultState: Characters = {
+  shikoku: {
+    id: "shikoku",
+    name: "四国めたん",
+    lipSyncMogrtPath: "",
+    lipSyncVidTrackIndex: 0,
+    voiceTrackIndex: 0,
+  },
+  zundamon: {
+    id: "zundamon",
+    name: "ずんだもん",
+    lipSyncMogrtPath: "",
+    lipSyncVidTrackIndex: 0,
+    voiceTrackIndex: 0,
+  },
+  kasukabeTumugi: {
+    id: "kasukabeTumugi",
+    name: "春日部つむぎ",
+    lipSyncMogrtPath: "",
+    lipSyncVidTrackIndex: 0,
+    voiceTrackIndex: 0,
+  },
+};
+
+export const characterReducer = (state = defaultState, action: Actions) => {
   switch (action.type) {
     case CharacterActionType.ADD_CHARACTER: {
       const { id } = action.payload;
@@ -52,10 +90,9 @@ export const characterReducer = (state = initialState, action: Actions) => {
           numbers.push(Number(match[1]));
         }
       });
-
       const maxNumber = Math.max(...numbers);
 
-      return {
+      const newState = {
         ...state,
         [id]: {
           id: id,
@@ -65,21 +102,27 @@ export const characterReducer = (state = initialState, action: Actions) => {
           voiceTrackIndex: 0,
         },
       };
+
+      saveCharactersToLocalStorage(newState);
+      return newState;
     }
 
     case CharacterActionType.REMOVE_CHARACTER: {
       const { id } = action.payload;
       const newState = { ...state };
       delete newState[id];
+      saveCharactersToLocalStorage(newState);
       return newState;
     }
 
     case CharacterActionType.UPDATE_CHARACTER: {
       const { characterId, character } = action.payload;
-      return {
+      const newState = {
         ...state,
         [characterId]: character,
       };
+      saveCharactersToLocalStorage(newState);
+      return newState;
     }
     default: {
       return state;
@@ -87,4 +130,6 @@ export const characterReducer = (state = initialState, action: Actions) => {
   }
 };
 
-export const initialState: Characters = {};
+export const createInitialState = (initialState: Characters) => {
+  return loadCharactersFromLocalStorage() ?? initialState;
+};

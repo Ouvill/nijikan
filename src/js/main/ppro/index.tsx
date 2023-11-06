@@ -5,7 +5,8 @@ import { CharacterConfig } from "./components/characterConfig";
 import {
   Character,
   characterReducer,
-  initialState as characterInitialState,
+  createInitialState,
+  defaultState as characterDefaultState,
   actions as characterActions,
   actions,
 } from "./store/characters";
@@ -19,7 +20,8 @@ const Ppro = () => {
 
   const [characters, dispatch] = useReducer(
     characterReducer,
-    characterInitialState,
+    characterDefaultState,
+    createInitialState,
   );
 
   const onClickAddCharacter = () => {
@@ -41,7 +43,7 @@ const Ppro = () => {
     }
   };
 
-  const characterConfigUpdater2 = (characterId: string) => {
+  const characterConfigUpdater = (characterId: string) => {
     return (character: Character) => {
       dispatch(actions.updateCharacter({ characterId, character }));
     };
@@ -78,7 +80,7 @@ const Ppro = () => {
       {characters[selectedCharacterId] && (
         <CharacterConfig
           character={characters[selectedCharacterId]}
-          setCharacter={characterConfigUpdater2(selectedCharacterId)}
+          setCharacter={characterConfigUpdater(selectedCharacterId)}
         ></CharacterConfig>
       )}
     </div>
