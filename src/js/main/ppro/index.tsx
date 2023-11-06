@@ -9,7 +9,7 @@ import {
   actions as characterActions,
   actions,
 } from "./store/characters";
-import Button from "../../components/button";
+import Button from "../../components/Button";
 import { v4 as uuidv4 } from "uuid";
 
 const Ppro = () => {

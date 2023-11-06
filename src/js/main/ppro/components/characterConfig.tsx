@@ -1,7 +1,7 @@
 import { evalTS } from "../../../lib/utils/bolt";
 import path from "path";
 import React from "react";
-import Button from "../../../components/button";
+import Button from "../../../components/Button";
 import { getPublicPath } from "../utils/getPublicPath";
 import { Character } from "../store/characters";
 
@@ -87,7 +87,6 @@ export function CharacterConfig(props: {
             onChange={changeCharacterName}
           />
         </div>
-        <p>{props.character.id}</p>
         <p>立ち絵ファイル</p>
         <Button>立ち絵読み込み</Button>
       </div>
