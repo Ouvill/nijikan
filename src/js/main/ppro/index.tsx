@@ -1,6 +1,5 @@
 import { csi } from "../../lib/utils/bolt";
-import React, { useState, useReducer } from "react";
-import { Store } from "./store";
+import React, { useState, useReducer, useMemo } from "react";
 import { CharacterConfig } from "./components/characterConfig";
 import {
   Character,
@@ -12,11 +11,13 @@ import {
 } from "./store/characters";
 import Button from "../../components/Button";
 import { v4 as uuidv4 } from "uuid";
+import {
+  loadSelectedCharacterIdFromLocalStorage,
+  saveSelectedCharacterIdToLocalStorage,
+} from "./store/SelectedCharacter";
 
 const Ppro = () => {
   const host = csi.hostEnvironment.appName;
-
-  const [selectedCharacterId, setSelectedCharacterId] = useState<string>("");
 
   const [characters, dispatch] = useReducer(
     characterReducer,
@@ -24,10 +25,34 @@ const Ppro = () => {
     createInitialState,
   );
 
+  const initialSelectedCharacterId = useMemo(() => {
+    const id = loadSelectedCharacterIdFromLocalStorage();
+    if (id) return id;
+
+    const characterIds = Object.keys(characters);
+    if (characterIds.length > 0) {
+      return characterIds[0];
+    }
+
+    return "";
+  }, []);
+
+  const [selectedCharacterId, setSelectedCharacterId] = useState<string>(
+    initialSelectedCharacterId,
+  );
+
+  const onChangeSelectedCharacterId = (
+    e: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    setSelectedCharacterId(e.target.value);
+    saveSelectedCharacterIdToLocalStorage(e.target.value);
+  };
+
   const onClickAddCharacter = () => {
     const id = uuidv4();
     dispatch(characterActions.addCharacter(id));
     setSelectedCharacterId(id);
+    saveSelectedCharacterIdToLocalStorage(id);
   };
 
   const onClickRemoveCharacter = () => {
@@ -38,8 +63,10 @@ const Ppro = () => {
     dispatch(characterActions.removeCharacter(selectedCharacterId));
     if (nextId) {
       setSelectedCharacterId(nextId);
+      saveSelectedCharacterIdToLocalStorage(nextId);
     } else {
       setSelectedCharacterId("");
+      saveSelectedCharacterIdToLocalStorage("");
     }
   };
 
@@ -59,9 +86,7 @@ const Ppro = () => {
             キャラクター選択
             <select
               value={selectedCharacterId}
-              onChange={(e) => {
-                setSelectedCharacterId(e.target.value);
-              }}
+              onChange={onChangeSelectedCharacterId}
             >
               {Object.entries(characters).map(([id, character]) => (
                 <option key={id} value={id}>
