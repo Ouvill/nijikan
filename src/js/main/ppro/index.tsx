@@ -12,7 +12,7 @@ import { v4 as uuidv4 } from "uuid";
 import {
   loadSelectedCharacterIdFromLocalStorage,
   saveSelectedCharacterIdToLocalStorage,
-} from "./store/SelectedCharacter";
+} from "./store/selectedCharacter";
 import { WatchFolder } from "./components/WatchFolder";
 import {defaultState as characterDefaultState} from "./store/characters/defaultState";
 import {Character} from "./store/characters/type";
