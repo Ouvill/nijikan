@@ -1,18 +1,5 @@
-export type Characters = { [name: string]: Character };
-
-export type Character = {
-  id: string;
-  name: string;
-  lipSyncMogrtPath: string;
-  lipSyncVidTrackIndex: number;
-  voiceTrackIndex: number;
-};
-
-const CharacterActionType = {
-  ADD_CHARACTER: "ADD_CHARACTER",
-  REMOVE_CHARACTER: "REMOVE_CHARACTER",
-  UPDATE_CHARACTER: "UPDATE_CHARACTER",
-} as const;
+import { defaultState } from "./defaultState";
+import { Character, CharacterActionType, Characters } from "./type";
 
 export const actions = {
   addCharacter: (id: string) => ({
@@ -51,30 +38,6 @@ const loadCharactersFromLocalStorage = (): Characters => {
     return JSON.parse(characters) as Characters;
   }
   return {};
-};
-
-export const defaultState: Characters = {
-  shikoku: {
-    id: "shikoku",
-    name: "四国めたん",
-    lipSyncMogrtPath: "",
-    lipSyncVidTrackIndex: 0,
-    voiceTrackIndex: 0,
-  },
-  zundamon: {
-    id: "zundamon",
-    name: "ずんだもん",
-    lipSyncMogrtPath: "",
-    lipSyncVidTrackIndex: 0,
-    voiceTrackIndex: 0,
-  },
-  kasukabeTumugi: {
-    id: "kasukabeTumugi",
-    name: "春日部つむぎ",
-    lipSyncMogrtPath: "",
-    lipSyncVidTrackIndex: 0,
-    voiceTrackIndex: 0,
-  },
 };
 
 export const characterReducer = (state = defaultState, action: Actions) => {

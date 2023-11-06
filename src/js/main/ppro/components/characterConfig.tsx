@@ -3,7 +3,8 @@ import path from "path";
 import React from "react";
 import Button from "../../../components/Button";
 import { getPublicPath } from "../utils/getPublicPath";
-import { Character } from "../store/characters";
+
+import { Character } from "../store/characters/type";
 
 const state_controller_mogrt = "nijikan_state_controller.mogrt";
 

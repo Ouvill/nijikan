@@ -3,10 +3,9 @@ import React, { useMemo, useReducer, useState } from "react";
 import { CharacterConfig } from "./components/characterConfig";
 import {
   actions as characterActions,
-  Character,
   characterReducer,
   createInitialState,
-  defaultState as characterDefaultState,
+
 } from "./store/characters";
 import Button from "../../components/Button";
 import { v4 as uuidv4 } from "uuid";
@@ -15,6 +14,8 @@ import {
   saveSelectedCharacterIdToLocalStorage,
 } from "./store/SelectedCharacter";
 import { WatchFolder } from "./components/WatchFolder";
+import {defaultState as characterDefaultState} from "./store/characters/defaultState";
+import {Character} from "./store/characters/type";
 
 const Ppro = () => {
   const host = csi.hostEnvironment.appName;

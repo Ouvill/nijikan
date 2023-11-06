@@ -1,4 +1,4 @@
-import { Character } from "./characters";
+import { Character } from "./characters/type";
 
 export type Store = {
   setting: {
@@ -7,4 +7,3 @@ export type Store = {
     };
   };
 };
-
