@@ -41,18 +41,6 @@ const Ppro = () => {
     }
   };
 
-  const [characterConfigs, setCharacterConfigs] = useState<
-    Store["setting"]["characters"]
-  >({
-    character1: {
-      id: "character1",
-      name: "ずんだもん",
-      lipSyncMogrtPath: "",
-      lipSyncVidTrackIndex: 0,
-      voiceTrackIndex: 0,
-    },
-  });
-
   const characterConfigUpdater2 = (characterId: string) => {
     return (character: Character) => {
       dispatch(actions.updateCharacter({ characterId, character }));

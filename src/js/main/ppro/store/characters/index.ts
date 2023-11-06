@@ -8,11 +8,6 @@ export type Character = {
   voiceTrackIndex: number;
 };
 
-type Payload = {
-  characterId: string;
-  character?: Character;
-};
-
 const CharacterActionType = {
   ADD_CHARACTER: "ADD_CHARACTER",
   REMOVE_CHARACTER: "REMOVE_CHARACTER",
