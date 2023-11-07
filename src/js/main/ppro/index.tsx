@@ -75,12 +75,10 @@ const Ppro = () => {
       dispatch(characterActions.updateCharacter({ characterId, character }));
     };
   };
-
   return (
     <div className={"mx-2"}>
       <h1>{host}</h1>
       <WatchFolder characters={characters} />
-
       <div>
         <h2>キャラクター</h2>
         <div className={"flex flex-col"}>

@@ -10,6 +10,10 @@ import { evalTS } from "../../../lib/utils/bolt";
 import Button from "../../../components/Button";
 import { Characters } from "../store/characters/type";
 import { watchAddVoice } from "../libs/watchAddVoice";
+import PQueue from "p-queue";
+import { insertCharacterTrackItems } from "../libs/insertCharacterTrackItems";
+
+const queue = new PQueue({ concurrency: 1 });
 
 export const WatchFolder = ({ characters }: { characters: Characters }) => {
   const [watchFolderState, watchFolderDispatch] = useReducer(
@@ -36,7 +40,15 @@ export const WatchFolder = ({ characters }: { characters: Characters }) => {
   const [isWatch, setIsWatch] = useState(false);
   useEffect(() => {
     if (isWatch) {
-      return watchAddVoice(watchFolderState.path, characters);
+      return watchAddVoice(
+        watchFolderState.path,
+        characters,
+        (path, character) => {
+          queue.add(async () => {
+            await insertCharacterTrackItems(path, character);
+          });
+        },
+      );
     }
   }, [isWatch, characters]);
 
