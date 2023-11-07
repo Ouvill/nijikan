@@ -13,12 +13,20 @@ export function CharacterConfig(props: {
   setCharacter: (character: Character) => void;
 }) {
   const selectKutipakuMogrt = async () => {
-    const path = await evalTS("selectMogrtFile");
-    if (path !== "") {
-      props.setCharacter({
-        ...props.character,
-        lipSyncMogrtPath: path,
+    try {
+      const path = await evalTS("selectMogrtFile").catch((e) => {
+        throw e;
       });
+      if (path !== "" && typeof path === "string") {
+        props.setCharacter({
+          ...props.character,
+          lipSyncMogrtPath: path,
+        });
+      }
+    } catch (e) {
+      if (e instanceof Error) {
+        alert(e.message);
+      }
     }
   };
 

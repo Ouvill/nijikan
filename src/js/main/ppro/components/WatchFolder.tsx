@@ -23,23 +23,29 @@ export const WatchFolder = ({ characters }: { characters: Characters }) => {
   );
 
   const onClickSelectFolder = async () => {
-    const path = await evalTS("selectFolder").catch((e) => {
-      alert(e.message);
-    });
+    try {
+      const path = await evalTS("selectFolder").catch((e) => {
+        throw e;
+      });
 
-    if (path !== "") {
-      watchFolderDispatch(
-        watchFolderActions.setWatchFolder({
-          path: path,
-          saveFunc: saveWatchFolderToLocalStorage,
-        }),
-      );
+      if (path !== "" && typeof path === "string") {
+        watchFolderDispatch(
+          watchFolderActions.setWatchFolder({
+            path: path,
+            saveFunc: saveWatchFolderToLocalStorage,
+          }),
+        );
+      }
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        alert(e.message);
+      }
     }
   };
 
   const [isWatch, setIsWatch] = useState(false);
   useEffect(() => {
-    if (isWatch) {
+    if (isWatch && watchFolderState.path !== "") {
       return watchAddVoice(
         watchFolderState.path,
         characters,
@@ -50,7 +56,7 @@ export const WatchFolder = ({ characters }: { characters: Characters }) => {
         },
       );
     }
-  }, [isWatch, characters]);
+  }, [isWatch, watchFolderState.path, characters]);
 
   const toggleWatch = () => {
     setIsWatch(!isWatch);
