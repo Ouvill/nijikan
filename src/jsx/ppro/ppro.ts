@@ -1,35 +1,42 @@
+// Please do not write comments in Japanese.
+// I don't know why, but it stops working.
 import { fillMogrtText, findItemByPath, forEachClip } from "./ppro-utils";
-
 import { findOrCreateBin } from "./scripts/findOrCreateBin";
-import { Character } from "../../js/main/ppro/store/characters/type";
+import { getProjectItemDuration } from "./scripts/getProjectItemDuration";
 
 export { selectFolder } from "./scripts/selectFolder";
 export { checkBeforeInsert } from "./scripts/checkBeforeInsert";
 export const example = () => {};
 
+const importAudio = (bin: ProjectItem, path: string) => {
+  const importOk = app.project.importFiles([path], true, bin, false);
+  if (!importOk) return;
+  return findItemByPath(bin, path);
+};
+
 export const insertAudio = (
-  binName: string,
-  path: string,
+  audioItem: ProjectItem,
   targetTime: Time,
   trackIndex: number,
 ) => {
-  const targetBin = findOrCreateBin(binName);
-  const importOk = app.project.importFiles([path], true, targetBin, false);
-  if (!importOk) return false;
-
-  const importedItem = findItemByPath(targetBin, path);
-  if (!importedItem) return false;
-
   app.project.activeSequence.audioTracks[trackIndex].insertClip(
-    importedItem,
+    audioItem,
     // @ts-ignore
     targetTime.ticks,
   );
 };
 
 export const insertCharacterTrackItems = (path: string, trackIndex: number) => {
-  const targetTime = app.project.activeSequence.getPlayerPosition();
-  insertAudio("voice", path, targetTime, trackIndex);
+  const playerPosition = app.project.activeSequence.getPlayerPosition();
+  const targetBin = findOrCreateBin("voice");
+
+  const audioItem = importAudio(targetBin, path);
+  if (!audioItem) return;
+
+  const duration = getProjectItemDuration(audioItem);
+  if (!duration) return;
+
+  insertAudio(audioItem, playerPosition, trackIndex);
 };
 
 export const importMogrt = (path: string) => {
