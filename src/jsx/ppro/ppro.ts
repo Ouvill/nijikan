@@ -1,12 +1,61 @@
 // Please do not write comments in Japanese.
 // I don't know why, but it stops working.
-import { fillMogrtText, findItemByPath, forEachClip } from "./ppro-utils";
-import { findOrCreateBin } from "./scripts/findOrCreateBin";
-import { getProjectItemDuration } from "./scripts/getProjectItemDuration";
+import {addTime, fillMogrtText, findItemByPath, forEachClip,} from "./ppro-utils";
+import {findOrCreateBin} from "./scripts/findOrCreateBin";
+import {getProjectItemDuration} from "./scripts/getProjectItemDuration";
 
 export { selectFolder } from "./scripts/selectFolder";
 export { checkBeforeInsert } from "./scripts/checkBeforeInsert";
 export const example = () => {};
+
+const compareTime = (a: Time, b: Time) => {
+  const aTicks = parseInt(a.ticks);
+  const bTicks = parseInt(b.ticks);
+  if (aTicks > bTicks) {
+    return 1;
+  } else if (aTicks < bTicks) {
+    return -1;
+  }
+  return 0;
+};
+
+const isBetweenTime = (targetTime: Time, start: Time, end: Time) => {
+  return (
+    compareTime(targetTime, start) >= 0 && compareTime(targetTime, end) < 0
+  );
+};
+
+const isClipOnTime = (targetTime: Time, clip: TrackItem) => {
+  return isBetweenTime(targetTime, clip.start, clip.end);
+};
+
+const checkInsertable = (targetTime: Time, duration: Time, track: Track) => {
+  if (compareTime(targetTime, track.clips[track.clips.numItems - 1].end) > 0) {
+    return true;
+  }
+
+  const zeroTime = new Time();
+  zeroTime.seconds = 0;
+
+  if (isBetweenTime(targetTime, zeroTime, track.clips[0].start)) {
+    const targetEndTime = addTime(targetTime, duration);
+    return compareTime(targetEndTime, track.clips[0].start) < 0;
+  }
+
+  for (let i = 0; i < track.clips.numItems - 1; i++) {
+    // targetTime on clip
+    if (isClipOnTime(targetTime, track.clips[i])) {
+      return false;
+    } else if (
+      //   targetTime between clip and next clip
+      isBetweenTime(targetTime, track.clips[i].end, track.clips[i + 1].start)
+    ) {
+      // if duration is longer than between clip and next clip
+      const targetEndTime = addTime(targetTime, duration);
+      return compareTime(targetEndTime, track.clips[i + 1].start) < 0;
+    }
+  }
+};
 
 const importAudio = (bin: ProjectItem, path: string) => {
   const importOk = app.project.importFiles([path], true, bin, false);
@@ -14,19 +63,36 @@ const importAudio = (bin: ProjectItem, path: string) => {
   return findItemByPath(bin, path);
 };
 
+const findClipByPath = (track: Track, path: string) => {
+  const num = track.clips.numItems;
+  for (let i = 0; i < num; i++) {
+    const clip = track.clips[i];
+    const clipPath = clip.projectItem.getMediaPath();
+    if (clipPath === path) {
+      return clip;
+    }
+  }
+};
+
 export const insertAudio = (
   audioItem: ProjectItem,
   targetTime: Time,
   trackIndex: number,
 ) => {
-  app.project.activeSequence.audioTracks[trackIndex].insertClip(
+  const track = app.project.activeSequence.audioTracks[trackIndex];
+  const result = track.insertClip(
     audioItem,
     // @ts-ignore
     targetTime.ticks,
   );
+
+  if (result) {
+    return findClipByPath(track, audioItem.getMediaPath());
+  }
 };
 
 export const insertCharacterTrackItems = (path: string, trackIndex: number) => {
+  alert("insertCharacterTrackItems");
   const playerPosition = app.project.activeSequence.getPlayerPosition();
   const targetBin = findOrCreateBin("voice");
 
@@ -36,7 +102,17 @@ export const insertCharacterTrackItems = (path: string, trackIndex: number) => {
   const duration = getProjectItemDuration(audioItem);
   if (!duration) return;
 
-  insertAudio(audioItem, playerPosition, trackIndex);
+  if (
+    checkInsertable(
+      playerPosition,
+      duration,
+      app.project.activeSequence.audioTracks[trackIndex],
+    )
+  ) {
+    insertAudio(audioItem, playerPosition, trackIndex);
+  } else {
+    alert("cannot insert");
+  }
 };
 
 export const importMogrt = (path: string) => {
