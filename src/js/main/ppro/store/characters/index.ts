@@ -32,12 +32,12 @@ const saveCharactersToLocalStorage = (characters: Characters) => {
   localStorage.setItem(localStorageKey, JSON.stringify(characters));
 };
 
-const loadCharactersFromLocalStorage = (): Characters => {
+const loadCharactersFromLocalStorage = () => {
   const characters = localStorage.getItem(localStorageKey);
   if (characters) {
     return JSON.parse(characters) as Characters;
   }
-  return {};
+  return;
 };
 
 export const characterReducer = (state = defaultState, action: Actions) => {
