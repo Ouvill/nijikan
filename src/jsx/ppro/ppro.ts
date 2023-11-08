@@ -30,13 +30,14 @@ const isClipOnTime = (targetTime: Time, clip: TrackItem) => {
 };
 
 const checkInsertable = (targetTime: Time, duration: Time, track: Track) => {
+  // if targetTime is after last clip
   if (compareTime(targetTime, track.clips[track.clips.numItems - 1].end) > 0) {
     return true;
   }
 
+  // if targetTime is before first clip
   const zeroTime = new Time();
   zeroTime.seconds = 0;
-
   if (isBetweenTime(targetTime, zeroTime, track.clips[0].start)) {
     const targetEndTime = addTime(targetTime, duration);
     return compareTime(targetEndTime, track.clips[0].start) < 0;
