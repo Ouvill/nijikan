@@ -10,7 +10,7 @@ export async function insertCharacterTrackItems(
   });
   if (!isOk) return;
 
-  evalTS("insertCharacterTrackItems", voicePath, character.voiceTrackIndex, {
+  evalTS("insertCharacterTrackItems", voicePath, character, {
     insertOtherTrack: true,
   }).catch((e) => {
     alert(e.message);

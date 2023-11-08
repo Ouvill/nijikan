@@ -5,6 +5,7 @@ import { findOrCreateBin } from "./scripts/findOrCreateBin";
 import { getProjectItemDuration } from "./scripts/getProjectItemDuration";
 import { checkInsertable } from "./scripts/checkInsertable";
 import { findClipByPath } from "./scripts/findClipByPath";
+import type { Character } from "../../js/main/ppro/store/characters/type";
 
 export { selectFolder } from "./scripts/selectFolder";
 export { checkBeforeInsert } from "./scripts/checkBeforeInsert";
@@ -135,14 +136,15 @@ function insertAudioToSequence({
 }
 
 /**
- *
- * @param path
- * @param trackIndex
- * @param options
+ * Inserts an audio track item for a character at the current player position in the active sequence.
+ * @param path - The path to the audio file to import.
+ * @param character - The character for which to insert the audio track item.
+ * @param options - Optional settings for the insertion.
+ * @returns void
  */
 export const insertCharacterTrackItems = (
   path: string,
-  trackIndex: number,
+  character: Character,
   options: {
     insertOtherTrack?: boolean;
   },
@@ -162,9 +164,10 @@ export const insertCharacterTrackItems = (
     targetTime: playerPosition,
     audioItem,
     duration,
-    trackIndex,
+    trackIndex: character.voiceTrackIndex,
   });
   if (!audioClip) return;
+
   app.project.activeSequence.setPlayerPosition(audioClip.end.ticks);
 };
 
