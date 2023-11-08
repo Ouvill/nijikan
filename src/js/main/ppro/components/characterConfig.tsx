@@ -86,11 +86,12 @@ export function CharacterConfig(props: {
 
   const onClickEditSubtitleMogrt = async () => {
     const mogrtPath = await evalTS("selectMogrtFile");
-
-    props.setCharacter({
-      ...props.character,
-      subtitleMogrtPaths: [mogrtPath],
-    });
+    if (mogrtPath !== "") {
+      props.setCharacter({
+        ...props.character,
+        subtitleMogrtPaths: [mogrtPath],
+      });
+    }
   };
 
   return (
