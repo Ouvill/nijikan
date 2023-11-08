@@ -15,6 +15,7 @@ import {
 import { WatchFolder } from "./components/WatchFolder";
 import { defaultState as characterDefaultState } from "./store/characters/defaultState";
 import { Character } from "./store/characters/type";
+import { Sandbox } from "./components/Sandbox";
 
 const Ppro = () => {
   const host = csi.hostEnvironment.appName;
@@ -78,6 +79,7 @@ const Ppro = () => {
   return (
     <div className={"mx-2"}>
       <h1>{host}</h1>
+      <Sandbox></Sandbox>
       <WatchFolder characters={characters} />
       <div>
         <h2>キャラクター</h2>
