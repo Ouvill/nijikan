@@ -1,6 +1,7 @@
 export type Character = {
   id: string;
   name: string;
+  subtitleMogrtPaths: string[];
   lipSyncMogrtPath: string;
   lipSyncVidTrackIndex: number;
   voiceTrackIndex: number;

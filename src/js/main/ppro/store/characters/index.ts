@@ -60,6 +60,7 @@ export const characterReducer = (state = defaultState, action: Actions) => {
         [id]: {
           id: id,
           name: "キャラクター_" + (maxNumber + 1).toString().padStart(2, "0"),
+          subtitleMogrtPaths: [],
           lipSyncMogrtPath: "",
           lipSyncVidTrackIndex: 0,
           voiceTrackIndex: 0,

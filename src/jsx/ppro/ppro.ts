@@ -203,7 +203,7 @@ export const alertTracks = () => {
   alert(nums.join(","));
 };
 
-export const selectMogrtFile = () => {
+export const selectMogrtFile = (): string => {
   const filterString = Folder.fs === "Windows" ? "mogrt:*.mogrt" : "";
   const file = File.openDialog("select mogrt file", filterString, false);
 

@@ -84,11 +84,20 @@ export function CharacterConfig(props: {
     });
   };
 
+  const onClickEditSubtitleMogrt = async () => {
+    const mogrtPath = await evalTS("selectMogrtFile");
+
+    props.setCharacter({
+      ...props.character,
+      subtitleMogrtPaths: [mogrtPath],
+    });
+  };
+
   return (
     <div>
-      <div>
+      <div className={"not-prose"}>
         <p>キャラクター設定</p>
-        <div className={"not-prose flex justify-between"}>
+        <div className={"flex justify-between"}>
           <p>名前</p>
           <input
             className={"text-black"}
@@ -96,23 +105,30 @@ export function CharacterConfig(props: {
             onChange={changeCharacterName}
           />
         </div>
-        <p>立ち絵ファイル</p>
-        <Button>立ち絵読み込み</Button>
-      </div>
+        <div className={"flex justify-between"}>
+          <p>音声トラック番号</p>
+          <input
+            className={"text-black"}
+            type={"number"}
+            value={props.character.voiceTrackIndex + 1}
+            min={1}
+            onChange={changeVoiceTrackIndex}
+          />
+        </div>
 
+        <div className={"flex justify-between items-center"}>
+          <p>字幕MOGRT</p>
+          <div className={"flex items-center"}>
+            <p>{props.character.subtitleMogrtPaths}</p>
+            <Button onClick={onClickEditSubtitleMogrt}>⚙️️</Button>
+          </div>
+        </div>
+      </div>
+      <p>立ち絵ファイル</p>
+      <Button>立ち絵読み込み</Button>
       <div>
         <h2>口パク制御</h2>
         <div className={"not-prose"}>
-          <div className={"flex justify-between"}>
-            <p>音声トラック番号</p>
-            <input
-              className={"text-black"}
-              type={"number"}
-              value={props.character.voiceTrackIndex + 1}
-              min={1}
-              onChange={changeVoiceTrackIndex}
-            />
-          </div>
           <div className={"flex justify-between"}>
             <p>挿入先トラック番号</p>
             <input
