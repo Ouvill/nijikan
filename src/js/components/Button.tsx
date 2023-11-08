@@ -13,7 +13,7 @@ const Button: React.FC<Props> = ({ children, ...props }) => (
       "py-2 " +
       "px-4 " +
       " " +
-      props.className
+      (props.className || "")
     }
     {...props}
   >
