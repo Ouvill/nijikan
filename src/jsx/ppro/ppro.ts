@@ -4,6 +4,7 @@ import { fillMogrtText, findItemByPath, forEachClip } from "./ppro-utils";
 import { findOrCreateBin } from "./scripts/findOrCreateBin";
 import { getProjectItemDuration } from "./scripts/getProjectItemDuration";
 import { checkInsertable } from "./scripts/checkInsertable";
+import { findClipByPath } from "./scripts/findClipByPath";
 
 export { selectFolder } from "./scripts/selectFolder";
 export { checkBeforeInsert } from "./scripts/checkBeforeInsert";
@@ -13,17 +14,6 @@ const importAudio = (bin: ProjectItem, path: string) => {
   const importOk = app.project.importFiles([path], true, bin, false);
   if (!importOk) return;
   return findItemByPath(bin, path);
-};
-
-const findClipByPath = (track: Track, path: string) => {
-  const num = track.clips.numItems;
-  for (let i = 0; i < num; i++) {
-    const clip = track.clips[i];
-    const clipPath = clip.projectItem.getMediaPath();
-    if (clipPath === path) {
-      return clip;
-    }
-  }
 };
 
 const insertAudioClip = (
