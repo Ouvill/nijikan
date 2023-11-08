@@ -1,5 +1,6 @@
 import { Character, Characters } from "../store/characters/type";
 import Chokidar from "chokidar";
+import { fs } from "../../../lib/cep/node";
 
 export function watchAddVoice(
   path: string,
@@ -7,6 +8,10 @@ export function watchAddVoice(
   callback: (path: string, character: Character) => void,
 ) {
   const chokidar: typeof Chokidar = require("chokidar");
+
+  if (!fs.existsSync(path)) {
+    alert("監視対象のフォルダが存在しません。");
+  }
   console.log("watch start");
   const watch = chokidar
     .watch(path, {
