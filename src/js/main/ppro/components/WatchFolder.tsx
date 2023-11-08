@@ -6,7 +6,6 @@ import {
   watchFolderDefaultState,
   watchFolderReducer,
 } from "../store/watchFolder";
-import { evalTS } from "../../../lib/utils/bolt";
 import Button from "../../../components/Button";
 import { Characters } from "../store/characters/type";
 import { watchAddVoice } from "../libs/watchAddVoice";
@@ -24,14 +23,23 @@ export const WatchFolder = ({ characters }: { characters: Characters }) => {
 
   const onClickSelectFolder = async () => {
     try {
-      const path = await evalTS("selectFolder").catch((e) => {
-        throw e;
-      });
+      const result = window.cep.fs.showOpenDialogEx(
+        false,
+        true,
+        "Select a folder",
+        null,
+        null,
+        null,
+      );
 
-      if (path !== "" && typeof path === "string") {
+      if (result.err !== 0) return;
+
+      const dirPath: string[] = result.data;
+      const shifted = dirPath.shift();
+      if (typeof shifted === "string" && shifted !== "") {
         watchFolderDispatch(
           watchFolderActions.setWatchFolder({
-            path: path,
+            path: shifted,
             saveFunc: saveWatchFolderToLocalStorage,
           }),
         );
