@@ -97,6 +97,53 @@ function insertAudioClipIfPossible(
   }
 }
 
+function insertAudioToSequence({
+  insertOtherTrack,
+  targetTime,
+  duration,
+  audioItem,
+  trackIndex,
+}: {
+  insertOtherTrack?: boolean;
+  targetTime: Time;
+  duration: Time;
+  audioItem: ProjectItem;
+  trackIndex: number;
+}) {
+  const seq = app.project.activeSequence;
+
+  // add audio track if needed
+  if (!haveEnoughAudioTrack(seq, trackIndex)) {
+    const numAudio = trackIndex - seq.audioTracks.numTracks + 1;
+    addAudioTrack(numAudio, seq.audioTracks.numTracks);
+  }
+
+  if (insertOtherTrack) {
+    let targetIndex = searchInsertableAudioTrack(
+      targetTime,
+      duration,
+      trackIndex,
+    );
+    if (targetIndex === -1) {
+      targetIndex = seq.audioTracks.numTracks;
+      addAudioTrack(1, targetIndex);
+    }
+    return insertAudioClipIfPossible(
+      audioItem,
+      duration,
+      targetTime,
+      targetIndex,
+    );
+  } else {
+    return insertAudioClipIfPossible(
+      audioItem,
+      duration,
+      targetTime,
+      trackIndex,
+    );
+  }
+}
+
 /**
  *
  * @param path
@@ -120,36 +167,15 @@ export const insertCharacterTrackItems = (
   const duration = getProjectItemDuration(audioItem);
   if (!duration) return;
 
-  // add audio track if needed
-  if (!haveEnoughAudioTrack(seq, trackIndex)) {
-    const numAudio = trackIndex - seq.audioTracks.numTracks + 1;
-    addAudioTrack(numAudio, seq.audioTracks.numTracks);
-  }
-  if (options.insertOtherTrack) {
-    let targetIndex = searchInsertableAudioTrack(
-      playerPosition,
-      duration,
-      trackIndex,
-    );
-    if (targetIndex === -1) {
-      targetIndex = seq.audioTracks.numTracks;
-      addAudioTrack(1, targetIndex);
-    }
-    const audioClip = insertAudioClipIfPossible(
-      audioItem,
-      duration,
-      playerPosition,
-      targetIndex,
-    );
-  } else {
-    const audioClip = insertAudioClipIfPossible(
-      audioItem,
-      duration,
-      playerPosition,
-      trackIndex,
-    );
-    if (audioClip === undefined) return;
-  }
+  const audioClip = insertAudioToSequence({
+    insertOtherTrack: options.insertOtherTrack,
+    targetTime: playerPosition,
+    audioItem,
+    duration,
+    trackIndex,
+  });
+  if (!audioClip) return;
+  app.project.activeSequence.setPlayerPosition(audioClip.end.ticks);
 };
 
 export const importMogrt = (path: string) => {
