@@ -7,7 +7,7 @@ const Main = () => {
   const appId = hostEnv.appId;
 
   return (
-    <div className={"prose lg:prose-xl dark:prose-invert max-w-none"}>
+    <div className={"prose prose-sm dark:prose-invert max-w-none"}>
       {appId === "PPRO" ? <Ppro /> : appId === "AEFT" ? <Aeft /> : <></>}
     </div>
   );

@@ -118,9 +118,13 @@ export function CharacterConfig(props: {
 
         <div className={"flex justify-between items-center"}>
           <p>字幕MOGRT</p>
-          <div className={"flex items-center"}>
-            <p>{props.character.subtitleMogrtPaths}</p>
-            <Button onClick={onClickEditSubtitleMogrt}>⚙️️</Button>
+          <div className={"min-w-0"}>
+            <div className={"flex items-center"}>
+              <p className={"min-w-0 break-words text-xs"}>
+                {props.character.subtitleMogrtPaths}
+              </p>
+              <Button onClick={onClickEditSubtitleMogrt}>⚙️️</Button>
+            </div>
           </div>
         </div>
       </div>
