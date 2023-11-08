@@ -1,8 +1,13 @@
 // Please do not write comments in Japanese.
 // I don't know why, but it stops working.
-import {addTime, fillMogrtText, findItemByPath, forEachClip,} from "./ppro-utils";
-import {findOrCreateBin} from "./scripts/findOrCreateBin";
-import {getProjectItemDuration} from "./scripts/getProjectItemDuration";
+import {
+  addTime,
+  fillMogrtText,
+  findItemByPath,
+  forEachClip,
+} from "./ppro-utils";
+import { findOrCreateBin } from "./scripts/findOrCreateBin";
+import { getProjectItemDuration } from "./scripts/getProjectItemDuration";
 
 export { selectFolder } from "./scripts/selectFolder";
 export { checkBeforeInsert } from "./scripts/checkBeforeInsert";
@@ -30,6 +35,11 @@ const isClipOnTime = (targetTime: Time, clip: TrackItem) => {
 };
 
 const checkInsertable = (targetTime: Time, duration: Time, track: Track) => {
+  // if track is empty
+  if (track.clips.numItems === 0) {
+    return true;
+  }
+
   // if targetTime is after last clip
   if (compareTime(targetTime, track.clips[track.clips.numItems - 1].end) > 0) {
     return true;
@@ -75,7 +85,7 @@ const findClipByPath = (track: Track, path: string) => {
   }
 };
 
-export const insertAudio = (
+const insertAudioClip = (
   audioItem: ProjectItem,
   targetTime: Time,
   trackIndex: number,
@@ -92,9 +102,75 @@ export const insertAudio = (
   }
 };
 
-export const insertCharacterTrackItems = (path: string, trackIndex: number) => {
-  alert("insertCharacterTrackItems");
-  const playerPosition = app.project.activeSequence.getPlayerPosition();
+const searchInsertableAudioTrack = (
+  targetTime: Time,
+  duration: Time,
+  defaultIndex: number,
+) => {
+  const num = app.project.activeSequence.audioTracks.numTracks;
+  for (let i = defaultIndex; i < num; i++) {
+    const track = app.project.activeSequence.audioTracks[i];
+    if (checkInsertable(targetTime, duration, track)) {
+      return i;
+    }
+  }
+
+  return -1;
+};
+
+const haveEnoughAudioTrack = (seq: Sequence, trackIndex: number) => {
+  return seq.audioTracks.numTracks > trackIndex;
+};
+
+const addAudioTrack = (numAudio: number, audioIndex: number) => {
+  if (qe) {
+    app.enableQE();
+  }
+  if (!qe) return;
+  qe.project.getActiveSequence().addTracks(0, 0, numAudio, 1, audioIndex);
+};
+
+export const testAddAudioTrack = () => {
+  const trackIndex = 6;
+  const seq = app.project.activeSequence;
+  const numAudio = trackIndex - seq.audioTracks.numTracks + 1;
+  addAudioTrack(numAudio, seq.audioTracks.numTracks);
+};
+
+function insertAudioClipIfPossible(
+  audioItem: ProjectItem,
+  duration: Time,
+  playerPosition: Time,
+  trackIndex: number,
+) {
+  if (
+    checkInsertable(
+      playerPosition,
+      duration,
+      app.project.activeSequence.audioTracks[trackIndex],
+    )
+  ) {
+    return insertAudioClip(audioItem, playerPosition, trackIndex);
+  } else {
+    return undefined;
+  }
+}
+
+/**
+ *
+ * @param path
+ * @param trackIndex
+ * @param options
+ */
+export const insertCharacterTrackItems = (
+  path: string,
+  trackIndex: number,
+  options: {
+    insertOtherTrack?: boolean;
+  },
+) => {
+  const seq = app.project.activeSequence;
+  const playerPosition = seq.getPlayerPosition();
   const targetBin = findOrCreateBin("voice");
 
   const audioItem = importAudio(targetBin, path);
@@ -103,16 +179,35 @@ export const insertCharacterTrackItems = (path: string, trackIndex: number) => {
   const duration = getProjectItemDuration(audioItem);
   if (!duration) return;
 
-  if (
-    checkInsertable(
+  // add audio track if needed
+  if (!haveEnoughAudioTrack(seq, trackIndex)) {
+    const numAudio = trackIndex - seq.audioTracks.numTracks + 1;
+    addAudioTrack(numAudio, seq.audioTracks.numTracks);
+  }
+  if (options.insertOtherTrack) {
+    let targetIndex = searchInsertableAudioTrack(
       playerPosition,
       duration,
-      app.project.activeSequence.audioTracks[trackIndex],
-    )
-  ) {
-    insertAudio(audioItem, playerPosition, trackIndex);
+      trackIndex,
+    );
+    if (targetIndex === -1) {
+      targetIndex = seq.audioTracks.numTracks;
+      addAudioTrack(1, targetIndex);
+    }
+    const audioClip = insertAudioClipIfPossible(
+      audioItem,
+      duration,
+      playerPosition,
+      targetIndex,
+    );
   } else {
-    alert("cannot insert");
+    const audioClip = insertAudioClipIfPossible(
+      audioItem,
+      duration,
+      playerPosition,
+      trackIndex,
+    );
+    if (audioClip === undefined) return;
   }
 };
 
