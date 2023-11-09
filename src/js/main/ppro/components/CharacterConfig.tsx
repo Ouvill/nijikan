@@ -46,6 +46,16 @@ export function CharacterConfig(props: {
     });
   };
 
+  const onChangeSubtitleTrackIndex = (
+      e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const value = parseInt(e.target.value);
+    props.setCharacter({
+      ...props.character,
+      subtitleTrackIndex: value - 1,
+    });
+  };
+
   const importStateControllerMogrt = () => {
     const mogrtPath = path.join(getPublicPath(), state_controller_mogrt);
     evalTS("importMogrt", mogrtPath).catch((e) => {
@@ -128,6 +138,16 @@ export function CharacterConfig(props: {
             </div>
           </div>
         </div>
+      </div>
+      <div className={"flex justify-between"}>
+        <p>字幕トラック番号</p>
+        <input
+          className={"text-black"}
+          type={"number"}
+          value={props.character.subtitleTrackIndex + 1}
+          min={1}
+          onChange={onChangeSubtitleTrackIndex}
+        />
       </div>
       <p>立ち絵ファイル</p>
       <Button>立ち絵読み込み</Button>

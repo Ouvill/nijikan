@@ -1,15 +1,57 @@
 // Please do not write comments in Japanese.
 // I don't know why, but it stops working.
-import { fillMogrtText, findItemByPath, forEachClip } from "./ppro-utils";
+import {
+  fillMogrtText,
+  findItemByPath,
+  forEachClip,
+  getParentItem,
+} from "./ppro-utils";
 import { findOrCreateBin } from "./scripts/findOrCreateBin";
-import { getProjectItemDuration } from "./scripts/getProjectItemDuration";
+import { getAudioDuration } from "./scripts/getDuration";
 import { checkInsertable } from "./scripts/checkInsertable";
 import { findClipByPath } from "./scripts/findClipByPath";
 import type { Character } from "../../js/main/ppro/store/characters/type";
+import { Connection, initCache } from "./scripts/cache";
+import { findClipByName } from "./scripts/findClipByName";
+import { getTrackEndTime } from "./scripts/getTrackEndTime";
 
 export { selectFolder } from "./scripts/selectFolder";
 export { checkBeforeInsert } from "./scripts/checkBeforeInsert";
 export const example = () => {};
+
+type MogrtStore = { [key: string]: string };
+const mogrtStore = initCache<MogrtStore>({});
+let mogrtBin: ProjectItem | undefined = undefined;
+
+function importMgtToProject(mogrtPath: string, store: Connection<MogrtStore>) {
+  const endTime = getTrackEndTime(app.project.activeSequence.videoTracks[0]);
+
+  const tmpMGT = app.project.activeSequence.importMGT(
+    mogrtPath,
+    endTime.ticks,
+    0,
+    0,
+  );
+  mogrtBin = getParentItem(tmpMGT.projectItem);
+  store.set(mogrtPath, tmpMGT.projectItem.getMediaPath());
+  const item = tmpMGT.projectItem;
+  tmpMGT.remove(false, false);
+  return item;
+}
+
+function getMogrtProjectItem(mogrtPath: string, store: Connection<MogrtStore>) {
+  if (store.get(mogrtPath) !== undefined && mogrtBin !== undefined) {
+    const item = findItemByPath(mogrtBin, store.get(mogrtPath));
+    if (item !== undefined) {
+      return item;
+    }
+  }
+  return importMgtToProject(mogrtPath, store);
+}
+
+export const sandboxFunc = ({ mogrtPath }: { mogrtPath: string }) => {
+  const pItem = getMogrtProjectItem(mogrtPath, mogrtStore);
+};
 
 const importAudio = (bin: ProjectItem, path: string) => {
   const importOk = app.project.importFiles([path], true, bin, false);
@@ -54,6 +96,10 @@ const haveEnoughAudioTrack = (seq: Sequence, trackIndex: number) => {
   return seq.audioTracks.numTracks > trackIndex;
 };
 
+const haveEnoughVideoTrack = (seq: Sequence, trackIndex: number) => {
+  return seq.videoTracks.numTracks > trackIndex;
+};
+
 const addAudioTrack = (numAudio: number, audioIndex: number) => {
   if (qe) {
     app.enableQE();
@@ -62,11 +108,12 @@ const addAudioTrack = (numAudio: number, audioIndex: number) => {
   qe.project.getActiveSequence().addTracks(0, 0, numAudio, 1, audioIndex);
 };
 
-export const testAddAudioTrack = () => {
-  const trackIndex = 6;
-  const seq = app.project.activeSequence;
-  const numAudio = trackIndex - seq.audioTracks.numTracks + 1;
-  addAudioTrack(numAudio, seq.audioTracks.numTracks);
+const addVideoTrack = (numVideo: number, videoIndex: number) => {
+  if (qe) {
+    app.enableQE();
+  }
+  if (!qe) return;
+  qe.project.getActiveSequence().addTracks(numVideo, videoIndex, 0, 0, 0);
 };
 
 function insertAudioClipIfPossible(
@@ -86,6 +133,48 @@ function insertAudioClipIfPossible(
   } else {
     return undefined;
   }
+}
+
+function overwriteVideoClip(
+  videoItem: ProjectItem,
+  duration: Time,
+  targetTime: Time,
+  trackIndex: number,
+) {
+  const rand = Math.floor(Math.random() * 100000);
+
+  // cache data
+  const originName = videoItem.name;
+  // @ts-ignore
+  const originInPoint: Time = videoItem.getInPoint(1);
+  // @ts-ignore
+  const originOutPoint: Time = videoItem.getOutPoint(1);
+  const zeroTime = new Time();
+  zeroTime.seconds = 0;
+
+  // set data
+  videoItem.name = rand.toString();
+  // @ts-ignore
+  videoItem.setInPoint(zeroTime.ticks, 4);
+  // @ts-ignore
+  videoItem.setOutPoint(duration.ticks, 4);
+
+  // insert
+  const track = app.project.activeSequence.videoTracks[trackIndex];
+  // @ts-ignore
+  const result = track.overwriteClip(videoItem, targetTime.ticks);
+  if (!result) return;
+  const clip = findClipByName(track, rand.toString());
+  if (!clip) return;
+
+  // restore data
+  clip.name = originName;
+  videoItem.name = originName;
+  // @ts-ignore
+  videoItem.setInPoint(originInPoint, 4);
+  videoItem.setOutPoint(originOutPoint, 4);
+
+  return clip;
 }
 
 function insertAudioToSequence({
@@ -135,38 +224,104 @@ function insertAudioToSequence({
   }
 }
 
-/**
- * Inserts an audio track item for a character at the current player position in the active sequence.
- * @param path - The path to the audio file to import.
- * @param character - The character for which to insert the audio track item.
- * @param options - Optional settings for the insertion.
- * @returns void
- */
-export const insertCharacterTrackItems = (
-  path: string,
-  character: Character,
-  options: {
-    insertOtherTrack?: boolean;
-  },
-) => {
+function searchInsertableVideoTrack(
+  targetTime: Time,
+  duration: Time,
+  defaultIndex: number,
+): number {
+  const num = app.project.activeSequence.videoTracks.numTracks;
+  for (let i = defaultIndex; i < num; i++) {
+    const track = app.project.activeSequence.videoTracks[i];
+    if (checkInsertable(targetTime, duration, track)) {
+      return i;
+    }
+  }
+
+  return -1;
+}
+
+function insertVideoToSequence({
+  insertOtherTrack,
+  targetTime,
+  duration,
+  videoItem,
+  trackIndex,
+}: {
+  insertOtherTrack?: boolean;
+  targetTime: Time;
+  duration: Time;
+  videoItem: ProjectItem;
+  trackIndex: number;
+}) {
+  const seq = app.project.activeSequence;
+
+  // add audio track if needed
+  if (!haveEnoughVideoTrack(seq, trackIndex)) {
+    const numAudio = trackIndex - seq.videoTracks.numTracks + 1;
+    addVideoTrack(numAudio, seq.videoTracks.numTracks);
+  }
+
+  if (insertOtherTrack) {
+    let targetIndex = searchInsertableVideoTrack(
+      targetTime,
+      duration,
+      trackIndex,
+    );
+    if (targetIndex === -1) {
+      targetIndex = seq.audioTracks.numTracks;
+      addVideoTrack(1, targetIndex);
+    }
+    return overwriteVideoClip(videoItem, duration, targetTime, targetIndex);
+  } else {
+    return overwriteVideoClip(videoItem, duration, targetTime, trackIndex);
+  }
+}
+
+export const insertCharacterTrackItems = ({
+  voicePath,
+  character,
+  subtitle,
+  insertOtherTrack,
+}: {
+  voicePath: string;
+  subtitle: string;
+  character: Character;
+  insertOtherTrack?: boolean;
+}) => {
   const seq = app.project.activeSequence;
   const playerPosition = seq.getPlayerPosition();
   const targetBin = findOrCreateBin("voice");
 
-  const audioItem = importAudio(targetBin, path);
+  // audio
+  const audioItem = importAudio(targetBin, voicePath);
   if (!audioItem) return;
 
-  const duration = getProjectItemDuration(audioItem);
+  const duration = getAudioDuration(audioItem);
   if (!duration) return;
 
   const audioClip = insertAudioToSequence({
-    insertOtherTrack: options.insertOtherTrack,
+    insertOtherTrack: insertOtherTrack,
     targetTime: playerPosition,
     audioItem,
     duration,
     trackIndex: character.voiceTrackIndex,
   });
   if (!audioClip) return;
+
+  const subtitleMogrtItem = getMogrtProjectItem(
+    character.subtitleMogrtPaths[0],
+    mogrtStore,
+  );
+
+  const subtitleMogrtClip = insertVideoToSequence({
+    insertOtherTrack: insertOtherTrack,
+    targetTime: playerPosition,
+    videoItem: subtitleMogrtItem,
+    duration,
+    trackIndex: character.subtitleTrackIndex,
+  });
+  if (!subtitleMogrtClip) return;
+  fillMogrtText(subtitleMogrtClip, "subtitle", subtitle);
 
   app.project.activeSequence.setPlayerPosition(audioClip.end.ticks);
 };
@@ -181,7 +336,6 @@ export const importMogrt = (path: string) => {
   );
 
   app.project.activeSequence.setPlayerPosition(clip.end.ticks);
-
   fillMogrtText(clip, "data", "Hello World");
 };
 
