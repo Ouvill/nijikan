@@ -58,6 +58,7 @@ export const WatchFolder = ({ characters }: { characters: Characters }) => {
         watchFolderState.path,
         characters,
         (path, character) => {
+          console.log("add voice", path, character);
           queue.add(async () => {
             await insertCharacterTrackItems(path, character);
           });

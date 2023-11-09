@@ -142,31 +142,45 @@ function insertAudioToSequence({
  * @param options - Optional settings for the insertion.
  * @returns void
  */
-export const insertCharacterTrackItems = (
-  path: string,
-  character: Character,
-  options: {
-    insertOtherTrack?: boolean;
-  },
-) => {
+export const insertCharacterTrackItems = ({
+  voicePath,
+  character,
+  insertOtherTrack,
+}: {
+  voicePath: string;
+  insertOtherTrack?: boolean;
+  character: Character;
+}) => {
   const seq = app.project.activeSequence;
   const playerPosition = seq.getPlayerPosition();
   const targetBin = findOrCreateBin("voice");
 
-  const audioItem = importAudio(targetBin, path);
+  // audio
+  const audioItem = importAudio(targetBin, voicePath);
   if (!audioItem) return;
 
   const duration = getProjectItemDuration(audioItem);
   if (!duration) return;
 
   const audioClip = insertAudioToSequence({
-    insertOtherTrack: options.insertOtherTrack,
+    insertOtherTrack: insertOtherTrack,
     targetTime: playerPosition,
     audioItem,
     duration,
     trackIndex: character.voiceTrackIndex,
   });
   if (!audioClip) return;
+
+  // subTitle
+  const mogrt = app.project.activeSequence.importMGT(
+    character.subtitleMogrtPaths[0],
+    playerPosition.ticks,
+    character.subtitleTrackIndex,
+    character.subtitleTrackIndex,
+  );
+  const zeroTime = new Time();
+  zeroTime.ticks = "0";
+  mogrt.end = audioClip.end;
 
   app.project.activeSequence.setPlayerPosition(audioClip.end.ticks);
 };
