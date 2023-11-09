@@ -277,21 +277,16 @@ function insertVideoToSequence({
   }
 }
 
-/**
- * Inserts an audio track item for a character at the current player position in the active sequence.
- * @param path - The path to the audio file to import.
- * @param character - The character for which to insert the audio track item.
- * @param options - Optional settings for the insertion.
- * @returns void
- */
 export const insertCharacterTrackItems = ({
   voicePath,
   character,
+  subtitle,
   insertOtherTrack,
 }: {
   voicePath: string;
-  insertOtherTrack?: boolean;
+  subtitle: string;
   character: Character;
+  insertOtherTrack?: boolean;
 }) => {
   const seq = app.project.activeSequence;
   const playerPosition = seq.getPlayerPosition();
@@ -326,6 +321,7 @@ export const insertCharacterTrackItems = ({
     trackIndex: character.subtitleTrackIndex,
   });
   if (!subtitleMogrtClip) return;
+  fillMogrtText(subtitleMogrtClip, "subtitle", subtitle);
 
   app.project.activeSequence.setPlayerPosition(audioClip.end.ticks);
 };

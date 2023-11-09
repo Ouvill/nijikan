@@ -25,6 +25,7 @@ export async function insertCharacterTrackItems(
   evalTS("insertCharacterTrackItems", {
     voicePath,
     character,
+    subtitle,
     insertOtherTrack: true,
   }).catch((e) => {
     alert(e.message);
