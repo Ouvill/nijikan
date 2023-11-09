@@ -1,6 +1,6 @@
 import { csi } from "../../lib/utils/bolt";
 import React, { useMemo, useReducer, useState } from "react";
-import { CharacterConfig } from "./components/characterConfig";
+import { CharacterConfig } from "./components/CharacterConfig";
 import {
   actions as characterActions,
   characterReducer,
