@@ -14,6 +14,7 @@ import { checkInsertable } from "./scripts/checkInsertable";
 import { findClipByPath } from "./scripts/findClipByPath";
 import type { Character } from "../../js/main/ppro/store/characters/type";
 import { Connection, initCache } from "./scripts/cache";
+import { findClipByName } from "./scripts/findClipByName";
 
 export { selectFolder } from "./scripts/selectFolder";
 export { checkBeforeInsert } from "./scripts/checkBeforeInsert";
@@ -25,8 +26,12 @@ let mogrtBin: ProjectItem | undefined = undefined;
 
 function importMgtToProject(mogrtPath: string, store: Connection<MogrtStore>) {
   const numClips = app.project.activeSequence.videoTracks[0].clips.numItems;
+
   const endTime =
-    app.project.activeSequence.videoTracks[0].clips[numClips - 1].end;
+    numClips !== 0
+      ? app.project.activeSequence.videoTracks[0].clips[numClips - 1].end
+      : new Time();
+
   const tmpMGT = app.project.activeSequence.importMGT(
     mogrtPath,
     endTime.ticks,
@@ -50,7 +55,11 @@ function getMogrtProjectItem(mogrtPath: string, store: Connection<MogrtStore>) {
   return importMgtToProject(mogrtPath, store);
 }
 
-export const sandboxFunc = ({ mogrtPath }: { mogrtPath: string }) => {};
+export const sandboxFunc = ({ mogrtPath }: { mogrtPath: string }) => {
+  const pItem = getMogrtProjectItem(mogrtPath, mogrtStore);
+
+
+};
 
 const importAudio = (bin: ProjectItem, path: string) => {
   const importOk = app.project.importFiles([path], true, bin, false);
@@ -137,17 +146,51 @@ function insertAudioClipIfPossible(
 function insertVideoClipIfPossible(
   videoItem: ProjectItem,
   duration: Time,
-  playerPosition: Time,
+  targetTime: Time,
   trackIndex: number,
 ) {
   if (
     checkInsertable(
-      playerPosition,
+      targetTime,
       duration,
       app.project.activeSequence.videoTracks[trackIndex],
     )
   ) {
     //   TODO: insert video clip
+    const rand = Math.floor(Math.random() * 100000);
+
+    // cache data
+    const originName = videoItem.name;
+    // @ts-ignore
+    const originInPoint: Time = videoItem.getInPoint(1);
+    // @ts-ignore
+    const originOutPoint: Time = videoItem.getOutPoint(1);
+    const zeroTime = new Time();
+    zeroTime.seconds = 0;
+
+    // set data
+    videoItem.name = rand.toString();
+    // @ts-ignore
+    videoItem.setInPoint(zeroTime.ticks, 4);
+    // @ts-ignore
+    videoItem.setOutPoint(duration.ticks, 4);
+
+    // insert
+    const track = app.project.activeSequence.videoTracks[trackIndex];
+    // @ts-ignore
+    const result = track.insertClip(videoItem, targetTime.ticks);
+    if (!result) return;
+    const clip = findClipByName(track, rand.toString());
+    if (!clip) return;
+
+    // restore data
+    clip.name = originName;
+    videoItem.name = originName;
+    // @ts-ignore
+    videoItem.setInPoint(originInPoint, 4);
+    videoItem.setOutPoint(originOutPoint, 4);
+
+    return clip;
   } else {
     return undefined;
   }
