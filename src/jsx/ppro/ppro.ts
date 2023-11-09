@@ -1,20 +1,19 @@
 // Please do not write comments in Japanese.
 // I don't know why, but it stops working.
 import {
-  addTime,
   fillMogrtText,
   findItemByPath,
   forEachClip,
   getParentItem,
-  subtractTime,
 } from "./ppro-utils";
 import { findOrCreateBin } from "./scripts/findOrCreateBin";
-import { getProjectItemDuration } from "./scripts/getProjectItemDuration";
+import { getAudioDuration } from "./scripts/getDuration";
 import { checkInsertable } from "./scripts/checkInsertable";
 import { findClipByPath } from "./scripts/findClipByPath";
 import type { Character } from "../../js/main/ppro/store/characters/type";
 import { Connection, initCache } from "./scripts/cache";
 import { findClipByName } from "./scripts/findClipByName";
+import { getTrackEndTime } from "./scripts/getTrackEndTime";
 
 export { selectFolder } from "./scripts/selectFolder";
 export { checkBeforeInsert } from "./scripts/checkBeforeInsert";
@@ -25,12 +24,7 @@ const mogrtStore = initCache<MogrtStore>({});
 let mogrtBin: ProjectItem | undefined = undefined;
 
 function importMgtToProject(mogrtPath: string, store: Connection<MogrtStore>) {
-  const numClips = app.project.activeSequence.videoTracks[0].clips.numItems;
-
-  const endTime =
-    numClips !== 0
-      ? app.project.activeSequence.videoTracks[0].clips[numClips - 1].end
-      : new Time();
+  const endTime = getTrackEndTime(app.project.activeSequence.videoTracks[0]);
 
   const tmpMGT = app.project.activeSequence.importMGT(
     mogrtPath,
@@ -57,8 +51,6 @@ function getMogrtProjectItem(mogrtPath: string, store: Connection<MogrtStore>) {
 
 export const sandboxFunc = ({ mogrtPath }: { mogrtPath: string }) => {
   const pItem = getMogrtProjectItem(mogrtPath, mogrtStore);
-
-
 };
 
 const importAudio = (bin: ProjectItem, path: string) => {
@@ -156,7 +148,6 @@ function insertVideoClipIfPossible(
       app.project.activeSequence.videoTracks[trackIndex],
     )
   ) {
-    //   TODO: insert video clip
     const rand = Math.floor(Math.random() * 100000);
 
     // cache data
@@ -267,7 +258,7 @@ export const insertCharacterTrackItems = ({
   const audioItem = importAudio(targetBin, voicePath);
   if (!audioItem) return;
 
-  const duration = getProjectItemDuration(audioItem);
+  const duration = getAudioDuration(audioItem);
   if (!duration) return;
 
   const audioClip = insertAudioToSequence({
