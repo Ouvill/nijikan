@@ -3,8 +3,11 @@ import { evalTS } from "../../../lib/utils/bolt";
 
 export function Sandbox() {
   const onClick = () => {
-    evalTS("testAddAudioTrack").catch((e) => {
-      alert(e.message);
+    evalTS("sandboxFunc", {
+      mogrtPath:
+        "C:\\Users\\youhei\\Creative Cloud Files\\Videos\\material\\motion_graphic_template\\2580x1080_stroke\\ずんだもん.mogrt",
+    }).catch((e) => {
+      alert("error catch from react"+ e.message);
     });
   };
 
