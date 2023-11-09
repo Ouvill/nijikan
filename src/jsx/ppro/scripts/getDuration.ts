@@ -15,7 +15,6 @@ export const getProjectItemDurationByMetadata = (item: ProjectItem) => {
   return parseTime(duration);
 };
 
-
 export const getAudioDuration = (item: ProjectItem) => {
   const seq = app.project.activeSequence;
   const track = seq.audioTracks[0];
@@ -25,7 +24,7 @@ export const getAudioDuration = (item: ProjectItem) => {
   // @ts-ignore
   const result = track.insertClip(item, endTime.ticks);
   if (result) {
-    const tmpItem = findClipByPath(track, item.getMediaPath());
+    const tmpItem = findClipByPath(track, item.getMediaPath(), true);
     if (!tmpItem) return;
     const duration = tmpItem.duration;
     tmpItem.remove(false, false);
