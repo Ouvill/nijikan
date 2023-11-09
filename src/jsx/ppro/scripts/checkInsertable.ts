@@ -18,6 +18,7 @@ const isBetweenTime = (targetTime: Time, start: Time, end: Time) => {
 const isClipOnTime = (targetTime: Time, clip: TrackItem) => {
   return isBetweenTime(targetTime, clip.start, clip.end);
 };
+
 export const checkInsertable = (
   targetTime: Time,
   duration: Time,
@@ -41,17 +42,27 @@ export const checkInsertable = (
     return compareTime(targetEndTime, track.clips[0].start) < 0;
   }
 
-  for (let i = 0; i < track.clips.numItems - 1; i++) {
-    // targetTime on clip
-    if (isClipOnTime(targetTime, track.clips[i])) {
+  // binary search
+  let left = 0;
+  let right = track.clips.numItems - 1;
+  let middle;
+  while (left <= right) {
+    middle = Math.floor((left + right) / 2);
+    if (compareTime(targetTime, track.clips[middle].start) < 0) {
+      right = middle - 1;
+    } else if (compareTime(targetTime, track.clips[middle].end) >= 0) {
+      left = middle + 1;
+      if (
+        compareTime(
+          addTime(targetTime, duration),
+          track.clips[middle + 1].start,
+        ) < 0
+      ) {
+        return true;
+      }
+    } else {
       return false;
-    } else if (
-      //   targetTime between clip and next clip
-      isBetweenTime(targetTime, track.clips[i].end, track.clips[i + 1].start)
-    ) {
-      // if duration is longer than between clip and next clip
-      const targetEndTime = addTime(targetTime, duration);
-      return compareTime(targetEndTime, track.clips[i + 1].start) < 0;
     }
   }
+  return false;
 };
