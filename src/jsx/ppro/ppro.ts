@@ -224,6 +224,59 @@ function insertAudioToSequence({
   }
 }
 
+function searchInsertableVideoTrack(
+  targetTime: Time,
+  duration: Time,
+  defaultIndex: number,
+): number {
+  const num = app.project.activeSequence.videoTracks.numTracks;
+  for (let i = defaultIndex; i < num; i++) {
+    const track = app.project.activeSequence.videoTracks[i];
+    if (checkInsertable(targetTime, duration, track)) {
+      return i;
+    }
+  }
+
+  return -1;
+}
+
+function insertVideoToSequence({
+  insertOtherTrack,
+  targetTime,
+  duration,
+  videoItem,
+  trackIndex,
+}: {
+  insertOtherTrack?: boolean;
+  targetTime: Time;
+  duration: Time;
+  videoItem: ProjectItem;
+  trackIndex: number;
+}) {
+  const seq = app.project.activeSequence;
+
+  // add audio track if needed
+  if (!haveEnoughVideoTrack(seq, trackIndex)) {
+    const numAudio = trackIndex - seq.videoTracks.numTracks + 1;
+    addVideoTrack(numAudio, seq.videoTracks.numTracks);
+  }
+
+  if (insertOtherTrack) {
+    let targetIndex = searchInsertableVideoTrack(
+      targetTime,
+      duration,
+      trackIndex,
+    );
+    if (targetIndex === -1) {
+      targetIndex = seq.audioTracks.numTracks;
+      addVideoTrack(1, targetIndex);
+    }
+    return overwriteVideoClip(videoItem, duration, targetTime, targetIndex);
+  } else {
+    return overwriteVideoClip(videoItem, duration, targetTime, trackIndex);
+  }
+}
+
 /**
  * Inserts an audio track item for a character at the current player position in the active sequence.
  * @param path - The path to the audio file to import.
@@ -265,22 +318,14 @@ export const insertCharacterTrackItems = ({
     mogrtStore,
   );
 
-  let mogrt: TrackItem | undefined = undefined;
-
-  if (
-    checkInsertable(
-      playerPosition,
-      duration,
-      app.project.activeSequence.videoTracks[character.subtitleTrackIndex],
-    )
-  ) {
-    mogrt = overwriteVideoClip(
-      subtitleMogrtItem,
-      duration,
-      playerPosition,
-      character.subtitleTrackIndex,
-    );
-  }
+  const subtitleMogrtClip = insertVideoToSequence({
+    insertOtherTrack: insertOtherTrack,
+    targetTime: playerPosition,
+    videoItem: subtitleMogrtItem,
+    duration,
+    trackIndex: character.subtitleTrackIndex,
+  });
+  if (!subtitleMogrtClip) return;
 
   app.project.activeSequence.setPlayerPosition(audioClip.end.ticks);
 };
