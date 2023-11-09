@@ -135,56 +135,46 @@ function insertAudioClipIfPossible(
   }
 }
 
-function insertVideoClipIfPossible(
+function overwriteVideoClip(
   videoItem: ProjectItem,
   duration: Time,
   targetTime: Time,
   trackIndex: number,
 ) {
-  if (
-    checkInsertable(
-      targetTime,
-      duration,
-      app.project.activeSequence.videoTracks[trackIndex],
-    )
-  ) {
-    const rand = Math.floor(Math.random() * 100000);
+  const rand = Math.floor(Math.random() * 100000);
 
-    // cache data
-    const originName = videoItem.name;
-    // @ts-ignore
-    const originInPoint: Time = videoItem.getInPoint(1);
-    // @ts-ignore
-    const originOutPoint: Time = videoItem.getOutPoint(1);
-    const zeroTime = new Time();
-    zeroTime.seconds = 0;
+  // cache data
+  const originName = videoItem.name;
+  // @ts-ignore
+  const originInPoint: Time = videoItem.getInPoint(1);
+  // @ts-ignore
+  const originOutPoint: Time = videoItem.getOutPoint(1);
+  const zeroTime = new Time();
+  zeroTime.seconds = 0;
 
-    // set data
-    videoItem.name = rand.toString();
-    // @ts-ignore
-    videoItem.setInPoint(zeroTime.ticks, 4);
-    // @ts-ignore
-    videoItem.setOutPoint(duration.ticks, 4);
+  // set data
+  videoItem.name = rand.toString();
+  // @ts-ignore
+  videoItem.setInPoint(zeroTime.ticks, 4);
+  // @ts-ignore
+  videoItem.setOutPoint(duration.ticks, 4);
 
-    // insert
-    const track = app.project.activeSequence.videoTracks[trackIndex];
-    // @ts-ignore
-    const result = track.insertClip(videoItem, targetTime.ticks);
-    if (!result) return;
-    const clip = findClipByName(track, rand.toString());
-    if (!clip) return;
+  // insert
+  const track = app.project.activeSequence.videoTracks[trackIndex];
+  // @ts-ignore
+  const result = track.overwriteClip(videoItem, targetTime.ticks);
+  if (!result) return;
+  const clip = findClipByName(track, rand.toString());
+  if (!clip) return;
 
-    // restore data
-    clip.name = originName;
-    videoItem.name = originName;
-    // @ts-ignore
-    videoItem.setInPoint(originInPoint, 4);
-    videoItem.setOutPoint(originOutPoint, 4);
+  // restore data
+  clip.name = originName;
+  videoItem.name = originName;
+  // @ts-ignore
+  videoItem.setInPoint(originInPoint, 4);
+  videoItem.setOutPoint(originOutPoint, 4);
 
-    return clip;
-  } else {
-    return undefined;
-  }
+  return clip;
 }
 
 function insertAudioToSequence({
@@ -275,12 +265,22 @@ export const insertCharacterTrackItems = ({
     mogrtStore,
   );
 
-  const mogrt = insertVideoClipIfPossible(
-    subtitleMogrtItem,
-    duration,
-    playerPosition,
-    character.subtitleTrackIndex,
-  );
+  let mogrt: TrackItem | undefined = undefined;
+
+  if (
+    checkInsertable(
+      playerPosition,
+      duration,
+      app.project.activeSequence.videoTracks[character.subtitleTrackIndex],
+    )
+  ) {
+    mogrt = overwriteVideoClip(
+      subtitleMogrtItem,
+      duration,
+      playerPosition,
+      character.subtitleTrackIndex,
+    );
+  }
 
   app.project.activeSequence.setPlayerPosition(audioClip.end.ticks);
 };
