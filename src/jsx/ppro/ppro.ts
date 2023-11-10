@@ -151,29 +151,30 @@ function overwriteVideoClip(
   const zeroTime = new Time();
   zeroTime.seconds = 0;
 
-  // set data
-  videoItem.name = rand.toString();
-  // @ts-ignore
-  videoItem.setInPoint(zeroTime.ticks, 4);
-  // @ts-ignore
-  videoItem.setOutPoint(duration.ticks, 4);
+  try {
+    // set data
+    videoItem.name = rand.toString();
+    // @ts-ignore
+    videoItem.setInPoint(zeroTime.ticks, 4);
+    // @ts-ignore
+    videoItem.setOutPoint(duration.ticks, 4);
 
-  // insert
-  const track = app.project.activeSequence.videoTracks[trackIndex];
-  // @ts-ignore
-  const result = track.overwriteClip(videoItem, targetTime.ticks);
-  if (!result) return;
-  const clip = findClipByName(track, rand.toString());
-  if (!clip) return;
-
-  // restore data
-  clip.name = originName;
-  videoItem.name = originName;
-  // @ts-ignore
-  videoItem.setInPoint(originInPoint, 4);
-  videoItem.setOutPoint(originOutPoint, 4);
-
-  return clip;
+    // insert
+    const track = app.project.activeSequence.videoTracks[trackIndex];
+    // @ts-ignore
+    const result = track.overwriteClip(videoItem, targetTime.ticks);
+    if (!result) return;
+    const clip = findClipByName(track, rand.toString());
+    if (!clip) return;
+    clip.name = originName;
+    return clip;
+  } finally {
+    // restore data
+    videoItem.name = originName;
+    // @ts-ignore
+    videoItem.setInPoint(originInPoint, 4);
+    videoItem.setOutPoint(originOutPoint, 4);
+  }
 }
 
 function insertAudioToSequence({
