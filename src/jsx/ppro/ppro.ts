@@ -321,7 +321,7 @@ export const insertCharacterTrackItems = ({
     trackIndex: character.subtitleTrackIndex,
   });
   if (!subtitleMogrtClip) return;
-  fillMogrtText(subtitleMogrtClip, "subtitle", subtitle);
+  fillMogrtText(subtitleMogrtClip, character.subtitleParamName, subtitle);
 
   linkClips([audioClip, subtitleMogrtClip], seq);
 

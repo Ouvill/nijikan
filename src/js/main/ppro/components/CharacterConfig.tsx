@@ -47,12 +47,22 @@ export function CharacterConfig(props: {
   };
 
   const onChangeSubtitleTrackIndex = (
-      e: React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const value = parseInt(e.target.value);
     props.setCharacter({
       ...props.character,
       subtitleTrackIndex: value - 1,
+    });
+  };
+
+  const onChangeSubtitleParamName = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const value = e.target.value;
+    props.setCharacter({
+      ...props.character,
+      subtitleParamName: value,
     });
   };
 
@@ -148,6 +158,15 @@ export function CharacterConfig(props: {
           min={1}
           onChange={onChangeSubtitleTrackIndex}
         />
+      </div>
+      <div className={"flex justify-between"}>
+        <p>字幕のプロパティ名</p>
+        <input
+          className={"text-black"}
+          type={"text"}
+          value={props.character.subtitleParamName}
+          onChange={onChangeSubtitleParamName}
+        ></input>
       </div>
       <p>立ち絵ファイル</p>
       <Button>立ち絵読み込み</Button>
