@@ -58,13 +58,13 @@ const importAudio = (bin: ProjectItem, path: string) => {
   return findItemByPath(bin, path);
 };
 
-const insertAudioClip = (
+const overwriteAudioClip = (
   audioItem: ProjectItem,
   targetTime: Time,
   trackIndex: number,
 ) => {
   const track = app.project.activeSequence.audioTracks[trackIndex];
-  const result = track.insertClip(
+  const result = track.overwriteClip(
     audioItem,
     // @ts-ignore
     targetTime.ticks,
@@ -114,25 +114,6 @@ const addVideoTrack = (numVideo: number, videoIndex: number) => {
   if (!qe) return;
   qe.project.getActiveSequence().addTracks(numVideo, videoIndex, 0, 0, 0);
 };
-
-function insertAudioClipIfPossible(
-  audioItem: ProjectItem,
-  duration: Time,
-  playerPosition: Time,
-  trackIndex: number,
-) {
-  if (
-    checkInsertable(
-      playerPosition,
-      duration,
-      app.project.activeSequence.audioTracks[trackIndex],
-    ) !== -1
-  ) {
-    return insertAudioClip(audioItem, playerPosition, trackIndex);
-  } else {
-    return undefined;
-  }
-}
 
 function overwriteVideoClip(
   videoItem: ProjectItem,
@@ -208,19 +189,9 @@ function insertAudioToSequence({
       targetIndex = seq.audioTracks.numTracks;
       addAudioTrack(1, targetIndex);
     }
-    return insertAudioClipIfPossible(
-      audioItem,
-      duration,
-      targetTime,
-      targetIndex,
-    );
+    return overwriteAudioClip(audioItem, targetTime, targetIndex);
   } else {
-    return insertAudioClipIfPossible(
-      audioItem,
-      duration,
-      targetTime,
-      trackIndex,
-    );
+    return overwriteAudioClip(audioItem, targetTime, trackIndex);
   }
 }
 
