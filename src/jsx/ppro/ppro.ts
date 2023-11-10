@@ -140,7 +140,7 @@ function overwriteVideoClip(
   targetTime: Time,
   trackIndex: number,
 ) {
-  const rand = Math.floor(Math.random() * 100000);
+  const rand = Math.floor(Math.random() * 1000000000);
 
   // cache data
   const originName = videoItem.name;
