@@ -83,7 +83,7 @@ const searchInsertableAudioTrack = (
   const num = app.project.activeSequence.audioTracks.numTracks;
   for (let i = defaultIndex; i < num; i++) {
     const track = app.project.activeSequence.audioTracks[i];
-    if (checkInsertable(targetTime, duration, track)) {
+    if (checkInsertable(targetTime, duration, track) !== -1) {
       return i;
     }
   }
@@ -126,7 +126,7 @@ function insertAudioClipIfPossible(
       playerPosition,
       duration,
       app.project.activeSequence.audioTracks[trackIndex],
-    )
+    ) !== -1
   ) {
     return insertAudioClip(audioItem, playerPosition, trackIndex);
   } else {
@@ -231,7 +231,7 @@ function searchInsertableVideoTrack(
   const num = app.project.activeSequence.videoTracks.numTracks;
   for (let i = defaultIndex; i < num; i++) {
     const track = app.project.activeSequence.videoTracks[i];
-    if (checkInsertable(targetTime, duration, track)) {
+    if (checkInsertable(targetTime, duration, track) !== -1) {
       return i;
     }
   }
