@@ -1,4 +1,4 @@
-import { defaultState } from "./defaultState";
+import { defaultCharacter, defaultState } from "./defaultState";
 import { Character, CharacterActionType, Characters } from "./type";
 
 export const actions = {
@@ -58,13 +58,9 @@ export const characterReducer = (state = defaultState, action: Actions) => {
       const newState = {
         ...state,
         [id]: {
+          ...defaultCharacter,
           id: id,
           name: "キャラクター_" + (maxNumber + 1).toString().padStart(2, "0"),
-          subtitleMogrtPaths: [],
-          subtitleTrackIndex: 0,
-          lipSyncMogrtPath: "",
-          lipSyncVidTrackIndex: 0,
-          voiceTrackIndex: 0,
         },
       };
 

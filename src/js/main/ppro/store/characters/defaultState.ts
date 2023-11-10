@@ -1,4 +1,14 @@
-import { Characters } from "./type";
+import { Character, Characters } from "./type";
+
+export const defaultCharacter: Omit<Character, "id"> = {
+  name: "キャラクター",
+  voiceTrackIndex: 0,
+  subtitleMogrtPaths: [],
+  subtitleTrackIndex: 0,
+  subtitleParamName: "ソーステキスト",
+  lipSyncMogrtPath: "",
+  lipSyncVidTrackIndex: 0,
+};
 
 export const defaultState: Characters = {
   shikokuMetan: {
@@ -6,6 +16,8 @@ export const defaultState: Characters = {
     name: "四国めたん",
     subtitleMogrtPaths: [],
     subtitleTrackIndex: 0,
+    subtitleParamName: "ソーステキスト",
+
     lipSyncMogrtPath: "",
     lipSyncVidTrackIndex: 0,
     voiceTrackIndex: 0,
@@ -15,6 +27,8 @@ export const defaultState: Characters = {
     name: "ずんだもん",
     subtitleMogrtPaths: [],
     subtitleTrackIndex: 0,
+    subtitleParamName: "ソーステキスト",
+
     lipSyncMogrtPath: "",
     lipSyncVidTrackIndex: 0,
     voiceTrackIndex: 0,
@@ -24,6 +38,8 @@ export const defaultState: Characters = {
     name: "春日部つむぎ",
     subtitleMogrtPaths: [],
     subtitleTrackIndex: 0,
+    subtitleParamName: "ソーステキスト",
+
     lipSyncMogrtPath: "",
     lipSyncVidTrackIndex: 0,
     voiceTrackIndex: 0,
@@ -33,6 +49,7 @@ export const defaultState: Characters = {
     name: "雨晴はう",
     subtitleMogrtPaths: [],
     subtitleTrackIndex: 0,
+    subtitleParamName: "ソーステキスト",
     lipSyncMogrtPath: "",
     lipSyncVidTrackIndex: 0,
     voiceTrackIndex: 0,
@@ -42,6 +59,7 @@ export const defaultState: Characters = {
     name: "波音リツ",
     subtitleMogrtPaths: [],
     subtitleTrackIndex: 0,
+    subtitleParamName: "ソーステキスト",
     lipSyncMogrtPath: "",
     lipSyncVidTrackIndex: 0,
     voiceTrackIndex: 0,
