@@ -14,6 +14,7 @@ import type { Character } from "../../js/main/ppro/store/characters/type";
 import { Connection, initCache } from "./scripts/cache";
 import { findClipByName } from "./scripts/findClipByName";
 import { getTrackEndTime } from "./scripts/getTrackEndTime";
+import { linkClips } from "./scripts/linkClips";
 
 export { selectFolder } from "./scripts/selectFolder";
 export { checkBeforeInsert } from "./scripts/checkBeforeInsert";
@@ -49,9 +50,7 @@ function getMogrtProjectItem(mogrtPath: string, store: Connection<MogrtStore>) {
   return importMgtToProject(mogrtPath, store);
 }
 
-export const sandboxFunc = ({ mogrtPath }: { mogrtPath: string }) => {
-  const pItem = getMogrtProjectItem(mogrtPath, mogrtStore);
-};
+export const sandboxFunc = ({ mogrtPath }: { mogrtPath: string }) => {};
 
 const importAudio = (bin: ProjectItem, path: string) => {
   const importOk = app.project.importFiles([path], true, bin, false);
@@ -322,6 +321,8 @@ export const insertCharacterTrackItems = ({
   });
   if (!subtitleMogrtClip) return;
   fillMogrtText(subtitleMogrtClip, "subtitle", subtitle);
+
+  linkClips([audioClip, subtitleMogrtClip], seq);
 
   app.project.activeSequence.setPlayerPosition(audioClip.end.ticks);
 };
