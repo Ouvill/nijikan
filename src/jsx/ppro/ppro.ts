@@ -308,10 +308,15 @@ export const insertCharacterTrackItems = ({
   });
   if (!audioClip) return;
 
-  const subtitleMogrtItem = getMogrtProjectItem(
-    character.subtitleMogrtPaths[0],
-    mogrtStore,
-  );
+  let subtitleMogrtItem: ProjectItem;
+  try {
+    subtitleMogrtItem = getMogrtProjectItem(
+      character.subtitleMogrtPaths[0],
+      mogrtStore,
+    );
+  } catch (e) {
+    return;
+  }
 
   const subtitleMogrtClip = insertVideoToSequence({
     insertOtherTrack: insertOtherTrack,

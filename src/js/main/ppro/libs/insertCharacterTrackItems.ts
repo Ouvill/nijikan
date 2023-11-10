@@ -12,6 +12,11 @@ export async function insertCharacterTrackItems(
   });
   if (!isOk) return;
 
+  if (fs.existsSync(character.subtitleMogrtPaths[0])) {
+    alert("字幕のモーショングラフィックステンプレートがありません");
+    return;
+  }
+
   let subtitle;
   try {
     const subtitlePath = replaceExt(voicePath, ".txt");
