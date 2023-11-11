@@ -1,5 +1,5 @@
-import { defaultCharacter, defaultState } from "./defaultState";
-import { Character, CharacterActionType, Characters } from "./type";
+import { defaultCharacter, charactersDefaultState } from "./state";
+import { Character, CharacterActionType } from "./type";
 
 export const actions = {
   addCharacter: (id: string) => ({
@@ -26,21 +26,7 @@ export const actions = {
 
 type Actions = ReturnType<(typeof actions)[keyof typeof actions]>;
 
-const localStorageKey = "characters";
-
-const saveCharactersToLocalStorage = (characters: Characters) => {
-  localStorage.setItem(localStorageKey, JSON.stringify(characters));
-};
-
-const loadCharactersFromLocalStorage = () => {
-  const characters = localStorage.getItem(localStorageKey);
-  if (characters) {
-    return JSON.parse(characters) as Characters;
-  }
-  return;
-};
-
-export const characterReducer = (state = defaultState, action: Actions) => {
+export const characterReducer = (state = charactersDefaultState, action: Actions) => {
   switch (action.type) {
     case CharacterActionType.ADD_CHARACTER: {
       const { id } = action.payload;
@@ -55,7 +41,7 @@ export const characterReducer = (state = defaultState, action: Actions) => {
       });
       const maxNumber = Math.max(...numbers);
 
-      const newState = {
+      return {
         ...state,
         [id]: {
           ...defaultCharacter,
@@ -63,34 +49,24 @@ export const characterReducer = (state = defaultState, action: Actions) => {
           name: "キャラクター_" + (maxNumber + 1).toString().padStart(2, "0"),
         },
       };
-
-      saveCharactersToLocalStorage(newState);
-      return newState;
     }
 
     case CharacterActionType.REMOVE_CHARACTER: {
       const { id } = action.payload;
       const newState = { ...state };
       delete newState[id];
-      saveCharactersToLocalStorage(newState);
       return newState;
     }
 
     case CharacterActionType.UPDATE_CHARACTER: {
       const { characterId, character } = action.payload;
-      const newState = {
+      return {
         ...state,
         [characterId]: character,
       };
-      saveCharactersToLocalStorage(newState);
-      return newState;
     }
     default: {
       return state;
     }
   }
-};
-
-export const createInitialState = (initialState: Characters) => {
-  return loadCharactersFromLocalStorage() || initialState;
 };

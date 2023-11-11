@@ -10,7 +10,7 @@ export const defaultCharacter: Omit<Character, "id"> = {
   lipSyncVidTrackIndex: 0,
 };
 
-export const defaultState: Characters = {
+export const charactersDefaultState: Characters = {
   shikokuMetan: {
     id: "shikoku",
     name: "四国めたん",

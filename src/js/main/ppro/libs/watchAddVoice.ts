@@ -1,4 +1,4 @@
-import { Character, Characters } from "../store/characters/type";
+import { Character, Characters } from "../store/settings/characters/type";
 import Chokidar from "chokidar";
 import { fs } from "../../../lib/cep/node";
 

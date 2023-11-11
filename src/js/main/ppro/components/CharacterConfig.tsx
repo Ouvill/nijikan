@@ -4,7 +4,7 @@ import React from "react";
 import Button from "../../../components/Button";
 import { getPublicPath } from "../libs/getPublicPath";
 
-import { Character } from "../store/characters/type";
+import { Character } from "../store/settings/characters/type";
 
 const state_controller_mogrt = "nijikan_state_controller.mogrt";
 
