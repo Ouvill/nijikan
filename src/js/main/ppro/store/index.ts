@@ -3,6 +3,7 @@ import setting, { settingSchema } from "./settings";
 import { defaultState, State } from "./state";
 import Ajv from "ajv";
 import { STORE } from "./constant";
+import { saveLocalStorage } from "./middleware/saveLocalStorage";
 
 const rootReducer = combineReducers({
   setting: setting,
@@ -31,6 +32,8 @@ const initialState = loadState() || defaultState;
 export const store = configureStore({
   preloadedState: initialState,
   reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(saveLocalStorage),
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
