@@ -1,17 +1,17 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { Character } from "./characters/type";
+import setting, { SettingState } from "./settings";
 
-export type Store = {
-  setting: {
-    enable: {};
-    characters: {
-      [name: string]: Character;
-    };
-  };
+export type State = {
+  setting: SettingState;
 };
 
+const rootReducer = combineReducers<State>({
+  setting: setting,
+});
+
 export const store = configureStore({
-  reducer: {},
+  reducer: rootReducer,
 });
 
 export type RootState = ReturnType<typeof store.getState>;
