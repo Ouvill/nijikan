@@ -36,12 +36,6 @@ export const characterSchema: JSONSchemaType<Character> = {
   additionalProperties: false,
 };
 
-export const CharacterActionType = {
-  ADD_CHARACTER: "ADD_CHARACTER",
-  REMOVE_CHARACTER: "REMOVE_CHARACTER",
-  UPDATE_CHARACTER: "UPDATE_CHARACTER",
-} as const;
-
 export type Characters = { [name: string]: Character };
 
 export const charactersSchema: JSONSchemaType<Characters> = {
@@ -52,5 +46,3 @@ export const charactersSchema: JSONSchemaType<Characters> = {
   additionalProperties: false,
   required: [],
 };
-
-// END: 6d04wxr

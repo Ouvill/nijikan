@@ -2,7 +2,7 @@ import { csi } from "../../lib/utils/bolt";
 import React from "react";
 
 import { CharacterConfig } from "./components/CharacterConfig";
-import { actions as characterActions } from "./store/settings/characters";
+import { charactersActions } from "./store/settings/characters";
 import Button from "../../components/Button";
 import { WatchFolder } from "./components/WatchFolder";
 import { Character } from "./store/settings/characters/type";
@@ -41,7 +41,7 @@ const PproApp = () => {
 
   const characterConfigUpdater = (characterId: string) => {
     return (character: Character) => {
-      dispatch(characterActions.updateCharacter({ characterId, character }));
+      dispatch(charactersActions.updateCharacter({ characterId, character }));
     };
   };
 

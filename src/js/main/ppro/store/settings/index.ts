@@ -6,7 +6,7 @@ import {
   featureSchema,
 } from "./feature/state";
 import { Characters, charactersSchema } from "./characters/type";
-import { characterReducer } from "./characters";
+import { charactersReducer } from "./characters";
 import { charactersDefaultState } from "./characters/state";
 import type { JSONSchemaType } from "ajv";
 import { STORE } from "../constant";
@@ -40,7 +40,7 @@ export const settingDefaultState: SettingState = {
 
 const setting = combineReducers({
   version: () => settingDefaultState.version,
-  characters: characterReducer,
+  characters: charactersReducer,
   feature: featureReducer,
   selectedCharacter: selectedCharacterReducer,
   watchFolder: watchFolderReducer,
