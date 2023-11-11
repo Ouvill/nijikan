@@ -5,7 +5,7 @@ import {
   actions as characterActions,
   characterReducer,
   createInitialState,
-} from "./store/characters";
+} from "./store/settings/characters";
 import Button from "../../components/Button";
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -13,8 +13,8 @@ import {
   saveSelectedCharacterIdToLocalStorage,
 } from "./store/selectedCharacter";
 import { WatchFolder } from "./components/WatchFolder";
-import { defaultState as characterDefaultState } from "./store/characters/defaultState";
-import { Character } from "./store/characters/type";
+import { defaultState as characterDefaultState } from "./store/settings/characters/defaultState";
+import { Character } from "./store/settings/characters/type";
 import { Sandbox } from "./components/Sandbox";
 
 const PproApp = () => {

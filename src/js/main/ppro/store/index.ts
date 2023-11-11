@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { Character } from "./characters/type";
+import { Character } from "./settings/characters/type";
 import setting, { SettingState } from "./settings";
 
 export type State = {

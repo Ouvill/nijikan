@@ -7,7 +7,7 @@ import {
   watchFolderReducer,
 } from "../store/watchFolder";
 import Button from "../../../components/Button";
-import { Characters } from "../store/characters/type";
+import { Characters } from "../store/settings/characters/type";
 import { watchAddVoice } from "../libs/watchAddVoice";
 import PQueue from "p-queue";
 import { insertCharacterTrackItems } from "../libs/insertCharacterTrackItems";

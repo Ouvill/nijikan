@@ -1,4 +1,4 @@
-import { Character } from "../store/characters/type";
+import { Character } from "../store/settings/characters/type";
 import { evalTS } from "../../../lib/utils/bolt";
 import { fs } from "../../../lib/cep/node";
 import { replaceExt } from "./replaceExt";

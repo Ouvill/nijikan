@@ -10,7 +10,7 @@ import { findOrCreateBin } from "./scripts/findOrCreateBin";
 import { getAudioDuration } from "./scripts/getDuration";
 import { checkInsertable } from "./scripts/checkInsertable";
 import { findClipByPath } from "./scripts/findClipByPath";
-import type { Character } from "../../js/main/ppro/store/characters/type";
+import type { Character } from "../../js/main/ppro/store/settings/characters/type";
 import { Connection, initCache } from "./scripts/cache";
 import { findClipByName } from "./scripts/findClipByName";
 import { getTrackEndTime } from "./scripts/getTrackEndTime";
