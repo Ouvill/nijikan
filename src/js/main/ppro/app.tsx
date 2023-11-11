@@ -1,5 +1,5 @@
 import { csi } from "../../lib/utils/bolt";
-import React, { useMemo, useReducer, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 import { CharacterConfig } from "./components/CharacterConfig";
 import { actions as characterActions } from "./store/settings/characters";
@@ -13,6 +13,7 @@ import { WatchFolder } from "./components/WatchFolder";
 import { Character } from "./store/settings/characters/type";
 import { Sandbox } from "./components/Sandbox";
 import { useAppDispatch, useAppSelector } from "./hooks/useReduxHooks";
+import { useSaveSettings } from "./hooks/useSaveSettings";
 
 const PproApp = () => {
   const host = csi.hostEnvironment.appName;
@@ -70,10 +71,14 @@ const PproApp = () => {
       dispatch(characterActions.updateCharacter({ characterId, character }));
     };
   };
+
+  const saveSettings = useSaveSettings();
+
   return (
     <div className={"mx-2"}>
       <h1>{host}</h1>
       <Sandbox></Sandbox>
+      <Button onClick={saveSettings}>設定を保存</Button>
       <WatchFolder characters={characters} />
       <div>
         <h2>キャラクター</h2>
