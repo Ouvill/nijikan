@@ -1,4 +1,4 @@
-import { defaultCharacter, defaultState } from "./defaultState";
+import { defaultCharacter, charactersDefaultState } from "./state";
 import { Character, CharacterActionType } from "./type";
 
 export const actions = {
@@ -26,7 +26,7 @@ export const actions = {
 
 type Actions = ReturnType<(typeof actions)[keyof typeof actions]>;
 
-export const characterReducer = (state = defaultState, action: Actions) => {
+export const characterReducer = (state = charactersDefaultState, action: Actions) => {
   switch (action.type) {
     case CharacterActionType.ADD_CHARACTER: {
       const { id } = action.payload;

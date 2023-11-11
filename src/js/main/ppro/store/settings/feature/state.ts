@@ -5,7 +5,7 @@ export type FeatureState = {
   insertLipSync: boolean;
 };
 
-export const defaultState: FeatureState = {
+export const featureDefaultState: FeatureState = {
   overwriteTrack: false,
   insertVoice: true,
   insertSubtitle: true,

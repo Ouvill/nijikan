@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { defaultState } from "./state";
+import { featureDefaultState } from "./state";
 
 const feature = createSlice({
   name: "setting/enable",
-  initialState: defaultState,
+  initialState: featureDefaultState,
   reducers: {
     setOverwriteTrack: (state, action: PayloadAction<boolean>) => {
       state.overwriteTrack = action.payload;
