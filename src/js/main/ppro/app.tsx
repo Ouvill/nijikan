@@ -1,11 +1,8 @@
 import { csi } from "../../lib/utils/bolt";
 import React, { useMemo, useReducer, useState } from "react";
+
 import { CharacterConfig } from "./components/CharacterConfig";
-import {
-  actions as characterActions,
-  characterReducer,
-  createInitialState,
-} from "./store/settings/characters";
+import { actions as characterActions } from "./store/settings/characters";
 import Button from "../../components/Button";
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -13,18 +10,15 @@ import {
   saveSelectedCharacterIdToLocalStorage,
 } from "./store/selectedCharacter";
 import { WatchFolder } from "./components/WatchFolder";
-import { defaultState as characterDefaultState } from "./store/settings/characters/defaultState";
 import { Character } from "./store/settings/characters/type";
 import { Sandbox } from "./components/Sandbox";
+import { useAppDispatch, useAppSelector } from "./hooks/useReduxHooks";
 
 const PproApp = () => {
   const host = csi.hostEnvironment.appName;
 
-  const [characters, dispatch] = useReducer(
-    characterReducer,
-    characterDefaultState,
-    createInitialState,
-  );
+  const dispatch = useAppDispatch();
+  const characters = useAppSelector((state) => state.setting.characters);
 
   const initialSelectedCharacterId = useMemo(() => {
     const id = loadSelectedCharacterIdFromLocalStorage();
