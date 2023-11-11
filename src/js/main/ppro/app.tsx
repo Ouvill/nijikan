@@ -1,48 +1,42 @@
 import { csi } from "../../lib/utils/bolt";
-import React, { useMemo, useState } from "react";
+import React from "react";
 
 import { CharacterConfig } from "./components/CharacterConfig";
 import { actions as characterActions } from "./store/settings/characters";
 import Button from "../../components/Button";
-import { v4 as uuidv4 } from "uuid";
 import { WatchFolder } from "./components/WatchFolder";
 import { Character } from "./store/settings/characters/type";
 import { Sandbox } from "./components/Sandbox";
 import { useAppDispatch, useAppSelector } from "./hooks/useReduxHooks";
 import { useSaveSettings } from "./hooks/useSaveSettings";
-import { selectedCharacterActions } from "./store/settings/selectedCharacter";
-import {selectedCharacterSelector} from "./store/settings/selectors";
+import { characterCollectionSelector } from "./store/settings/selectors";
+import { useSelectCharacter } from "./hooks/useSelectCharacter";
 
 const PproApp = () => {
   const host = csi.hostEnvironment.appName;
 
   const dispatch = useAppDispatch();
-  const characters = useAppSelector((state) => state.setting.characters);
-  const selectedCharacterId = useAppSelector(selectedCharacterSelector);
+  const characters = useAppSelector(characterCollectionSelector);
+
+  const {
+    selectedCharacterId,
+    selectCharacter,
+    addCharacter,
+    removeSelectedCharacter,
+  } = useSelectCharacter();
 
   const onChangeSelectedCharacterId = (
     e: React.ChangeEvent<HTMLSelectElement>,
   ) => {
-    dispatch(selectedCharacterActions.setSelectedCharacter(e.target.value));
+    selectCharacter(e.target.value);
   };
 
   const onClickAddCharacter = () => {
-    const id = uuidv4();
-    dispatch(characterActions.addCharacter(id));
-    dispatch(selectedCharacterActions.setSelectedCharacter(id));
+    addCharacter();
   };
 
   const onClickRemoveCharacter = () => {
-    const characterIds = Object.keys(characters);
-    const index = characterIds.indexOf(selectedCharacterId);
-    const nextIndex = index === 0 ? 1 : index - 1;
-    const nextId = characterIds[nextIndex];
-    dispatch(characterActions.removeCharacter(selectedCharacterId));
-    if (nextId) {
-      dispatch(selectedCharacterActions.setSelectedCharacter(nextId));
-    } else {
-      dispatch(selectedCharacterActions.setSelectedCharacter(""));
-    }
+    removeSelectedCharacter();
   };
 
   const characterConfigUpdater = (characterId: string) => {

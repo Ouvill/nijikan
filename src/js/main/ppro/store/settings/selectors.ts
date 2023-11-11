@@ -5,3 +5,6 @@ export const watchFolderSelector = (state: RootState) =>
 
 export const selectedCharacterSelector = (state: RootState) =>
   state.setting.selectedCharacter;
+
+export const characterCollectionSelector = (state: RootState) =>
+  state.setting.characters;
