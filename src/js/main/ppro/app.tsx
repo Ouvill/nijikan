@@ -5,50 +5,31 @@ import { CharacterConfig } from "./components/CharacterConfig";
 import { actions as characterActions } from "./store/settings/characters";
 import Button from "../../components/Button";
 import { v4 as uuidv4 } from "uuid";
-import {
-  loadSelectedCharacterIdFromLocalStorage,
-  saveSelectedCharacterIdToLocalStorage,
-} from "./store/selectedCharacter";
 import { WatchFolder } from "./components/WatchFolder";
 import { Character } from "./store/settings/characters/type";
 import { Sandbox } from "./components/Sandbox";
 import { useAppDispatch, useAppSelector } from "./hooks/useReduxHooks";
 import { useSaveSettings } from "./hooks/useSaveSettings";
+import { selectedCharacterActions } from "./store/settings/selectedCharacter";
+import {selectedCharacterSelector} from "./store/settings/selectors";
 
 const PproApp = () => {
   const host = csi.hostEnvironment.appName;
 
   const dispatch = useAppDispatch();
   const characters = useAppSelector((state) => state.setting.characters);
-
-  const initialSelectedCharacterId = useMemo(() => {
-    const id = loadSelectedCharacterIdFromLocalStorage();
-    if (id) return id;
-
-    const characterIds = Object.keys(characters);
-    if (characterIds.length > 0) {
-      return characterIds[0];
-    }
-
-    return "";
-  }, []);
-
-  const [selectedCharacterId, setSelectedCharacterId] = useState<string>(
-    initialSelectedCharacterId,
-  );
+  const selectedCharacterId = useAppSelector(selectedCharacterSelector);
 
   const onChangeSelectedCharacterId = (
     e: React.ChangeEvent<HTMLSelectElement>,
   ) => {
-    setSelectedCharacterId(e.target.value);
-    saveSelectedCharacterIdToLocalStorage(e.target.value);
+    dispatch(selectedCharacterActions.setSelectedCharacter(e.target.value));
   };
 
   const onClickAddCharacter = () => {
     const id = uuidv4();
     dispatch(characterActions.addCharacter(id));
-    setSelectedCharacterId(id);
-    saveSelectedCharacterIdToLocalStorage(id);
+    dispatch(selectedCharacterActions.setSelectedCharacter(id));
   };
 
   const onClickRemoveCharacter = () => {
@@ -58,11 +39,9 @@ const PproApp = () => {
     const nextId = characterIds[nextIndex];
     dispatch(characterActions.removeCharacter(selectedCharacterId));
     if (nextId) {
-      setSelectedCharacterId(nextId);
-      saveSelectedCharacterIdToLocalStorage(nextId);
+      dispatch(selectedCharacterActions.setSelectedCharacter(nextId));
     } else {
-      setSelectedCharacterId("");
-      saveSelectedCharacterIdToLocalStorage("");
+      dispatch(selectedCharacterActions.setSelectedCharacter(""));
     }
   };
 
@@ -82,6 +61,7 @@ const PproApp = () => {
       <WatchFolder characters={characters} />
       <div>
         <h2>キャラクター</h2>
+        <p>selected: {selectedCharacterId}</p>
         <div className={"flex flex-col"}>
           <label>
             <div className={"not-prose flex justify-between"}>
