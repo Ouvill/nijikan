@@ -1,16 +1,16 @@
 import React, { useEffect, useReducer, useState } from "react";
-import {
+import watchFolderReducer, {
   createWatchFolderInitialState,
   saveWatchFolderToLocalStorage,
   watchFolderActions,
-  watchFolderDefaultState,
-  watchFolderReducer,
-} from "../store/watchFolder";
+
+} from "../store/settings/watchFolder";
 import Button from "../../../components/Button";
 import { Characters } from "../store/settings/characters/type";
 import { watchAddVoice } from "../libs/watchAddVoice";
 import PQueue from "p-queue";
 import { insertCharacterTrackItems } from "../libs/insertCharacterTrackItems";
+import {watchFolderDefaultState} from "../store/settings/watchFolder/state";
 
 const queue = new PQueue({ concurrency: 1 });
 

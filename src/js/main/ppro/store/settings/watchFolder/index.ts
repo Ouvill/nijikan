@@ -1,33 +1,26 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { watchFolderDefaultState, WatchFolderState } from "./state";
 
 const localStorageKey = "watchFolder";
-
-export type WatchFolder = {
-  isWatchingOnStartup: boolean;
-  path: string;
-};
-
-export const watchFolderDefaultState: WatchFolder = {
-  isWatchingOnStartup: false,
-  path: "",
-};
 
 export const loadWatchFolderFromLocalStorage = () => {
   const watchFolder = localStorage.getItem(localStorageKey);
   if (watchFolder) {
-    return JSON.parse(watchFolder) as WatchFolder;
+    return JSON.parse(watchFolder) as WatchFolderState;
   }
   return;
 };
 
-export const saveWatchFolderToLocalStorage = (watchFolder: WatchFolder) => {
+export const saveWatchFolderToLocalStorage = (
+  watchFolder: WatchFolderState,
+) => {
   localStorage.setItem(localStorageKey, JSON.stringify(watchFolder));
 };
 
-type SaveFunc = (state: WatchFolder) => void;
+type SaveFunc = (state: WatchFolderState) => void;
 
-const slice = createSlice({
-  name: "watchFolder",
+const watchFolder = createSlice({
+  name: "setting/watchFolder",
   initialState: watchFolderDefaultState,
   reducers: {
     setWatchFolder: (
@@ -56,10 +49,11 @@ const slice = createSlice({
 });
 
 export const createWatchFolderInitialState = (
-  initialState: WatchFolder,
-): WatchFolder => {
+  initialState: WatchFolderState,
+): WatchFolderState => {
   return loadWatchFolderFromLocalStorage() || initialState;
 };
 
-export const watchFolderReducer = slice.reducer;
-export const watchFolderActions = slice.actions;
+export const watchFolderActions = watchFolder.actions;
+
+export default watchFolder.reducer;
