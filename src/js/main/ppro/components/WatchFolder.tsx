@@ -1,25 +1,18 @@
-import React, { useEffect, useReducer, useState } from "react";
-import watchFolderReducer, {
-  createWatchFolderInitialState,
-  saveWatchFolderToLocalStorage,
-  watchFolderActions,
-
-} from "../store/settings/watchFolder";
+import React, { useEffect, useState } from "react";
+import { watchFolderActions } from "../store/settings/watchFolder";
 import Button from "../../../components/Button";
 import { Characters } from "../store/settings/characters/type";
 import { watchAddVoice } from "../libs/watchAddVoice";
 import PQueue from "p-queue";
 import { insertCharacterTrackItems } from "../libs/insertCharacterTrackItems";
-import {watchFolderDefaultState} from "../store/settings/watchFolder/state";
+import { useAppDispatch, useAppSelector } from "../hooks/useReduxHooks";
+import { watchFolderSelector } from "../store/settings/selectors";
 
 const queue = new PQueue({ concurrency: 1 });
 
 export const WatchFolder = ({ characters }: { characters: Characters }) => {
-  const [watchFolderState, watchFolderDispatch] = useReducer(
-    watchFolderReducer,
-    watchFolderDefaultState,
-    createWatchFolderInitialState,
-  );
+  const dispatch = useAppDispatch();
+  const watchFolderState = useAppSelector(watchFolderSelector);
 
   const onClickSelectFolder = async () => {
     try {
@@ -37,10 +30,9 @@ export const WatchFolder = ({ characters }: { characters: Characters }) => {
       const dirPath: string[] = result.data;
       const shifted = dirPath.shift();
       if (typeof shifted === "string" && shifted !== "") {
-        watchFolderDispatch(
+        dispatch(
           watchFolderActions.setWatchFolder({
             path: shifted,
-            saveFunc: saveWatchFolderToLocalStorage,
           }),
         );
       }
