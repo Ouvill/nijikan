@@ -6,6 +6,7 @@ import { getPublicPath } from "../../libs/getPublicPath";
 
 import { Character } from "../../store/settings/characters/type";
 import { SubtitleCharacterConfig } from "./SubtitleCharacterConfig";
+import { LipSyncCharacterConfig } from "./LipSyncCharacterConfig";
 
 const state_controller_mogrt = "nijikan_state_controller.mogrt";
 
@@ -13,24 +14,6 @@ export function CharacterConfig(props: {
   character: Character;
   setCharacter: (character: Character) => void;
 }) {
-  const selectKutipakuMogrt = async () => {
-    try {
-      const path = await evalTS("selectMogrtFile").catch((e) => {
-        throw e;
-      });
-      if (path !== "" && typeof path === "string") {
-        props.setCharacter({
-          ...props.character,
-          lipSyncMogrtPath: path,
-        });
-      }
-    } catch (e) {
-      if (e instanceof Error) {
-        alert(e.message);
-      }
-    }
-  };
-
   const changeVoiceTrackIndex = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value);
     props.setCharacter({
@@ -39,29 +22,9 @@ export function CharacterConfig(props: {
     });
   };
 
-  const changeLipSyncTrackIndex = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value);
-    props.setCharacter({
-      ...props.character,
-      lipSyncVidTrackIndex: value - 1,
-    });
-  };
-
   const importStateControllerMogrt = () => {
     const mogrtPath = path.join(getPublicPath(), state_controller_mogrt);
     evalTS("importMogrt", mogrtPath).catch((e) => {
-      alert(e.message);
-    });
-  };
-
-  const insertKutipakuMogrt = async () => {
-    if (props.character.lipSyncMogrtPath === "") return;
-    evalTS(
-      "insertLabMogrt",
-      props.character.lipSyncMogrtPath,
-      props.character.lipSyncVidTrackIndex,
-      props.character.voiceTrackIndex,
-    ).catch((e) => {
       alert(e.message);
     });
   };
@@ -112,31 +75,10 @@ export function CharacterConfig(props: {
           character={props.character}
           setCharacter={props.setCharacter}
         />
-        <div>
-          <h2>口パク制御</h2>
-          <div className={"not-prose"}>
-            <div className={"flex justify-between"}>
-              <p>挿入先トラック番号</p>
-              <input
-                type={"number"}
-                value={props.character.lipSyncVidTrackIndex + 1}
-                className={"text-black"}
-                onChange={changeLipSyncTrackIndex}
-              />
-            </div>
-          </div>
-          <div>
-            {props.character.lipSyncMogrtPath ? (
-              <p>{props.character.lipSyncMogrtPath}</p>
-            ) : (
-              <></>
-            )}
-            <div className={"flex justify-end"}>
-              <Button onClick={selectKutipakuMogrt}>口パクMOGRT指定</Button>
-              <Button onClick={insertKutipakuMogrt}>口パクMOGRT挿入</Button>
-            </div>
-          </div>
-        </div>
+        <LipSyncCharacterConfig
+          character={props.character}
+          setCharacter={props.setCharacter}
+        />
       </div>
 
       <div>
