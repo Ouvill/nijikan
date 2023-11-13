@@ -1,14 +1,17 @@
 import { Character } from "../../store/settings/characters/type";
 import { evalTS } from "../../../../lib/utils/bolt";
-import React from "react";
+import React, { useState } from "react";
 import Button from "../../../../components/Button";
 
 export function SubtitleCharacterConfig(props: {
   character: Character;
   setCharacter: (character: Character) => void;
 }) {
+  const [disabledSelectButton, setDisabledSelectButton] = useState(false);
   const onClickSelectSubtitleMogrt = async () => {
+    setDisabledSelectButton(true);
     const mogrtPath = await evalTS("selectMogrtFile");
+    setDisabledSelectButton(false);
     if (mogrtPath !== "") {
       props.setCharacter({
         ...props.character,
@@ -39,6 +42,7 @@ export function SubtitleCharacterConfig(props: {
 
   return (
     <div>
+      <h2>字幕設定</h2>
       <div className={"flex justify-between items-center"}>
         <p>字幕MOGRT</p>
         <div className={"min-w-0"}>
@@ -46,7 +50,12 @@ export function SubtitleCharacterConfig(props: {
             <p className={"min-w-0 break-words text-xs"}>
               {props.character.subtitleMogrtPath}
             </p>
-            <Button onClick={onClickSelectSubtitleMogrt}>⚙️️</Button>
+            <Button
+              onClick={onClickSelectSubtitleMogrt}
+              disabled={disabledSelectButton}
+            >
+              ⚙️️
+            </Button>
           </div>
         </div>
       </div>
