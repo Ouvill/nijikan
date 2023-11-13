@@ -1,10 +1,11 @@
-import { evalTS } from "../../../lib/utils/bolt";
+import { evalTS } from "../../../../lib/utils/bolt";
 import path from "path";
 import React from "react";
-import Button from "../../../components/Button";
-import { getPublicPath } from "../libs/getPublicPath";
+import Button from "../../../../components/Button";
+import { getPublicPath } from "../../libs/getPublicPath";
 
-import { Character } from "../store/settings/characters/type";
+import { Character } from "../../store/settings/characters/type";
+import { SubtitleCharacterConfig } from "./SubtitleCharacterConfig";
 
 const state_controller_mogrt = "nijikan_state_controller.mogrt";
 
@@ -46,26 +47,6 @@ export function CharacterConfig(props: {
     });
   };
 
-  const onChangeSubtitleTrackIndex = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const value = parseInt(e.target.value);
-    props.setCharacter({
-      ...props.character,
-      subtitleTrackIndex: value - 1,
-    });
-  };
-
-  const onChangeSubtitleParamName = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const value = e.target.value;
-    props.setCharacter({
-      ...props.character,
-      subtitleParamName: value,
-    });
-  };
-
   const importStateControllerMogrt = () => {
     const mogrtPath = path.join(getPublicPath(), state_controller_mogrt);
     evalTS("importMogrt", mogrtPath).catch((e) => {
@@ -104,16 +85,6 @@ export function CharacterConfig(props: {
     });
   };
 
-  const onClickEditSubtitleMogrt = async () => {
-    const mogrtPath = await evalTS("selectMogrtFile");
-    if (mogrtPath !== "") {
-      props.setCharacter({
-        ...props.character,
-        subtitleMogrtPaths: [mogrtPath],
-      });
-    }
-  };
-
   return (
     <div>
       <div className={"not-prose"}>
@@ -137,62 +108,33 @@ export function CharacterConfig(props: {
           />
         </div>
 
-        <div className={"flex justify-between items-center"}>
-          <p>字幕MOGRT</p>
-          <div className={"min-w-0"}>
-            <div className={"flex items-center"}>
-              <p className={"min-w-0 break-words text-xs"}>
-                {props.character.subtitleMogrtPaths}
-              </p>
-              <Button onClick={onClickEditSubtitleMogrt}>⚙️️</Button>
+        <SubtitleCharacterConfig
+          character={props.character}
+          setCharacter={props.setCharacter}
+        />
+        <div>
+          <h2>口パク制御</h2>
+          <div className={"not-prose"}>
+            <div className={"flex justify-between"}>
+              <p>挿入先トラック番号</p>
+              <input
+                type={"number"}
+                value={props.character.lipSyncVidTrackIndex + 1}
+                className={"text-black"}
+                onChange={changeLipSyncTrackIndex}
+              />
             </div>
           </div>
-        </div>
-      </div>
-      <div className={"flex justify-between"}>
-        <p>字幕トラック番号</p>
-        <input
-          className={"text-black"}
-          type={"number"}
-          value={props.character.subtitleTrackIndex + 1}
-          min={1}
-          onChange={onChangeSubtitleTrackIndex}
-        />
-      </div>
-      <div className={"flex justify-between"}>
-        <p>字幕のプロパティ名</p>
-        <input
-          className={"text-black"}
-          type={"text"}
-          value={props.character.subtitleParamName}
-          onChange={onChangeSubtitleParamName}
-        ></input>
-      </div>
-      <p>立ち絵ファイル</p>
-      <Button>立ち絵読み込み</Button>
-      <div>
-        <h2>口パク制御</h2>
-        <div className={"not-prose"}>
-          <div className={"flex justify-between"}>
-            <p>挿入先トラック番号</p>
-            <input
-              type={"number"}
-              value={props.character.lipSyncVidTrackIndex + 1}
-              className={"text-black"}
-              onChange={changeLipSyncTrackIndex}
-            />
-          </div>
-        </div>
-
-        <div>
-          {props.character.lipSyncMogrtPath ? (
-            <p>{props.character.lipSyncMogrtPath}</p>
-          ) : (
-            <></>
-          )}
-          <div className={"flex justify-end"}>
-            <Button onClick={selectKutipakuMogrt}>口パクMOGRT指定</Button>
-            <Button onClick={insertKutipakuMogrt}>口パクMOGRT挿入</Button>
+          <div>
+            {props.character.lipSyncMogrtPath ? (
+              <p>{props.character.lipSyncMogrtPath}</p>
+            ) : (
+              <></>
+            )}
+            <div className={"flex justify-end"}>
+              <Button onClick={selectKutipakuMogrt}>口パクMOGRT指定</Button>
+              <Button onClick={insertKutipakuMogrt}>口パクMOGRT挿入</Button>
+            </div>
           </div>
         </div>
       </div>

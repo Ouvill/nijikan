@@ -282,7 +282,7 @@ export const insertCharacterTrackItems = ({
   let subtitleMogrtItem: ProjectItem;
   try {
     subtitleMogrtItem = getMogrtProjectItem(
-      character.subtitleMogrtPaths[0],
+      character.subtitleMogrtPath,
       mogrtStore,
     );
   } catch (e) {

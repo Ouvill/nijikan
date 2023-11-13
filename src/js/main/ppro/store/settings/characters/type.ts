@@ -3,7 +3,7 @@ import type { JSONSchemaType } from "ajv";
 export type Character = {
   id: string;
   name: string;
-  subtitleMogrtPaths: string[];
+  subtitleMogrtPath: string;
   subtitleTrackIndex: number;
   subtitleParamName: string;
   lipSyncMogrtPath: string;
@@ -16,7 +16,7 @@ export const characterSchema: JSONSchemaType<Character> = {
   properties: {
     id: { type: "string" },
     name: { type: "string" },
-    subtitleMogrtPaths: { type: "array", items: { type: "string" } },
+    subtitleMogrtPath: { type: "string" },
     subtitleTrackIndex: { type: "number" },
     subtitleParamName: { type: "string" },
     lipSyncMogrtPath: { type: "string" },
@@ -26,7 +26,7 @@ export const characterSchema: JSONSchemaType<Character> = {
   required: [
     "id",
     "name",
-    "subtitleMogrtPaths",
+    "subtitleMogrtPath",
     "subtitleTrackIndex",
     "subtitleParamName",
     "lipSyncMogrtPath",

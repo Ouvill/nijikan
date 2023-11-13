@@ -3,7 +3,7 @@ import { Character, Characters } from "./type";
 export const defaultCharacter: Omit<Character, "id"> = {
   name: "キャラクター",
   voiceTrackIndex: 0,
-  subtitleMogrtPaths: [],
+  subtitleMogrtPath: "",
   subtitleTrackIndex: 0,
   subtitleParamName: "ソーステキスト",
   lipSyncMogrtPath: "",
@@ -14,7 +14,7 @@ export const charactersDefaultState: Characters = {
   shikokuMetan: {
     id: "shikoku",
     name: "四国めたん",
-    subtitleMogrtPaths: [],
+    subtitleMogrtPath: "",
     subtitleTrackIndex: 0,
     subtitleParamName: "ソーステキスト",
 
@@ -25,7 +25,7 @@ export const charactersDefaultState: Characters = {
   zundamon: {
     id: "zundamon",
     name: "ずんだもん",
-    subtitleMogrtPaths: [],
+    subtitleMogrtPath: "",
     subtitleTrackIndex: 0,
     subtitleParamName: "ソーステキスト",
 
@@ -36,7 +36,7 @@ export const charactersDefaultState: Characters = {
   kasukabeTumugi: {
     id: "kasukabeTumugi",
     name: "春日部つむぎ",
-    subtitleMogrtPaths: [],
+    subtitleMogrtPath: "",
     subtitleTrackIndex: 0,
     subtitleParamName: "ソーステキスト",
 
@@ -47,7 +47,7 @@ export const charactersDefaultState: Characters = {
   amehareHau: {
     id: "amehareHau",
     name: "雨晴はう",
-    subtitleMogrtPaths: [],
+    subtitleMogrtPath: "",
     subtitleTrackIndex: 0,
     subtitleParamName: "ソーステキスト",
     lipSyncMogrtPath: "",
@@ -57,7 +57,7 @@ export const charactersDefaultState: Characters = {
   namineRitsu: {
     id: "namineRitsu",
     name: "波音リツ",
-    subtitleMogrtPaths: [],
+    subtitleMogrtPath: "",
     subtitleTrackIndex: 0,
     subtitleParamName: "ソーステキスト",
     lipSyncMogrtPath: "",
