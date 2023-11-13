@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../../hooks/useReduxHooks";
 import { featureSelector } from "../../store/selectors";
 import { featureActions } from "../../store/settings/feature";
+import { ToggleButton } from "../../../../components/ToggleButton";
 
 export const FeatureConfig = () => {
   const dispatch = useAppDispatch();
@@ -15,19 +16,18 @@ export const FeatureConfig = () => {
   };
 
   return (
-    <div>
+    <div className={"flex flex-col gap-y-2"}>
+      <h2>アプリ設定</h2>
       <div className={"flex justify-between"}>
         <p>トラックを上書きする</p>
-        <input
-          type={"checkbox"}
+        <ToggleButton
           onChange={onChangeOverwriteTrack}
           checked={features.overwriteTrack}
-        ></input>
+        ></ToggleButton>
       </div>
       <div className={"flex justify-between"}>
         <p>口パクを挿入する</p>
-        <input
-          type={"checkbox"}
+        <ToggleButton
           onChange={onChangeInsertLipSync}
           checked={features.insertLipSync}
         />
