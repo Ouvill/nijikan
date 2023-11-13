@@ -82,11 +82,9 @@ export const WatchFolder = ({
       <div className={"flex justify-center items-center py-8"}>
         <ToggleButton checked={isWatch} onChange={toggleWatch}></ToggleButton>
       </div>
-      <div className={"flex justify-between gap-2"}>
+      <div className={"flex justify-between items-center gap-2"}>
         <p className={"min-w-0 text-xs text-right break-words"}>
-          {watchFolderState.path.length > 30
-            ? `${watchFolderState.path.slice(-30)}`
-            : watchFolderState.path}
+          {watchFolderState.path}
         </p>
         <Button onClick={onClickSelectFolder}>フォルダ選択</Button>
       </div>
