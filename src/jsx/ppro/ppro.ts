@@ -159,13 +159,13 @@ function overwriteVideoClip(
 }
 
 function insertAudioToSequence({
-  insertOtherTrack,
+  overwriteTrack,
   targetTime,
   duration,
   audioItem,
   trackIndex,
 }: {
-  insertOtherTrack?: boolean;
+  overwriteTrack?: boolean;
   targetTime: Time;
   duration: Time;
   audioItem: ProjectItem;
@@ -179,7 +179,9 @@ function insertAudioToSequence({
     addAudioTrack(numAudio, seq.audioTracks.numTracks);
   }
 
-  if (insertOtherTrack) {
+  if (overwriteTrack) {
+    return overwriteAudioClip(audioItem, targetTime, trackIndex);
+  } else {
     let targetIndex = searchInsertableAudioTrack(
       targetTime,
       duration,
@@ -190,8 +192,6 @@ function insertAudioToSequence({
       addAudioTrack(1, targetIndex);
     }
     return overwriteAudioClip(audioItem, targetTime, targetIndex);
-  } else {
-    return overwriteAudioClip(audioItem, targetTime, trackIndex);
   }
 }
 
@@ -212,13 +212,13 @@ function searchInsertableVideoTrack(
 }
 
 function insertVideoToSequence({
-  insertOtherTrack,
+  overwriteTrack,
   targetTime,
   duration,
   videoItem,
   trackIndex,
 }: {
-  insertOtherTrack?: boolean;
+  overwriteTrack?: boolean;
   targetTime: Time;
   duration: Time;
   videoItem: ProjectItem;
@@ -232,7 +232,9 @@ function insertVideoToSequence({
     addVideoTrack(numAudio, seq.videoTracks.numTracks);
   }
 
-  if (insertOtherTrack) {
+  if (overwriteTrack) {
+    return overwriteVideoClip(videoItem, duration, targetTime, trackIndex);
+  } else {
     let targetIndex = searchInsertableVideoTrack(
       targetTime,
       duration,
@@ -243,8 +245,6 @@ function insertVideoToSequence({
       addVideoTrack(1, targetIndex);
     }
     return overwriteVideoClip(videoItem, duration, targetTime, targetIndex);
-  } else {
-    return overwriteVideoClip(videoItem, duration, targetTime, trackIndex);
   }
 }
 
@@ -252,12 +252,12 @@ export const insertCharacterTrackItems = ({
   voicePath,
   character,
   subtitle,
-  insertOtherTrack,
+  overwriteTrack,
 }: {
   voicePath: string;
   subtitle: string;
   character: Character;
-  insertOtherTrack?: boolean;
+  overwriteTrack?: boolean;
 }) => {
   const seq = app.project.activeSequence;
   const playerPosition = seq.getPlayerPosition();
@@ -271,7 +271,7 @@ export const insertCharacterTrackItems = ({
   if (!duration) return;
 
   const audioClip = insertAudioToSequence({
-    insertOtherTrack: insertOtherTrack,
+    overwriteTrack: overwriteTrack,
     targetTime: playerPosition,
     audioItem,
     duration,
@@ -290,7 +290,7 @@ export const insertCharacterTrackItems = ({
   }
 
   const subtitleMogrtClip = insertVideoToSequence({
-    insertOtherTrack: insertOtherTrack,
+    overwriteTrack: overwriteTrack,
     targetTime: playerPosition,
     videoItem: subtitleMogrtItem,
     duration,

@@ -9,14 +9,19 @@ import { Character } from "./store/settings/characters/type";
 import { Sandbox } from "./components/Sandbox";
 import { useAppDispatch, useAppSelector } from "./hooks/useReduxHooks";
 import { useSaveSettings } from "./hooks/useSaveSettings";
-import { characterCollectionSelector } from "./store/selectors";
+import {
+  characterCollectionSelector,
+  featureSelector,
+} from "./store/selectors";
 import { useSelectCharacter } from "./hooks/useSelectCharacter";
+import { FeatureConfig } from "./components/FeatureConfig";
 
 const PproApp = () => {
   const host = csi.hostEnvironment.appName;
 
   const dispatch = useAppDispatch();
   const characters = useAppSelector(characterCollectionSelector);
+  const features = useAppSelector(featureSelector);
 
   const {
     selectedCharacterId,
@@ -52,7 +57,8 @@ const PproApp = () => {
       <h1>{host}</h1>
       <Sandbox></Sandbox>
       <Button onClick={saveSettings}>設定を保存</Button>
-      <WatchFolder characters={characters} />
+      <WatchFolder characters={characters} features={features} />
+      <FeatureConfig></FeatureConfig>
       <div>
         <h2>キャラクター</h2>
         <p>selected: {selectedCharacterId}</p>

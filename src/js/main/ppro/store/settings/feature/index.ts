@@ -8,8 +8,11 @@ const feature = createSlice({
     setOverwriteTrack: (state, action: PayloadAction<boolean>) => {
       state.overwriteTrack = action.payload;
     },
+    setInsertLipSync(state, action: PayloadAction<boolean>) {
+      state.insertLipSync = action.payload;
+    },
   },
 });
 
-export const { setOverwriteTrack } = feature.actions;
+export const featureActions = feature.actions;
 export default feature.reducer;

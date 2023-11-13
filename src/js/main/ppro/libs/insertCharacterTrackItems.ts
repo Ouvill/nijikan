@@ -2,17 +2,19 @@ import { Character } from "../store/settings/characters/type";
 import { evalTS } from "../../../lib/utils/bolt";
 import { fs } from "../../../lib/cep/node";
 import { replaceExt } from "./replaceExt";
+import { FeatureState } from "../store/settings/feature/state";
 
 export async function insertCharacterTrackItems(
   voicePath: string,
   character: Character,
+  features: FeatureState,
 ) {
   const isOk = await evalTS("checkBeforeInsert").catch(() => {
     return;
   });
   if (!isOk) return;
 
-  if (!fs.existsSync(character.subtitleMogrtPaths[0])) {
+  if (!fs.existsSync(character.subtitleMogrtPath)) {
     alert("字幕のモーショングラフィックステンプレートがありません");
     return;
   }
@@ -31,7 +33,7 @@ export async function insertCharacterTrackItems(
     voicePath,
     character,
     subtitle,
-    insertOtherTrack: true,
+    overwriteTrack: features.overwriteTrack,
   }).catch((e) => {
     alert(e.message);
   });

@@ -7,10 +7,17 @@ import PQueue from "p-queue";
 import { insertCharacterTrackItems } from "../libs/insertCharacterTrackItems";
 import { useAppDispatch, useAppSelector } from "../hooks/useReduxHooks";
 import { watchFolderSelector } from "../store/selectors";
+import { FeatureState } from "../store/settings/feature/state";
 
 const queue = new PQueue({ concurrency: 1 });
 
-export const WatchFolder = ({ characters }: { characters: Characters }) => {
+export const WatchFolder = ({
+  characters,
+  features,
+}: {
+  characters: Characters;
+  features: FeatureState;
+}) => {
   const dispatch = useAppDispatch();
   const watchFolderState = useAppSelector(watchFolderSelector);
 
@@ -52,12 +59,12 @@ export const WatchFolder = ({ characters }: { characters: Characters }) => {
         (path, character) => {
           console.log("add voice", path, character);
           queue.add(async () => {
-            await insertCharacterTrackItems(path, character);
+            await insertCharacterTrackItems(path, character, features);
           });
         },
       );
     }
-  }, [isWatch, watchFolderState.path, characters]);
+  }, [isWatch, watchFolderState.path, characters, features]);
 
   const toggleWatch = () => {
     setIsWatch(!isWatch);

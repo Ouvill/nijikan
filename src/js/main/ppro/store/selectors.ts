@@ -8,3 +8,5 @@ export const selectedCharacterSelector = (state: RootState) =>
 
 export const characterCollectionSelector = (state: RootState) =>
   state.setting.characters;
+
+export const featureSelector = (state: RootState) => state.setting.feature;
