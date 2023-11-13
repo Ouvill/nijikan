@@ -3,14 +3,12 @@ import { watchFolderActions } from "../../store/settings/watchFolder";
 import Button from "../../../../components/Button";
 import { Characters } from "../../store/settings/characters/type";
 import { watchAddVoice } from "../../libs/watchAddVoice";
-import PQueue from "p-queue";
 import { insertCharacterTrackItems } from "../../libs/insertCharacterTrackItems";
 import { useAppDispatch, useAppSelector } from "../../hooks/useReduxHooks";
 import { watchFolderSelector } from "../../store/selectors";
 import { FeatureState } from "../../store/settings/feature/state";
 import { ToggleButton } from "../../../../components/ToggleButton";
-
-const queue = new PQueue({ concurrency: 1 });
+import { queue } from "../../libs/queue";
 
 export const WatchFolder = ({
   characters,
