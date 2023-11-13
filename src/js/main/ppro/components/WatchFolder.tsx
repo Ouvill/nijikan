@@ -6,7 +6,7 @@ import { watchAddVoice } from "../libs/watchAddVoice";
 import PQueue from "p-queue";
 import { insertCharacterTrackItems } from "../libs/insertCharacterTrackItems";
 import { useAppDispatch, useAppSelector } from "../hooks/useReduxHooks";
-import { watchFolderSelector } from "../store/settings/selectors";
+import { watchFolderSelector } from "../store/selectors";
 
 const queue = new PQueue({ concurrency: 1 });
 

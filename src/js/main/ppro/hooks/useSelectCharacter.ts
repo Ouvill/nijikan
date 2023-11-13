@@ -5,7 +5,7 @@ import { selectedCharacterActions } from "../store/settings/selectedCharacter";
 import {
   characterCollectionSelector,
   selectedCharacterSelector,
-} from "../store/settings/selectors";
+} from "../store/selectors";
 
 export const useSelectCharacter = () => {
   const dispatch = useAppDispatch();

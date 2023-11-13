@@ -9,7 +9,7 @@ import { Character } from "./store/settings/characters/type";
 import { Sandbox } from "./components/Sandbox";
 import { useAppDispatch, useAppSelector } from "./hooks/useReduxHooks";
 import { useSaveSettings } from "./hooks/useSaveSettings";
-import { characterCollectionSelector } from "./store/settings/selectors";
+import { characterCollectionSelector } from "./store/selectors";
 import { useSelectCharacter } from "./hooks/useSelectCharacter";
 
 const PproApp = () => {
