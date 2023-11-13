@@ -29,11 +29,31 @@ export async function insertCharacterTrackItems(
     return;
   }
 
+  if (
+    features.insertLipSync &&
+    character.lipSyncMogrtPath !== "" &&
+    !fs.existsSync(character.lipSyncMogrtPath)
+  ) {
+    alert("口パクのモーショングラフィックステンプレートがありません");
+    return;
+  }
+  let lab = "";
+  try {
+    if (features.insertLipSync) {
+      const lipSyncPath = replaceExt(voicePath, ".lab");
+      const b = await fs.promises.readFile(lipSyncPath);
+      lab = b.toString();
+    }
+  } catch (e) {
+    alert("labファイルの読み取りに失敗しました");
+    return;
+  }
   evalTS("insertCharacterTrackItems", {
     voicePath,
     character,
+    features,
     subtitle,
-    overwriteTrack: features.overwriteTrack,
+    lab,
   }).catch((e) => {
     alert(e.message);
   });

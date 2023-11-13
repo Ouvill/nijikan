@@ -15,6 +15,7 @@ import { Connection, initCache } from "./scripts/cache";
 import { findClipByName } from "./scripts/findClipByName";
 import { getTrackEndTime } from "./scripts/getTrackEndTime";
 import { linkClips } from "./scripts/linkClips";
+import { FeatureState } from "../../js/main/ppro/store/settings/feature/state";
 
 export { selectFolder } from "./scripts/selectFolder";
 export { checkBeforeInsert } from "./scripts/checkBeforeInsert";
@@ -251,17 +252,20 @@ function insertVideoToSequence({
 export const insertCharacterTrackItems = ({
   voicePath,
   character,
+  features,
   subtitle,
-  overwriteTrack,
+  lab,
 }: {
   voicePath: string;
-  subtitle: string;
   character: Character;
-  overwriteTrack?: boolean;
+  features: FeatureState;
+  subtitle: string;
+  lab: string;
 }) => {
   const seq = app.project.activeSequence;
   const playerPosition = seq.getPlayerPosition();
   const targetBin = findOrCreateBin("voice");
+  let clips: TrackItem[] = [];
 
   // audio
   const audioItem = importAudio(targetBin, voicePath);
@@ -271,14 +275,16 @@ export const insertCharacterTrackItems = ({
   if (!duration) return;
 
   const audioClip = insertAudioToSequence({
-    overwriteTrack: overwriteTrack,
+    overwriteTrack: features.overwriteTrack,
     targetTime: playerPosition,
     audioItem,
     duration,
     trackIndex: character.voiceTrackIndex,
   });
   if (!audioClip) return;
+  clips.push(audioClip);
 
+  // subtitle
   let subtitleMogrtItem: ProjectItem;
   try {
     subtitleMogrtItem = getMogrtProjectItem(
@@ -290,7 +296,7 @@ export const insertCharacterTrackItems = ({
   }
 
   const subtitleMogrtClip = insertVideoToSequence({
-    overwriteTrack: overwriteTrack,
+    overwriteTrack: features.overwriteTrack,
     targetTime: playerPosition,
     videoItem: subtitleMogrtItem,
     duration,
@@ -298,8 +304,32 @@ export const insertCharacterTrackItems = ({
   });
   if (!subtitleMogrtClip) return;
   fillMogrtText(subtitleMogrtClip, character.subtitleParamName, subtitle);
+  clips.push(subtitleMogrtClip);
 
-  linkClips([audioClip, subtitleMogrtClip], seq);
+  // lip sync
+  if (features.insertLipSync && character.lipSyncMogrtPath) {
+    let lipSyncMogrtItem: ProjectItem;
+    try {
+      lipSyncMogrtItem = getMogrtProjectItem(
+        character.lipSyncMogrtPath,
+        mogrtStore,
+      );
+    } catch (e) {
+      return;
+    }
+    const lipSyncMogrtClip = insertVideoToSequence({
+      overwriteTrack: features.overwriteTrack,
+      targetTime: playerPosition,
+      videoItem: lipSyncMogrtItem,
+      duration,
+      trackIndex: character.lipSyncVidTrackIndex,
+    });
+    if (!lipSyncMogrtClip) return;
+    fillMogrtText(lipSyncMogrtClip, "lab", lab);
+    clips.push(lipSyncMogrtClip);
+  }
+
+  linkClips(clips, seq);
 
   app.project.activeSequence.setPlayerPosition(audioClip.end.ticks);
 };
