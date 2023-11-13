@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { watchFolderActions } from "../store/settings/watchFolder";
-import Button from "../../../components/Button";
-import { Characters } from "../store/settings/characters/type";
-import { watchAddVoice } from "../libs/watchAddVoice";
+import { watchFolderActions } from "../../store/settings/watchFolder";
+import Button from "../../../../components/Button";
+import { Characters } from "../../store/settings/characters/type";
+import { watchAddVoice } from "../../libs/watchAddVoice";
 import PQueue from "p-queue";
-import { insertCharacterTrackItems } from "../libs/insertCharacterTrackItems";
-import { useAppDispatch, useAppSelector } from "../hooks/useReduxHooks";
-import { watchFolderSelector } from "../store/selectors";
-import { FeatureState } from "../store/settings/feature/state";
+import { insertCharacterTrackItems } from "../../libs/insertCharacterTrackItems";
+import { useAppDispatch, useAppSelector } from "../../hooks/useReduxHooks";
+import { watchFolderSelector } from "../../store/selectors";
+import { FeatureState } from "../../store/settings/feature/state";
+import { ToggleButton } from "../../../../components/ToggleButton";
 
 const queue = new PQueue({ concurrency: 1 });
 
@@ -67,17 +68,30 @@ export const WatchFolder = ({
   }, [isWatch, watchFolderState.path, characters, features]);
 
   const toggleWatch = () => {
+    if (!isWatch && watchFolderState.path === "") {
+      alert("監視フォルダを選択してください");
+      return;
+    }
+
     setIsWatch(!isWatch);
   };
 
   return (
     <div>
-      <h2>監視フォルダ</h2>
-      <p>{watchFolderState.path}</p>
-      <Button onClick={onClickSelectFolder}>フォルダ選択</Button>
-      <Button>
-        <input type={"checkbox"} onChange={toggleWatch} checked={isWatch} />
-      </Button>
+      <div>
+        <p>ボイス監視</p>
+      </div>
+      <div className={"flex justify-center items-center py-8"}>
+        <ToggleButton checked={isWatch} onChange={toggleWatch}></ToggleButton>
+      </div>
+      <div className={"flex justify-between gap-2"}>
+        <p className={"min-w-0 text-xs text-right break-words"}>
+          {watchFolderState.path.length > 30
+            ? `${watchFolderState.path.slice(-30)}`
+            : watchFolderState.path}
+        </p>
+        <Button onClick={onClickSelectFolder}>フォルダ選択</Button>
+      </div>
     </div>
   );
 };
