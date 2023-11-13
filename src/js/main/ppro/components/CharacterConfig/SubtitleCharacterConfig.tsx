@@ -41,12 +41,12 @@ export function SubtitleCharacterConfig(props: {
   };
 
   return (
-    <div>
+    <div className={"flex flex-col gap-2"}>
       <h2>字幕設定</h2>
-      <div className={"flex justify-between items-center"}>
+      <div className={"flex justify-between items-center gap-4"}>
         <p>字幕MOGRT</p>
         <div className={"min-w-0"}>
-          <div className={"flex items-center"}>
+          <div className={"flex items-center gap-2"}>
             <p className={"min-w-0 break-words text-xs"}>
               {props.character.subtitleMogrtPath}
             </p>
