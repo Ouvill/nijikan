@@ -5,6 +5,7 @@ export type FeatureState = {
   insertVoice: boolean;
   insertSubtitle: boolean;
   insertLipSync: boolean;
+  linkClips: boolean;
 };
 
 export const featureDefaultState: FeatureState = {
@@ -12,6 +13,7 @@ export const featureDefaultState: FeatureState = {
   insertVoice: true,
   insertSubtitle: true,
   insertLipSync: true,
+  linkClips: true,
 };
 
 export const featureSchema: JSONSchemaType<FeatureState> = {
@@ -21,12 +23,14 @@ export const featureSchema: JSONSchemaType<FeatureState> = {
     insertVoice: { type: "boolean" },
     insertSubtitle: { type: "boolean" },
     insertLipSync: { type: "boolean" },
+    linkClips: { type: "boolean" },
   },
   required: [
     "overwriteTrack",
     "insertVoice",
     "insertSubtitle",
     "insertLipSync",
+    "linkClips",
   ],
   additionalProperties: false,
 };

@@ -11,6 +11,9 @@ const feature = createSlice({
     setInsertLipSync(state, action: PayloadAction<boolean>) {
       state.insertLipSync = action.payload;
     },
+    setLinkClips(state, action: PayloadAction<boolean>) {
+      state.linkClips = action.payload;
+    },
   },
 });
 

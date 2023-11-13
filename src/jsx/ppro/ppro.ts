@@ -329,8 +329,9 @@ export const insertCharacterTrackItems = ({
     clips.push(lipSyncMogrtClip);
   }
 
-  linkClips(clips, seq);
-
+  if (features.linkClips) {
+    linkClips(clips, seq);
+  }
   app.project.activeSequence.setPlayerPosition(audioClip.end.ticks);
 };
 
