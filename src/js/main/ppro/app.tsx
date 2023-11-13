@@ -53,7 +53,7 @@ const PproApp = () => {
   const saveSettings = useSaveSettings();
 
   return (
-    <div className={"mx-2"}>
+    <div className={"mx-2 not-prose"}>
       <h1>{host}</h1>
       <Sandbox></Sandbox>
       <Button onClick={saveSettings}>設定を保存</Button>
@@ -64,7 +64,7 @@ const PproApp = () => {
         <p>selected: {selectedCharacterId}</p>
         <div className={"flex flex-col"}>
           <label>
-            <div className={"not-prose flex justify-between"}>
+            <div className={"flex justify-between"}>
               <p>キャラクター選択</p>
               <select
                 value={selectedCharacterId}
