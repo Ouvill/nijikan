@@ -1,15 +1,6 @@
 import { addTime } from "../ppro-utils";
+import { compareTime } from "./compareTime";
 
-const compareTime = (a: Time, b: Time) => {
-  const aTicks = parseInt(a.ticks);
-  const bTicks = parseInt(b.ticks);
-  if (aTicks > bTicks) {
-    return 1;
-  } else if (aTicks < bTicks) {
-    return -1;
-  }
-  return 0;
-};
 const isBetweenTime = (targetTime: Time, start: Time, end: Time) => {
   return (
     compareTime(targetTime, start) >= 0 && compareTime(targetTime, end) < 0
@@ -67,7 +58,7 @@ export const checkInsertable = (
       if (compareTime(targetEndTime, track.clips[middle + 1].start) <= 0) {
         return middle;
       }
-    } else /* targetTime on clip */ {
+    } /* targetTime on clip */ else {
       return -1;
     }
   }

@@ -16,6 +16,7 @@ import { findClipByName } from "./scripts/findClipByName";
 import { getTrackEndTime } from "./scripts/getTrackEndTime";
 import { linkClips } from "./scripts/linkClips";
 import { FeatureState } from "../../js/main/ppro/store/settings/feature/state";
+import { findClipByStartTime } from "./scripts/findClipByStartTime";
 
 export { selectFolder } from "./scripts/selectFolder";
 export { checkBeforeInsert } from "./scripts/checkBeforeInsert";
@@ -122,10 +123,6 @@ function overwriteVideoClip(
   targetTime: Time,
   trackIndex: number,
 ) {
-  const rand = Math.floor(Math.random() * 1000000000);
-
-  // cache data
-  const originName = videoItem.name;
   // @ts-ignore
   const originInPoint: Time = videoItem.getInPoint(1);
   // @ts-ignore
@@ -135,7 +132,6 @@ function overwriteVideoClip(
 
   try {
     // set data
-    videoItem.name = rand.toString();
     // @ts-ignore
     videoItem.setInPoint(zeroTime.ticks, 4);
     // @ts-ignore
@@ -146,13 +142,11 @@ function overwriteVideoClip(
     // @ts-ignore
     const result = track.overwriteClip(videoItem, targetTime.ticks);
     if (!result) return;
-    const clip = findClipByName(track, rand.toString());
+    const clip = findClipByStartTime(track, targetTime);
     if (!clip) return;
-    clip.name = originName;
     return clip;
   } finally {
     // restore data
-    videoItem.name = originName;
     // @ts-ignore
     videoItem.setInPoint(originInPoint, 4);
     videoItem.setOutPoint(originOutPoint, 4);
