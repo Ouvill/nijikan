@@ -9,14 +9,12 @@ import {
 import { findOrCreateBin } from "./scripts/findOrCreateBin";
 import { getAudioDuration } from "./scripts/getDuration";
 import { checkInsertable } from "./scripts/checkInsertable";
-import { findClipByPath } from "./scripts/findClipByPath";
-import type { Character } from "../../js/main/ppro/store/settings/characters/type";
 import { Connection, initCache } from "./scripts/cache";
-import { findClipByName } from "./scripts/findClipByName";
 import { getTrackEndTime } from "./scripts/getTrackEndTime";
 import { linkClips } from "./scripts/linkClips";
-import { FeatureState } from "../../js/main/ppro/store/settings/feature/state";
 import { findClipByStartTime } from "./scripts/findClipByStartTime";
+import type { Character } from "../../js/main/ppro/store/settings/characters/type";
+import type { FeatureState } from "../../js/main/ppro/store/settings/feature/state";
 
 export { selectFolder } from "./scripts/selectFolder";
 export { checkBeforeInsert } from "./scripts/checkBeforeInsert";
@@ -73,7 +71,7 @@ const overwriteAudioClip = (
   );
 
   if (result) {
-    return findClipByPath(track, audioItem.getMediaPath());
+    return findClipByStartTime(track, targetTime);
   }
 };
 
