@@ -1,13 +1,20 @@
 import Button from "../../../components/Button";
-import { evalTS } from "../../../lib/utils/bolt";
+import { csi, evalTS } from "../../../lib/utils/bolt";
+import { useEffect } from "react";
+import { CSXSEvent } from "../../../type";
 
 export function Sandbox() {
+  useEffect(() => {}, []);
+
+  useEffect(() => {
+    csi.addEventListener("sampleEvent", (e: CSXSEvent) => {
+      alert(e.data);
+    });
+  }, []);
+
   const onClick = () => {
-    evalTS("sandboxFunc", {
-      mogrtPath:
-        "C:\\Users\\youhei\\Creative Cloud Files\\Videos\\material\\motion_graphic_template\\2580x1080_stroke\\ずんだもん.mogrt",
-    }).catch((e) => {
-      alert("error catch from react"+ e.message);
+    evalTS("sandboxFunc").catch((e) => {
+      alert("error catch from react" + e.message);
     });
   };
 

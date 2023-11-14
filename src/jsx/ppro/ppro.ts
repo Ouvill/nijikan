@@ -50,7 +50,12 @@ function getMogrtProjectItem(mogrtPath: string, store: Connection<MogrtStore>) {
   return importMgtToProject(mogrtPath, store);
 }
 
-export const sandboxFunc = ({ mogrtPath }: { mogrtPath: string }) => {};
+export const sandboxFunc = () => {
+  const eventObj = new CSXSEvent();
+  eventObj.type = "sampleEvent";
+  eventObj.data = "data from jsx";
+  eventObj.dispatch();
+};
 
 const importAudio = (bin: ProjectItem, path: string) => {
   const importOk = app.project.importFiles([path], true, bin, false);
