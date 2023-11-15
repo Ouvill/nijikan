@@ -28,14 +28,24 @@ const PproApp = () => {
           <Sandbox></Sandbox>
           <Button
             onClick={() => {
-              openPage("feature");
+              if (page != "feature") {
+                openPage("feature");
+              } else {
+                closePage();
+              }
             }}
+            className={`${page === "feature" ? "bg-gray-800" : ""}`}
           >
             アプリ設定
           </Button>
           <Button
+            className={`${page === "characters" ? "bg-gray-800" : ""}`}
             onClick={() => {
-              openPage("characters");
+              if (page != "characters") {
+                openPage("characters");
+              } else {
+                closePage();
+              }
             }}
           >
             キャラクター設定
