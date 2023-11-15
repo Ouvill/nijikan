@@ -7,7 +7,7 @@ const Ppro = () => {
   return (
     <Provider store={store}>
       <SubscribeWatchFolder />
-      <PproApp />;
+      <PproApp />
     </Provider>
   );
 };
