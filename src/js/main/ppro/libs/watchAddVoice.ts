@@ -32,6 +32,7 @@ export function watchAddVoice(
     });
 
   return () => {
+    if (typeof watch === "undefined") return;
     watch.close().then(() => {
       console.log("watch close");
     });

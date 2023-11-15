@@ -9,6 +9,14 @@ const rootReducer = combineReducers({
   setting: setting,
 });
 
+const migration = (state: unknown): State => {
+  // add code when migration is needed
+  return {
+    ...defaultState,
+    setting: state as State["setting"],
+  };
+};
+
 const loadState = (): State | undefined => {
   if (typeof localStorage === "undefined") return;
   const state = localStorage.getItem(STORE.SETTING_KEY);
@@ -19,7 +27,8 @@ const loadState = (): State | undefined => {
   const valid = validate(parsedSetting);
   if (!valid) {
     console.log(validate.errors);
-    return;
+
+    return migration(parsedSetting);
   }
   return {
     ...defaultState,

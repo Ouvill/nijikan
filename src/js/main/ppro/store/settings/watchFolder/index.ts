@@ -14,6 +14,9 @@ const watchFolder = createSlice({
       const { path } = action.payload;
       state.path = path;
     },
+    setWatching: (state, action: PayloadAction<boolean>) => {
+      state.isWatching = action.payload;
+    },
     setIsWatchingOnStartup: (
       state,
       action: PayloadAction<{
