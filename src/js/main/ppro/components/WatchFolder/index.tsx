@@ -2,7 +2,7 @@ import React from "react";
 import { watchFolderActions } from "../../store/settings/watchFolder";
 import { useAppDispatch, useAppSelector } from "../../hooks/useReduxHooks";
 import { watchFolderSelector } from "../../store/selectors";
-import { ToggleButton } from "../../../../components/ToggleButton";
+import { Switch } from "../../../../components/Switch";
 
 export const WatchFolder = () => {
   const dispatch = useAppDispatch();
@@ -23,10 +23,10 @@ export const WatchFolder = () => {
         <p>ボイス監視</p>
       </div>
       <div className={"flex justify-center items-center"}>
-        <ToggleButton
+        <Switch
           checked={watchFolderState.isWatching}
           onChange={toggleWatch}
-        ></ToggleButton>
+        ></Switch>
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/useReduxHooks";
 import { featureSelector } from "../../../store/selectors";
 import { featureActions } from "../../../store/settings/feature";
-import { ToggleButton } from "../../../../../components/ToggleButton";
+import { Switch } from "../../../../../components/Switch";
 
 export const FeatureConfig = () => {
   const dispatch = useAppDispatch();
@@ -26,24 +26,24 @@ export const FeatureConfig = () => {
     <div className={"flex flex-col gap-y-2"}>
       <div className={"flex justify-between"}>
         <p>クリップをリンクする</p>
-        <ToggleButton
+        <Switch
           onChange={onChangeLinkClip}
           checked={features.linkClips}
-        ></ToggleButton>
+        ></Switch>
       </div>
       <div className={"flex justify-between"}>
         <p>口パクを挿入する</p>
-        <ToggleButton
+        <Switch
           onChange={onChangeInsertLipSync}
           checked={features.insertLipSync}
         />
       </div>
       <div className={"flex justify-between"}>
         <p>トラックを上書きする</p>
-        <ToggleButton
+        <Switch
           onChange={onChangeOverwriteTrack}
           checked={features.overwriteTrack}
-        ></ToggleButton>
+        ></Switch>
       </div>
     </div>
   );

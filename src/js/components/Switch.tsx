@@ -4,7 +4,7 @@ type Props = Omit<React.ButtonHTMLAttributes<HTMLInputElement>, "type"> & {
   checked: boolean;
 };
 
-export const ToggleButton: React.FC<Props> = ({ className, ...props }) => {
+export const Switch: React.FC<Props> = ({ className, ...props }) => {
   return (
     <label
       className={[
