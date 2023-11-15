@@ -17,12 +17,6 @@ export const CharactersConfig = () => {
     removeSelectedCharacter,
   } = useSelectCharacter();
 
-  const onChangeSelectedCharacterId = (
-    e: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    selectCharacter(e.target.value);
-  };
-
   const onClickAddCharacter = () => {
     addCharacter();
   };
@@ -42,24 +36,34 @@ export const CharactersConfig = () => {
       <div>
         <div className={"flex flex-col"}>
           <label>
-            <div className={"flex justify-between"}>
+            <div className={""}>
               <p>キャラクター選択</p>
-              <select
-                value={selectedCharacterId}
-                onChange={onChangeSelectedCharacterId}
-                className={"text-black"}
-              >
+              <div className={"grid grid-cols-3 gap-0.5"}>
                 {Object.entries(characters).map(([id, character]) => (
-                  <option key={id} value={id}>
+                  <div
+                    key={id}
+                    className={[
+                      "bg-gray-700 ",
+                      "hover:bg-gray-800 ",
+                      "active:bg-gray-900",
+                      "text-center",
+                      `${id === selectedCharacterId ? "bg-gray-800" : ""}`,
+                      "transition",
+                    ].join(" ")}
+                    onClick={() => {
+                      selectCharacter(id);
+                    }}
+                  >
                     {character.name}
-                  </option>
+                  </div>
                 ))}
-              </select>
+              </div>
             </div>
           </label>
-          <div className={"flex justify-end"}>
-            <Button onClick={onClickAddCharacter}>+</Button>
-            <Button onClick={onClickRemoveCharacter}>-</Button>
+          <div className={"flex justify-end my-2"}>
+            <Button onClick={onClickAddCharacter}>
+              キャラクター設定を追加
+            </Button>
           </div>
         </div>
       </div>
@@ -70,6 +74,14 @@ export const CharactersConfig = () => {
           setCharacter={characterConfigUpdater(selectedCharacterId)}
         ></CharacterConfig>
       )}
+      <div className={"flex justify-end my-4"}>
+        <Button
+          className={"bg-red-900 hover:bg-red-950 active:bg-red-950"}
+          onClick={onClickRemoveCharacter}
+        >
+          キャラクターを削除
+        </Button>
+      </div>
     </div>
   );
 };
