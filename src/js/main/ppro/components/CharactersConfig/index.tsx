@@ -40,8 +40,6 @@ export const CharactersConfig = () => {
   return (
     <div>
       <div>
-        <h2>キャラクター</h2>
-        <p>selected: {selectedCharacterId}</p>
         <div className={"flex flex-col"}>
           <label>
             <div className={"flex justify-between"}>

@@ -1,8 +1,8 @@
 import React, { useCallback } from "react";
-import { useAppDispatch, useAppSelector } from "../../hooks/useReduxHooks";
-import { featureSelector } from "../../store/selectors";
-import { featureActions } from "../../store/settings/feature";
-import { ToggleButton } from "../../../../components/ToggleButton";
+import { useAppDispatch, useAppSelector } from "../../../hooks/useReduxHooks";
+import { featureSelector } from "../../../store/selectors";
+import { featureActions } from "../../../store/settings/feature";
+import { ToggleButton } from "../../../../../components/ToggleButton";
 
 export const FeatureConfig = () => {
   const dispatch = useAppDispatch();
@@ -24,7 +24,6 @@ export const FeatureConfig = () => {
 
   return (
     <div className={"flex flex-col gap-y-2"}>
-      <h2>アプリ設定</h2>
       <div className={"flex justify-between"}>
         <p>クリップをリンクする</p>
         <ToggleButton

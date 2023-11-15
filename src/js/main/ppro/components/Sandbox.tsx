@@ -7,9 +7,15 @@ export function Sandbox() {
   useEffect(() => {}, []);
 
   useEffect(() => {
-    csi.addEventListener("sampleEvent", (e: CSXSEvent) => {
+    const handler = (e: CSXSEvent) => {
       alert(e.data);
-    });
+    };
+
+    csi.addEventListener("sampleEvent", handler, null);
+
+    return () => {
+      csi.removeEventListener("sampleEvent", handler, null);
+    };
   }, []);
 
   const onClick = () => {

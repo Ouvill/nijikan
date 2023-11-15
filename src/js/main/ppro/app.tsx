@@ -1,37 +1,65 @@
 import { csi } from "../../lib/utils/bolt";
-import React from "react";
+import React, { useState } from "react";
 
-import { CharacterConfig } from "./components/CharacterConfig";
-import { charactersActions } from "./store/settings/characters";
 import Button from "../../components/Button";
 import { WatchFolder } from "./components/WatchFolder";
-import { Character } from "./store/settings/characters/type";
 import { Sandbox } from "./components/Sandbox";
-import { useAppDispatch, useAppSelector } from "./hooks/useReduxHooks";
-import { useSaveSettings } from "./hooks/useSaveSettings";
-import {
-  characterCollectionSelector,
-  featureSelector,
-} from "./store/selectors";
-import { useSelectCharacter } from "./hooks/useSelectCharacter";
-import { FeatureConfig } from "./components/FeatureConfig";
 import { CharactersConfig } from "./components/CharactersConfig";
+import { AppConfig } from "./components/AppConfig";
+
+type Pages = "index" | "feature" | "characters";
 
 const PproApp = () => {
   const host = csi.hostEnvironment.appName;
-
-  const features = useAppSelector(featureSelector);
-
-  const saveSettings = useSaveSettings();
+  const [page, setPage] = useState<Pages>("index");
+  const openPage = (page: Pages) => {
+    setPage(page);
+  };
+  const closePage = () => {
+    setPage("index");
+  };
 
   return (
     <div className={"mx-2 not-prose"}>
       <h1>{host}</h1>
-      <Sandbox></Sandbox>
-      <Button onClick={saveSettings}>設定を保存</Button>
-      <WatchFolder />
-      <FeatureConfig></FeatureConfig>
-      <CharactersConfig></CharactersConfig>
+      <div className={"flex flex-col gap-4"}>
+        <WatchFolder />
+        <div className={"flex justify-end gap-2"}>
+          <Sandbox></Sandbox>
+          <Button
+            onClick={() => {
+              openPage("feature");
+            }}
+          >
+            アプリ設定
+          </Button>
+          <Button
+            onClick={() => {
+              openPage("characters");
+            }}
+          >
+            キャラクター設定
+          </Button>
+        </div>
+      </div>
+
+      {page === "feature" && (
+        <div className={"flex flex-col my-4 gap-2"}>
+          <p>アプリ設定</p>
+          <AppConfig />
+          <div className={"flex justify-end"}>
+            <Button onClick={closePage}>閉じる</Button>
+          </div>
+        </div>
+      )}
+      {page === "characters" && (
+        <div className={"flex flex-col my-4 gap-2"}>
+          <CharactersConfig />
+          <div className={"flex justify-end"}>
+            <Button onClick={closePage}>閉じる</Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
