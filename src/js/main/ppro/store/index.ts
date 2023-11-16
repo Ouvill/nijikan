@@ -13,7 +13,6 @@ const migration = (state: unknown): State => {
   // add code when migration is needed
   return {
     ...defaultState,
-    setting: state as State["setting"],
   };
 };
 
