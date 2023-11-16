@@ -6,18 +6,31 @@ export const defaultCharacter: Omit<Character, "id"> = {
   subtitleMogrtPath: "",
   subtitleTrackIndex: 0,
   subtitleParamName: "ソーステキスト",
+  imagePosition: {
+    x: 960,
+    y: 540,
+  },
+  imageScale: 100,
+  imagePath: "",
+  imageVidTrackIndex: 0,
   lipSyncMogrtPath: "",
   lipSyncVidTrackIndex: 0,
 };
 
 export const charactersDefaultState: Characters = {
   shikokuMetan: {
-    id: "shikoku",
+    id: "shikokuMetan",
     name: "四国めたん",
     subtitleMogrtPath: "",
     subtitleTrackIndex: 0,
     subtitleParamName: "ソーステキスト",
-
+    imagePosition: {
+      x: 960,
+      y: 540,
+    },
+    imageScale: 100,
+    imagePath: "",
+    imageVidTrackIndex: 0,
     lipSyncMogrtPath: "",
     lipSyncVidTrackIndex: 0,
     voiceTrackIndex: 0,
@@ -28,7 +41,13 @@ export const charactersDefaultState: Characters = {
     subtitleMogrtPath: "",
     subtitleTrackIndex: 0,
     subtitleParamName: "ソーステキスト",
-
+    imagePosition: {
+      x: 960,
+      y: 540,
+    },
+    imageScale: 100,
+    imagePath: "",
+    imageVidTrackIndex: 0,
     lipSyncMogrtPath: "",
     lipSyncVidTrackIndex: 0,
     voiceTrackIndex: 0,
@@ -39,7 +58,13 @@ export const charactersDefaultState: Characters = {
     subtitleMogrtPath: "",
     subtitleTrackIndex: 0,
     subtitleParamName: "ソーステキスト",
-
+    imagePosition: {
+      x: 960,
+      y: 540,
+    },
+    imageScale: 100,
+    imagePath: "",
+    imageVidTrackIndex: 0,
     lipSyncMogrtPath: "",
     lipSyncVidTrackIndex: 0,
     voiceTrackIndex: 0,
@@ -50,6 +75,13 @@ export const charactersDefaultState: Characters = {
     subtitleMogrtPath: "",
     subtitleTrackIndex: 0,
     subtitleParamName: "ソーステキスト",
+    imagePosition: {
+      x: 960,
+      y: 540,
+    },
+    imageScale: 100,
+    imagePath: "",
+    imageVidTrackIndex: 0,
     lipSyncMogrtPath: "",
     lipSyncVidTrackIndex: 0,
     voiceTrackIndex: 0,
@@ -60,6 +92,13 @@ export const charactersDefaultState: Characters = {
     subtitleMogrtPath: "",
     subtitleTrackIndex: 0,
     subtitleParamName: "ソーステキスト",
+    imagePosition: {
+      x: 960,
+      y: 540,
+    },
+    imageScale: 100,
+    imagePath: "",
+    imageVidTrackIndex: 0,
     lipSyncMogrtPath: "",
     lipSyncVidTrackIndex: 0,
     voiceTrackIndex: 0,
