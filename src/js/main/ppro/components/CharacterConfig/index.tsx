@@ -2,6 +2,7 @@ import React from "react";
 import { Character } from "../../store/settings/characters/type";
 import { SubtitleCharacterConfig } from "./SubtitleCharacterConfig";
 import { LipSyncCharacterConfig } from "./LipSyncCharacterConfig";
+import { ImageCharacterConfig } from "./ImageCharacterConfig";
 
 export function CharacterConfig(props: {
   character: Character;
@@ -52,6 +53,10 @@ export function CharacterConfig(props: {
             character={props.character}
             setCharacter={props.setCharacter}
           />
+          <ImageCharacterConfig
+            character={props.character}
+            setCharacter={props.setCharacter}
+          ></ImageCharacterConfig>
           <LipSyncCharacterConfig
             character={props.character}
             setCharacter={props.setCharacter}
