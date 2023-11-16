@@ -269,6 +269,32 @@ export const insertCharacterTrackItems = ({
   fillMogrtText(subtitleMogrtClip, character.subtitleParamName, subtitle);
   clips.push(subtitleMogrtClip);
 
+  // image
+  if (features.insertImage && character.imagePath !== "") {
+    const extensionBin = findOrCreateBin(ns.split(".").slice(-1)[0]);
+    let image = findItemByPath(extensionBin, character.imagePath);
+    if (image === undefined) {
+      image = importFile(extensionBin, character.imagePath);
+    }
+    if (!image) return;
+
+    const imageClip = insertVideoToSequence({
+      overwriteTrack: features.overwriteTrack,
+      targetTime: playerPosition,
+      videoItem: image,
+      duration,
+      trackIndex: character.imageVidTrackIndex,
+    });
+
+    if (!imageClip) return;
+    setClipMotionValue({
+      seq: app.project.activeSequence,
+      clip: imageClip,
+      position: character.imagePosition,
+      scale: character.imageScale,
+    });
+  }
+
   // lip sync
   if (features.insertLipSync && character.lipSyncMogrtPath) {
     let lipSyncMogrtItem: ProjectItem;
@@ -296,8 +322,6 @@ export const insertCharacterTrackItems = ({
       position: character.imagePosition,
       scale: character.imageScale,
     });
-
-    clips.push(lipSyncMogrtClip);
   }
 
   if (features.linkClips) {
