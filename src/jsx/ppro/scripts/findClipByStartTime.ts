@@ -1,6 +1,6 @@
 import { compareTime } from "./compareTime";
 
-export const findClipByStartTime = (track: Track, time: Time) => {
+export const getClipIndexByStartTime = (track: Track, time: Time) => {
   const num = track.clips.numItems;
 
   let left = 0;
@@ -10,7 +10,7 @@ export const findClipByStartTime = (track: Track, time: Time) => {
   while (left <= right) {
     middle = Math.floor((left + right) / 2);
     if (compareTime(time, track.clips[middle].start) === 0) {
-      return track.clips[middle];
+      return middle;
     } else if (compareTime(time, track.clips[middle].start) > 0) {
       left = middle + 1;
     } else {
@@ -18,5 +18,13 @@ export const findClipByStartTime = (track: Track, time: Time) => {
     }
   }
 
+  return -1;
+};
+
+export const findClipByStartTime = (track: Track, time: Time) => {
+  const index = getClipIndexByStartTime(track, time);
+  if (index !== -1) {
+    return track.clips[index];
+  }
   return undefined;
 };
