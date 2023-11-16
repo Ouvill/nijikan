@@ -18,6 +18,10 @@ export const FeatureConfig = () => {
     dispatch(featureActions.setOverwriteTrack(e.target.checked));
   };
 
+  const onChangeInsertImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(featureActions.setInsertImage(e.target.checked));
+  };
+
   const onChangeInsertLipSync = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(featureActions.setInsertLipSync(e.target.checked));
   };
@@ -30,6 +34,13 @@ export const FeatureConfig = () => {
           onChange={onChangeLinkClip}
           checked={features.linkClips}
         ></Switch>
+      </div>
+      <div className={"flex justify-between"}>
+        <p>立ち絵を挿入する</p>
+        <Switch
+          onChange={onChangeInsertImage}
+          checked={features.insertImage}
+        />
       </div>
       <div className={"flex justify-between"}>
         <p>口パクを挿入する</p>

@@ -14,6 +14,9 @@ const feature = createSlice({
     setLinkClips(state, action: PayloadAction<boolean>) {
       state.linkClips = action.payload;
     },
+    setInsertImage(state, action: PayloadAction<boolean>) {
+      state.insertImage = action.payload;
+    },
   },
 });
 
