@@ -2,6 +2,7 @@ import Button from "../../../../components/Button";
 import React, { useState } from "react";
 import { Character } from "../../store/settings/characters/type";
 import { evalTS } from "../../../../lib/utils/bolt";
+import { Switch } from "../../../../components/Switch";
 
 type Props = {
   character: Character;
@@ -57,6 +58,13 @@ export const ImageCharacterConfig: React.FC<Props> = (props) => {
     props.setCharacter({
       ...props.character,
       imageScale: value,
+    });
+  };
+
+  const onChangeHorizontalFlip = (e: React.ChangeEvent<HTMLInputElement>) => {
+    props.setCharacter({
+      ...props.character,
+      imageHorizontalFlip: e.target.checked,
     });
   };
 
@@ -120,6 +128,13 @@ export const ImageCharacterConfig: React.FC<Props> = (props) => {
           value={props.character.imageScale}
           min={0}
           onChange={onChangeScale}
+        />
+      </div>
+      <div className={"flex justify-between"}>
+        <p>左右反転</p>
+        <Switch
+          checked={props.character.imageHorizontalFlip}
+          onChange={onChangeHorizontalFlip}
         />
       </div>
     </div>

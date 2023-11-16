@@ -6,12 +6,13 @@ export type Character = {
   subtitleMogrtPath: string;
   subtitleTrackIndex: number;
   subtitleParamName: string;
+  imagePath: string;
   imagePosition: {
     x: number;
     y: number;
   };
   imageScale: number;
-  imagePath: string;
+  imageHorizontalFlip: boolean;
   imageVidTrackIndex: number;
   lipSyncMogrtPath: string;
   lipSyncVidTrackIndex: number;
@@ -26,6 +27,7 @@ export const characterSchema: JSONSchemaType<Character> = {
     subtitleMogrtPath: { type: "string" },
     subtitleTrackIndex: { type: "number" },
     subtitleParamName: { type: "string" },
+    imagePath: { type: "string" },
     imagePosition: {
       type: "object",
       properties: {
@@ -35,7 +37,7 @@ export const characterSchema: JSONSchemaType<Character> = {
       required: ["x", "y"],
     },
     imageScale: { type: "number" },
-    imagePath: { type: "string" },
+    imageHorizontalFlip: { type: "boolean" },
     imageVidTrackIndex: { type: "number" },
     lipSyncMogrtPath: { type: "string" },
     lipSyncVidTrackIndex: { type: "number" },
@@ -47,9 +49,10 @@ export const characterSchema: JSONSchemaType<Character> = {
     "subtitleMogrtPath",
     "subtitleTrackIndex",
     "subtitleParamName",
+    "imagePath",
     "imagePosition",
     "imageScale",
-    "imagePath",
+    "imageHorizontalFlip",
     "imageVidTrackIndex",
     "lipSyncMogrtPath",
     "lipSyncVidTrackIndex",

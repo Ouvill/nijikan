@@ -16,12 +16,7 @@ export { selectFolder } from "./scripts/selectFolder";
 export { checkBeforeInsert } from "./scripts/checkBeforeInsert";
 export const example = () => {};
 
-export const sandboxFunc = () => {
-  const eventObj = new CSXSEvent();
-  eventObj.type = "sampleEvent";
-  eventObj.data = "data from jsx";
-  eventObj.dispatch();
-};
+export const sandboxFunc = () => {};
 
 const importFile = (bin: ProjectItem, path: string) => {
   const importOk = app.project.importFiles([path], true, bin, false);
