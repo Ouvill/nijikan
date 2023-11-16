@@ -187,8 +187,8 @@ function insertVideoToSequence({
 
   // add audio track if needed
   if (!haveEnoughVideoTrack(seq, trackIndex)) {
-    const numAudio = trackIndex - seq.videoTracks.numTracks + 1;
-    addVideoTrack(numAudio, seq.videoTracks.numTracks);
+    const needTrackNum = trackIndex - seq.videoTracks.numTracks + 1;
+    addVideoTrack(needTrackNum, seq.videoTracks.numTracks);
   }
 
   if (overwriteTrack) {
