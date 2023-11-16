@@ -5,12 +5,17 @@ import { findOrCreateBin } from "./scripts/findOrCreateBin";
 import { getAudioDuration } from "./scripts/getDuration";
 import { checkInsertable } from "./scripts/checkInsertable";
 import { linkClips } from "./scripts/linkClips";
-import { findClipByStartTime } from "./scripts/findClipByStartTime";
+import {
+  findClipByStartTime,
+  getClipIndexByStartTime,
+} from "./scripts/findClipByStartTime";
 import type { Character } from "../../js/main/ppro/store/settings/characters/type";
 import type { FeatureState } from "../../js/main/ppro/store/settings/feature/state";
 import { setClipMotionValue } from "./scripts/setClipMotionValue";
 import { ns } from "../../shared/shared";
 import { getMogrtProjectItem, mogrtStore } from "./scripts/mogrt";
+import { applyEffect } from "./scripts/qe/applyEffect";
+import { ComponentMatchName } from "./constant";
 
 export { selectFolder } from "./scripts/selectFolder";
 export { checkBeforeInsert } from "./scripts/checkBeforeInsert";
@@ -182,7 +187,10 @@ function insertVideoToSequence({
   duration: Time;
   videoItem: ProjectItem;
   trackIndex: number;
-}) {
+}): {
+  clip: TrackItem | undefined;
+  trackIndex: number;
+} {
   const seq = app.project.activeSequence;
 
   // add audio track if needed
@@ -192,7 +200,10 @@ function insertVideoToSequence({
   }
 
   if (overwriteTrack) {
-    return overwriteVideoClip(videoItem, duration, targetTime, trackIndex);
+    return {
+      clip: overwriteVideoClip(videoItem, duration, targetTime, trackIndex),
+      trackIndex: trackIndex,
+    };
   } else {
     let targetIndex = searchInsertableVideoTrack(
       targetTime,
@@ -203,7 +214,10 @@ function insertVideoToSequence({
       targetIndex = seq.audioTracks.numTracks;
       addVideoTrack(1, targetIndex);
     }
-    return overwriteVideoClip(videoItem, duration, targetTime, targetIndex);
+    return {
+      clip: overwriteVideoClip(videoItem, duration, targetTime, targetIndex),
+      trackIndex: targetIndex,
+    };
   }
 }
 
@@ -259,7 +273,7 @@ export const insertCharacterTrackItems = ({
     videoItem: subtitleMogrtItem,
     duration,
     trackIndex: character.subtitleTrackIndex,
-  });
+  }).clip;
   if (!subtitleMogrtClip) return;
   fillMogrtText(subtitleMogrtClip, character.subtitleParamName, subtitle);
   clips.push(subtitleMogrtClip);
@@ -273,14 +287,17 @@ export const insertCharacterTrackItems = ({
     }
     if (!image) return;
 
-    const imageClip = insertVideoToSequence({
+    // insert image to sequence
+    const insertedImageInfo = insertVideoToSequence({
       overwriteTrack: features.overwriteTrack,
       targetTime: playerPosition,
       videoItem: image,
       duration,
       trackIndex: character.imageVidTrackIndex,
     });
+    const imageClip = insertedImageInfo.clip;
 
+    // set position & scale
     if (!imageClip) return;
     setClipMotionValue({
       seq: app.project.activeSequence,
@@ -288,6 +305,20 @@ export const insertCharacterTrackItems = ({
       position: character.imagePosition,
       scale: character.imageScale,
     });
+
+    // flip
+    if (character.imageHorizontalFlip) {
+      const index = getClipIndexByStartTime(
+        app.project.activeSequence.videoTracks[insertedImageInfo.trackIndex],
+        playerPosition,
+      );
+      if (index === -1) return;
+      applyEffect(
+        insertedImageInfo.trackIndex,
+        index,
+        ComponentMatchName.HorizontalFlip,
+      );
+    }
   }
 
   // lip sync
@@ -301,24 +332,44 @@ export const insertCharacterTrackItems = ({
     } catch (e) {
       return;
     }
-    const lipSyncMogrtClip = insertVideoToSequence({
+
+    const insertedLipSyncMogrtInfo = insertVideoToSequence({
       overwriteTrack: features.overwriteTrack,
       targetTime: playerPosition,
       videoItem: lipSyncMogrtItem,
       duration,
       trackIndex: character.lipSyncVidTrackIndex,
     });
+    const lipSyncMogrtClip = insertedLipSyncMogrtInfo.clip;
     if (!lipSyncMogrtClip) return;
     fillMogrtText(lipSyncMogrtClip, "lab", lab);
 
+    // set position & scale
     setClipMotionValue({
       seq: app.project.activeSequence,
       clip: lipSyncMogrtClip,
       position: character.imagePosition,
       scale: character.imageScale,
     });
+
+    // flip
+    if (character.imageHorizontalFlip) {
+      const index = getClipIndexByStartTime(
+        app.project.activeSequence.videoTracks[
+          insertedLipSyncMogrtInfo.trackIndex
+        ],
+        playerPosition,
+      );
+      if (index === -1) return;
+      applyEffect(
+        insertedLipSyncMogrtInfo.trackIndex,
+        index,
+        ComponentMatchName.HorizontalFlip,
+      );
+    }
   }
 
+  // link clips
   if (features.linkClips) {
     linkClips(clips, seq);
   }
