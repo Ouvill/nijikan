@@ -15,6 +15,7 @@ import { linkClips } from "./scripts/linkClips";
 import { findClipByStartTime } from "./scripts/findClipByStartTime";
 import type { Character } from "../../js/main/ppro/store/settings/characters/type";
 import type { FeatureState } from "../../js/main/ppro/store/settings/feature/state";
+import { setClipMotionValue } from "./scripts/setClipMotionValue";
 
 export { selectFolder } from "./scripts/selectFolder";
 export { checkBeforeInsert } from "./scripts/checkBeforeInsert";
@@ -323,6 +324,14 @@ export const insertCharacterTrackItems = ({
     });
     if (!lipSyncMogrtClip) return;
     fillMogrtText(lipSyncMogrtClip, "lab", lab);
+
+    setClipMotionValue({
+      seq: app.project.activeSequence,
+      clip: lipSyncMogrtClip,
+      position: character.imagePosition,
+      scale: character.imageScale,
+    });
+
     clips.push(lipSyncMogrtClip);
   }
 

@@ -13,14 +13,15 @@ import { ComponentMatchName, MediaTypes } from "../constant";
 export const setClipMotionValue = ({
   seq,
   clip,
-  x,
-  y,
+  position,
   scale,
 }: {
   seq: Sequence;
   clip: TrackItem;
-  x: number;
-  y: number;
+  position: {
+    x: number;
+    y: number;
+  };
   scale: number;
 }) => {
   // Check if the clip is a video clip
@@ -35,22 +36,22 @@ export const setClipMotionValue = ({
     // Check if the component is a "Motion" component
     if (components[i].matchName === ComponentMatchName.Motion) {
       // Get the "Position" property of the component
-      const position = components[i].properties[0];
+      const positionComp = components[i].properties[0];
 
       // Calculate the new position value based on the sequence frame size
       const positionValue = [
-        x / seq.frameSizeHorizontal,
-        y / seq.frameSizeVertical,
+        position.x / seq.frameSizeHorizontal,
+        position.y / seq.frameSizeVertical,
       ];
 
       // Set the new position value
-      position.setValue(positionValue);
+      positionComp.setValue(positionValue);
 
       // Get the "Scale" property of the component
       const scaleParam = components[i].properties[1];
 
       // Set the new scale value
-      scaleParam.setValue(scale);
+      scaleParam.setValue(scale, true);
 
       return;
     }
