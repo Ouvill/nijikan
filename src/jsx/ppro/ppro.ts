@@ -366,6 +366,16 @@ export const alertTracks = () => {
   alert(nums.join(","));
 };
 
+export const selectFile = (prompt: string = "select file"): string => {
+  const filterString = "";
+  const file = File.openDialog(prompt, filterString, false);
+
+  if (file) {
+    return file.fsName;
+  }
+  return "";
+};
+
 export const selectMogrtFile = (): string => {
   const filterString = Folder.fs === "Windows" ? "mogrt:*.mogrt" : "";
   const file = File.openDialog("select mogrt file", filterString, false);
