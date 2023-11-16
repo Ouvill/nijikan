@@ -58,7 +58,7 @@ export const sandboxFunc = () => {
   eventObj.dispatch();
 };
 
-const importAudio = (bin: ProjectItem, path: string) => {
+const importFile = (bin: ProjectItem, path: string) => {
   const importOk = app.project.importFiles([path], true, bin, false);
   if (!importOk) return;
   return findItemByPath(bin, path);
@@ -266,7 +266,7 @@ export const insertCharacterTrackItems = ({
   let clips: TrackItem[] = [];
 
   // audio
-  const audioItem = importAudio(targetBin, voicePath);
+  const audioItem = importFile(targetBin, voicePath);
   if (!audioItem) return;
 
   const duration = getAudioDuration(audioItem);
