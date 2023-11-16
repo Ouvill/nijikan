@@ -3,7 +3,7 @@ type Store = {
 };
 
 export type Connection<S extends Record<string, any>> = {
-  get: <K extends keyof S>(key: K) => S[K];
+  get: <K extends keyof S>(key: K) => S[K] | undefined;
   set: <K extends keyof S>(key: K, value: S[K]) => void;
   clear: () => void;
 };

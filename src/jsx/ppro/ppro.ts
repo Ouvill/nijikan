@@ -1,55 +1,20 @@
 // Please do not write comments in Japanese.
 // I don't know why, but it stops working.
-import {
-  fillMogrtText,
-  findItemByPath,
-  forEachClip,
-  getParentItem,
-} from "./ppro-utils";
+import { fillMogrtText, findItemByPath, forEachClip } from "./ppro-utils";
 import { findOrCreateBin } from "./scripts/findOrCreateBin";
 import { getAudioDuration } from "./scripts/getDuration";
 import { checkInsertable } from "./scripts/checkInsertable";
-import { Connection, initCache } from "./scripts/cache";
-import { getTrackEndTime } from "./scripts/getTrackEndTime";
 import { linkClips } from "./scripts/linkClips";
 import { findClipByStartTime } from "./scripts/findClipByStartTime";
 import type { Character } from "../../js/main/ppro/store/settings/characters/type";
 import type { FeatureState } from "../../js/main/ppro/store/settings/feature/state";
 import { setClipMotionValue } from "./scripts/setClipMotionValue";
+import { ns } from "../../shared/shared";
+import { getMogrtProjectItem, mogrtStore } from "./scripts/mogrt";
 
 export { selectFolder } from "./scripts/selectFolder";
 export { checkBeforeInsert } from "./scripts/checkBeforeInsert";
 export const example = () => {};
-
-type MogrtStore = { [key: string]: string };
-const mogrtStore = initCache<MogrtStore>({});
-let mogrtBin: ProjectItem | undefined = undefined;
-
-function importMgtToProject(mogrtPath: string, store: Connection<MogrtStore>) {
-  const endTime = getTrackEndTime(app.project.activeSequence.videoTracks[0]);
-
-  const tmpMGT = app.project.activeSequence.importMGT(
-    mogrtPath,
-    endTime.ticks,
-    0,
-    0,
-  );
-  mogrtBin = getParentItem(tmpMGT.projectItem);
-  store.set(mogrtPath, tmpMGT.projectItem.getMediaPath());
-  const item = tmpMGT.projectItem;
-  tmpMGT.remove(false, false);
-  return item;
-}
-
-function getMogrtProjectItem(mogrtPath: string, store: Connection<MogrtStore>) {
-  if (store.get(mogrtPath) !== undefined && mogrtBin !== undefined) {
-    const item = findItemByPath(mogrtBin, store.get(mogrtPath));
-    if (item !== undefined) {
-      return item;
-    }
-  }
-  return importMgtToProject(mogrtPath, store);
-}
 
 export const sandboxFunc = () => {
   const eventObj = new CSXSEvent();
