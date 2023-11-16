@@ -30,6 +30,15 @@ export async function insertCharacterTrackItems(
   }
 
   if (
+    features.insertImage &&
+    character.imagePath !== "" &&
+    !fs.existsSync(character.imagePath)
+  ) {
+    alert("画像がありません");
+    return;
+  }
+
+  if (
     features.insertLipSync &&
     character.lipSyncMogrtPath !== "" &&
     !fs.existsSync(character.lipSyncMogrtPath)
