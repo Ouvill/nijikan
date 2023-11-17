@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Character } from "../../store/settings/characters/type";
 import { SubtitleCharacterConfig } from "./SubtitleCharacterConfig";
 import { LipSyncCharacterConfig } from "./LipSyncCharacterConfig";
@@ -16,10 +16,19 @@ export function CharacterConfig(props: {
     });
   };
 
-  const changeCharacterName = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [name, setName] = useState<string>(props.character.name);
+  useEffect(() => {
+    setName(props.character.name);
+  }, [props.character]);
+
+  const onChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  };
+
+  const onBlurName = (e: React.ChangeEvent<HTMLInputElement>) => {
     props.setCharacter({
       ...props.character,
-      name: e.target.value,
+      name: name,
     });
   };
 
@@ -33,8 +42,9 @@ export function CharacterConfig(props: {
               <p>名前</p>
               <input
                 className={"text-black"}
-                value={props.character.name}
-                onChange={changeCharacterName}
+                value={name}
+                onChange={onChangeName}
+                onBlur={onBlurName}
               />
             </div>
             <div className={"flex justify-between"}>
