@@ -29,7 +29,7 @@ export const FeatureConfig = () => {
   return (
     <div className={"flex flex-col gap-y-2"}>
       <div className={"flex justify-between"}>
-        <p>クリップをリンクする</p>
+        <p>字幕と音声をリンクする</p>
         <Switch
           onChange={onChangeLinkClip}
           checked={features.linkClips}
@@ -37,10 +37,7 @@ export const FeatureConfig = () => {
       </div>
       <div className={"flex justify-between"}>
         <p>立ち絵を挿入する</p>
-        <Switch
-          onChange={onChangeInsertImage}
-          checked={features.insertImage}
-        />
+        <Switch onChange={onChangeInsertImage} checked={features.insertImage} />
       </div>
       <div className={"flex justify-between"}>
         <p>口パクを挿入する</p>
