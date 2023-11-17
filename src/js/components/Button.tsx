@@ -4,7 +4,12 @@ type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   children: React.ReactNode;
 };
 
-const Button: React.FC<Props> = ({ children, className, ...props }) => (
+const Button: React.FC<Props> = ({
+  children,
+  className,
+  disabled,
+  ...props
+}) => (
   <button
     className={[
       "bg-gray-700 ",
@@ -14,9 +19,11 @@ const Button: React.FC<Props> = ({ children, className, ...props }) => (
       "px-4",
       "transition",
       " ",
+      disabled ? "opacity-50" : "",
       className || "",
     ].join(" ")}
     {...props}
+    disabled={disabled}
   >
     {children}
   </button>

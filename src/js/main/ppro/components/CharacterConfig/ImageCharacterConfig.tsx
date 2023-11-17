@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Character } from "../../store/settings/characters/type";
 import { evalTS } from "../../../../lib/utils/bolt";
 import { Switch } from "../../../../components/Switch";
+import { FaRegFolder } from "react-icons/fa6";
 
 type Props = {
   character: Character;
@@ -82,7 +83,7 @@ export const ImageCharacterConfig: React.FC<Props> = (props) => {
               onClick={onClickSelectImage}
               disabled={disabledSelectButton}
             >
-              ⚙️️
+              <FaRegFolder className={"h-6"}></FaRegFolder>
             </Button>
           </div>
         </div>

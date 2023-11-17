@@ -2,6 +2,7 @@ import { Character } from "../../store/settings/characters/type";
 import React, { useState } from "react";
 import { evalTS } from "../../../../lib/utils/bolt";
 import Button from "../../../../components/Button";
+import {FaRegFolder} from "react-icons/fa6";
 
 export function LipSyncCharacterConfig(props: {
   character: Character;
@@ -56,7 +57,7 @@ export function LipSyncCharacterConfig(props: {
               onClick={selectLipSyncMogrt}
               disabled={disabledSelectButton}
             >
-              ⚙️️
+              <FaRegFolder className={"h-6"}></FaRegFolder>
             </Button>
           </div>
         </div>
