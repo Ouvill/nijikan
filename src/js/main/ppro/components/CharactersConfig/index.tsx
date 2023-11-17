@@ -1,11 +1,13 @@
 import Button from "../../../../components/Button";
 import { CharacterConfig } from "../CharacterConfig";
-import React from "react";
+import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/useReduxHooks";
 import { characterCollectionSelector } from "../../store/selectors";
 import { useSelectCharacter } from "../../hooks/useSelectCharacter";
 import { Character } from "../../store/settings/characters/type";
 import { charactersActions } from "../../store/settings/characters";
+import { createPortal } from "react-dom";
+import { Modal } from "../../../../components/Modal";
 
 export const CharactersConfig = () => {
   const dispatch = useAppDispatch();
@@ -29,6 +31,11 @@ export const CharactersConfig = () => {
     return (character: Character) => {
       dispatch(charactersActions.updateCharacter({ characterId, character }));
     };
+  };
+
+  const [showModal, setShowModal] = useState(false);
+  const closeModal = () => {
+    setShowModal(false);
   };
 
   return (
@@ -60,7 +67,7 @@ export const CharactersConfig = () => {
               </div>
             </div>
           </label>
-          <div className={"flex justify-end my-2"}>
+          <div className={"flex justify-end mt-8"}>
             <Button onClick={onClickAddCharacter}>
               キャラクター設定を追加
             </Button>
@@ -77,10 +84,30 @@ export const CharactersConfig = () => {
       <div className={"flex justify-end my-4"}>
         <Button
           className={"bg-red-900 hover:bg-red-950 active:bg-red-950"}
-          onClick={onClickRemoveCharacter}
+          onClick={() => {
+            setShowModal(true);
+          }}
         >
           キャラクターを削除
         </Button>
+        {showModal &&
+          createPortal(
+            <Modal onClose={() => setShowModal(false)}>
+              <div className={"py-10 px-20"}>
+                <p>キャラクター設定を削除しますか</p>
+                <div className={"flex gap-4 justify-end"}>
+                  <Button
+                    className={"bg-red-900 hover:bg-red-950 active:bg-red-950"}
+                    onClick={onClickRemoveCharacter}
+                  >
+                    削除
+                  </Button>
+                  <Button onClick={closeModal}>キャンセル</Button>
+                </div>
+              </div>
+            </Modal>,
+            document.body,
+          )}
       </div>
     </div>
   );
