@@ -4,17 +4,11 @@ import { defaultState, State } from "./state";
 import Ajv from "ajv";
 import { getSavePath, readJsonFile } from "../libs/saveSettingsToJson";
 import { saveToJsonFile } from "./middleware/saveJsonFile";
+import { migration } from "./migration";
 
 const rootReducer = combineReducers({
   setting: setting,
 });
-
-const migration = (state: unknown): State => {
-  // add code when migration is needed
-  return {
-    ...defaultState,
-  };
-};
 
 const loadState = (): State | undefined => {
   const dataPath = getSavePath();
