@@ -3,6 +3,7 @@ import { evalTS } from "../../../../lib/utils/bolt";
 import React, { useState } from "react";
 import Button from "../../../../components/Button";
 import { FaRegFolder } from "react-icons/fa6";
+import {Input} from "../../../../components/Input/Input";
 
 export function SubtitleCharacterConfig(props: {
   character: Character;
@@ -62,7 +63,7 @@ export function SubtitleCharacterConfig(props: {
       </div>
       <div className={"flex justify-between"}>
         <p>字幕トラック番号</p>
-        <input
+        <Input
           className={"text-black"}
           type={"number"}
           value={props.character.subtitleTrackIndex + 1}
@@ -72,12 +73,12 @@ export function SubtitleCharacterConfig(props: {
       </div>
       <div className={"flex justify-between"}>
         <p>字幕のプロパティ名</p>
-        <input
+        <Input
           className={"text-black"}
           type={"text"}
           value={props.character.subtitleParamName}
           onChange={onChangeSubtitleParamName}
-        ></input>
+        ></Input>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import { Character } from "../../store/settings/characters/type";
 import { evalTS } from "../../../../lib/utils/bolt";
 import { Switch } from "../../../../components/Switch";
 import { FaRegFolder } from "react-icons/fa6";
+import {Input} from "../../../../components/Input/Input";
 
 type Props = {
   character: Character;
@@ -90,7 +91,7 @@ export const ImageCharacterConfig: React.FC<Props> = (props) => {
       </div>
       <div className={"flex justify-between"}>
         <p>キャラ画像トラック番号</p>
-        <input
+        <Input
           className={"text-black"}
           type={"number"}
           value={props.character.imageVidTrackIndex + 1}
@@ -103,7 +104,7 @@ export const ImageCharacterConfig: React.FC<Props> = (props) => {
         <div className={"flex flex-col gap-2"}>
           <div className={"flex gap-2"}>
             <p>X: </p>
-            <input
+            <Input
               type={"number"}
               className={"w-20 text-stone-900"}
               value={props.character.imagePosition.x}
@@ -112,18 +113,18 @@ export const ImageCharacterConfig: React.FC<Props> = (props) => {
           </div>
           <div className={"flex gap-2"}>
             <p>Y: </p>
-            <input
+            <Input
               type={"number"}
               className={"w-20 text-stone-900"}
               value={props.character.imagePosition.y}
               onChange={onChangeImagePositionY}
-            ></input>
+            ></Input>
           </div>
         </div>
       </div>
       <div className={"flex justify-between"}>
         <p>スケール</p>
-        <input
+        <Input
           className={"text-black"}
           type={"number"}
           value={props.character.imageScale}

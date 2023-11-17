@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { evalTS } from "../../../../lib/utils/bolt";
 import Button from "../../../../components/Button";
 import {FaRegFolder} from "react-icons/fa6";
+import {Input} from "../../../../components/Input/Input";
 
 export function LipSyncCharacterConfig(props: {
   character: Character;
@@ -65,7 +66,7 @@ export function LipSyncCharacterConfig(props: {
       <div className={"not-prose"}>
         <div className={"flex justify-between"}>
           <p>口パクトラック番号</p>
-          <input
+          <Input
             type={"number"}
             value={props.character.lipSyncVidTrackIndex + 1}
             className={"text-black"}

@@ -3,6 +3,7 @@ import { Character } from "../../store/settings/characters/type";
 import { SubtitleCharacterConfig } from "./SubtitleCharacterConfig";
 import { LipSyncCharacterConfig } from "./LipSyncCharacterConfig";
 import { ImageCharacterConfig } from "./ImageCharacterConfig";
+import {Input} from "../../../../components/Input/Input";
 
 export function CharacterConfig(props: {
   character: Character;
@@ -40,7 +41,7 @@ export function CharacterConfig(props: {
           <div className={"flex flex-col gap-2"}>
             <div className={"flex justify-between"}>
               <p>名前</p>
-              <input
+              <Input
                 className={"text-black"}
                 value={name}
                 onChange={onChangeName}
@@ -49,7 +50,7 @@ export function CharacterConfig(props: {
             </div>
             <div className={"flex justify-between"}>
               <p>音声トラック番号</p>
-              <input
+              <Input
                 className={"text-black"}
                 type={"number"}
                 value={props.character.voiceTrackIndex + 1}
