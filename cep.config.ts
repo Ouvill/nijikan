@@ -57,7 +57,7 @@ const config: CEP_Config = {
     jsxBin: "off",
   },
   installModules: ["chokidar"],
-  copyAssets: ["public"],
+  copyAssets: [""],
   copyZipAssets: [],
 };
 export default config;
