@@ -23,10 +23,19 @@ export function watchAddVoice(
       // 音声ファイルのみを対象にする
       if (!soundExt.includes(path.slice(-4))) return;
 
-      // キャラクターの名前が含まれているか
-      const targetChara = Object.values(characters).find((character) =>
-        path.includes(character.name),
-      );
+      // キャラクターに関連するファイルのみか判定
+      const targetChara = Object.values(characters).find((character) => {
+        if (character.regex) {
+          if (!character.regexStr) return false;
+          try {
+            new RegExp(character.regexStr).test(path);
+          } catch (e) {
+            return false;
+          }
+        } else {
+          return path.includes(character.name);
+        }
+      });
       if (!targetChara) return;
       callback(path, targetChara);
     });
