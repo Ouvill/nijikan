@@ -25,7 +25,7 @@ const PproApp = () => {
       <div className={"flex flex-col gap-4"}>
         <WatchFolder />
         <div className={"flex justify-end gap-2"}>
-          <Sandbox></Sandbox>
+          {process.env.NODE_ENV === "development" && <Sandbox></Sandbox>}
           <Button
             onClick={() => {
               if (page != "feature") {
