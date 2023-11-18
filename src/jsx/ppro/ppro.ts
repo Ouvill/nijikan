@@ -376,19 +376,6 @@ export const insertCharacterTrackItems = ({
   app.project.activeSequence.setPlayerPosition(audioClip.end.ticks);
 };
 
-export const importMogrt = (path: string) => {
-  const playerPosition = app.project.activeSequence.getPlayerPosition();
-  const clip = app.project.activeSequence.importMGT(
-    path,
-    playerPosition.ticks,
-    1,
-    0,
-  );
-
-  app.project.activeSequence.setPlayerPosition(clip.end.ticks);
-  fillMogrtText(clip, "data", "Hello World");
-};
-
 export const moveClip = (targetSec: number) => {
   const clip = app.project.activeSequence.getSelection()[0];
   const t = new Time();
@@ -397,17 +384,6 @@ export const moveClip = (targetSec: number) => {
   eTime.seconds = targetSec + 10;
   // @ts-ignore
   clip.move(t.seconds);
-};
-
-export const alertTracks = () => {
-  const clips = app.project.activeSequence.videoTracks[0].clips;
-  alert(clips.numItems.toString());
-  const num = clips.numItems;
-  const nums: string[] = [];
-  for (let i = 0; i < num; i++) {
-    nums.push(clips[i].name);
-  }
-  alert(nums.join(","));
 };
 
 export const selectFile = (prompt: string = "select file"): string => {
@@ -428,20 +404,6 @@ export const selectMogrtFile = (): string => {
     return file.fsName;
   }
   return "";
-};
-
-export const getAudioMediaPathAtTargetTrack = (trackIndex: number) => {
-  const clips = app.project.activeSequence.audioTracks[trackIndex].clips;
-  const num = clips.numItems;
-  const paths: string[] = [];
-  for (let i = 0; i < num; i++) {
-    const clip = clips[i];
-    const path = clip.projectItem.getMediaPath();
-    if (path) {
-      paths.push(path);
-    }
-  }
-  return paths;
 };
 
 export const insertLabMogrt = (
