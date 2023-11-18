@@ -3,6 +3,8 @@ import type { JSONSchemaType } from "ajv";
 export type Character = {
   id: string;
   name: string;
+  regex: boolean;
+  regexStr: string;
   subtitleMogrtPath: string;
   subtitleTrackIndex: number;
   subtitleParamName: string;
@@ -24,6 +26,8 @@ export const characterSchema: JSONSchemaType<Character> = {
   properties: {
     id: { type: "string" },
     name: { type: "string" },
+    regex: { type: "boolean" },
+    regexStr: { type: "string" },
     subtitleMogrtPath: { type: "string" },
     subtitleTrackIndex: { type: "number" },
     subtitleParamName: { type: "string" },

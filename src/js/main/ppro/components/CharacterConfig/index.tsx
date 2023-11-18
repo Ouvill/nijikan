@@ -3,7 +3,8 @@ import { Character } from "../../store/settings/characters/type";
 import { SubtitleCharacterConfig } from "./SubtitleCharacterConfig";
 import { LipSyncCharacterConfig } from "./LipSyncCharacterConfig";
 import { ImageCharacterConfig } from "./ImageCharacterConfig";
-import {Input} from "../../../../components/Input/Input";
+import { Input } from "../../../../components/Input/Input";
+import { Switch } from "../../../../components/Switch";
 
 export function CharacterConfig(props: {
   character: Character;
@@ -33,6 +34,27 @@ export function CharacterConfig(props: {
     });
   };
 
+  const [re, setRe] = useState<string>("");
+  useEffect(() => {
+    setRe(props.character.regexStr);
+  }, [props.character]);
+  const onChangeRe = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRe(e.target.value);
+  };
+  const onBlurRe = (e: React.ChangeEvent<HTMLInputElement>) => {
+    props.setCharacter({
+      ...props.character,
+      regexStr: re,
+    });
+  };
+
+  const onSwitchRegex = (e: React.ChangeEvent<HTMLInputElement>) => {
+    props.setCharacter({
+      ...props.character,
+      regex: e.target.checked,
+    });
+  };
+
   return (
     <div>
       <div className={"not-prose"}>
@@ -47,6 +69,22 @@ export function CharacterConfig(props: {
                 onChange={onChangeName}
                 onBlur={onBlurName}
               />
+            </div>
+            <div className={"flex justify-between"}>
+              <p>名前以外で音声検索</p>
+              <div className={"flex items-center gap-2"}>
+                <Switch
+                  checked={props.character.regex}
+                  onChange={onSwitchRegex}
+                ></Switch>
+                <Input
+                  className={"text-black"}
+                  value={re}
+                  onChange={onChangeRe}
+                  onBlur={onBlurRe}
+                  disabled={!props.character.regex}
+                ></Input>
+              </div>
             </div>
             <div className={"flex justify-between"}>
               <p>音声トラック番号</p>
