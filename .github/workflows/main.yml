@@ -3,7 +3,7 @@ name: ZXP Release
 on:
   push:
     tags:
-      - "*.*.*"
+      - "v*.*.*"
 
 permissions:
   contents: write
@@ -21,6 +21,8 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
+        env:
+          ZXP_SIGNING_PASSWORD: ${{ secrets.ZXP_SIGNING_PASSWORD }}
       - run: npm i --legacy-peer-deps
       - run: npm run zxp
 
@@ -33,4 +35,4 @@ jobs:
           SOURCE_BRANCH: ${{ steps.extract_names.outputs.SOURCE_BRANCH }}
           SOURCE_TAG: ${{ steps.extract_names.outputs.SOURCE_TAG }}
         with:
-          files: ./dist/zxp/com.bolt.cep.zxp
+          files: ./dist/zxp/net.ouvill.nijikan.zxp

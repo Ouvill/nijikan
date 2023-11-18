@@ -51,7 +51,7 @@ const config: CEP_Config = {
     country: "JP",
     province: "Tokyo",
     org: "Ouvill",
-    password: process.env.ZXP_PASSWORD || "mypassword",
+    password: process.env.ZXP_SIGNING_PASSWORD || "mypassword",
     tsa: "http://timestamp.digicert.com/",
     sourceMap: false,
     jsxBin: "off",
