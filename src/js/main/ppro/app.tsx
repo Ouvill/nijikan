@@ -21,7 +21,6 @@ const PproApp = () => {
 
   return (
     <div className={"mx-2 not-prose"}>
-      <h1>{host}</h1>
       <div className={"flex flex-col gap-4"}>
         <WatchFolder />
         <div className={"flex justify-end gap-2"}>
