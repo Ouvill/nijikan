@@ -5,6 +5,8 @@ import { WatchFolder } from "./components/WatchFolder";
 import { Sandbox } from "./components/Sandbox";
 import { CharactersConfig } from "./components/CharactersConfig";
 import { AppConfig } from "./components/AppConfig";
+import { useAppSelector } from "./hooks/useReduxHooks";
+import { watchFolderSelector } from "./store/selectors";
 
 type Pages = "index" | "feature" | "characters";
 
@@ -17,10 +19,21 @@ const PproApp = () => {
     setPage("index");
   };
 
+  const watchFolderState = useAppSelector(watchFolderSelector);
+
   return (
     <div className={"mx-2 not-prose"}>
       <div className={"flex flex-col gap-4"}>
         <WatchFolder />
+        <div
+          className={[
+            watchFolderState.isWatching ? "" : "invisible",
+            "flex",
+            "justify-end",
+          ].join(" ")}
+        >
+          <p>設定を変更するときはボイス監視を無効にしてください</p>
+        </div>
         <div className={"flex justify-end gap-2"}>
           {process.env.NODE_ENV === "development" && <Sandbox></Sandbox>}
           <Button
@@ -31,12 +44,21 @@ const PproApp = () => {
                 closePage();
               }
             }}
-            className={`${page === "feature" ? "bg-gray-800" : ""}`}
+            className={`${
+              page === "feature" && !watchFolderState.isWatching
+                ? "bg-gray-800"
+                : ""
+            }`}
+            disabled={watchFolderState.isWatching}
           >
             アプリ設定
           </Button>
           <Button
-            className={`${page === "characters" ? "bg-gray-800" : ""}`}
+            className={`${
+              page === "characters" && !watchFolderState.isWatching
+                ? "bg-gray-800"
+                : ""
+            }`}
             onClick={() => {
               if (page != "characters") {
                 openPage("characters");
@@ -44,13 +66,14 @@ const PproApp = () => {
                 closePage();
               }
             }}
+            disabled={watchFolderState.isWatching}
           >
             キャラクター設定
           </Button>
         </div>
       </div>
 
-      {page === "feature" && (
+      {page === "feature" && !watchFolderState.isWatching && (
         <div className={"flex flex-col my-4 gap-2"}>
           <p>アプリ設定</p>
           <AppConfig />
@@ -59,7 +82,7 @@ const PproApp = () => {
           </div>
         </div>
       )}
-      {page === "characters" && (
+      {page === "characters" && !watchFolderState.isWatching && (
         <div className={"flex flex-col my-4 gap-2"}>
           <CharactersConfig />
           <div className={"flex justify-end"}>

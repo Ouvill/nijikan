@@ -18,3 +18,7 @@
 ::-webkit-scrollbar-thumb:hover {
     background-color: #454545;
 }
+
+body {
+    overflow-y: scroll;
+}
