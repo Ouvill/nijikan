@@ -1,4 +1,3 @@
-import { csi } from "../../lib/utils/bolt";
 import React, { useState } from "react";
 
 import Button from "../../components/Button";
@@ -10,7 +9,6 @@ import { AppConfig } from "./components/AppConfig";
 type Pages = "index" | "feature" | "characters";
 
 const PproApp = () => {
-  const host = csi.hostEnvironment.appName;
   const [page, setPage] = useState<Pages>("index");
   const openPage = (page: Pages) => {
     setPage(page);

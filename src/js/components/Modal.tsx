@@ -1,3 +1,4 @@
+import React from "react";
 import { getAppBackgroundColor } from "../lib/utils/bolt";
 
 type Props = {

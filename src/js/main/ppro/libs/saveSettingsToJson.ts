@@ -24,7 +24,7 @@ const ensureDirectoryExistence = (filePath: string) => {
     fs.mkdirSync(dir, { recursive: true });
   }
 };
-export const saveDataToJsonFile = (data: any, path: string) => {
+export const saveDataToJsonFile = (data: object, path: string) => {
   ensureDirectoryExistence(path);
   const jsonString = JSON.stringify(data);
   fs.writeFileSync(path, jsonString);

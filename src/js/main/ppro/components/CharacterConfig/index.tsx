@@ -27,7 +27,7 @@ export function CharacterConfig(props: {
     setName(e.target.value);
   };
 
-  const onBlurName = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onBlurName = () => {
     props.setCharacter({
       ...props.character,
       name: name,
@@ -41,7 +41,7 @@ export function CharacterConfig(props: {
   const onChangeRe = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRe(e.target.value);
   };
-  const onBlurRe = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onBlurRe = () => {
     props.setCharacter({
       ...props.character,
       regexStr: re,

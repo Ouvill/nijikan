@@ -1,3 +1,4 @@
+import React from "react";
 import { Layer, Psd, readPsd } from "ag-psd";
 import { useRef, useState } from "react";
 import { evalTS } from "../../lib/utils/bolt";
@@ -25,15 +26,15 @@ const Aeft = () => {
   const [psd, setPsd] = useState<Psd | null>(null);
 
   //再帰的に読み込む
-  const printLayerName = (psd: Psd | Layer) => {
-    psd.children?.forEach((child) => {
-      console.log(child.name);
-
-      if (child.children != null) {
-        printLayerName(child);
-      }
-    });
-  };
+  // const printLayerName = (psd: Psd | Layer) => {
+  //   psd.children?.forEach((child) => {
+  //     console.log(child.name);
+  //
+  //     if (child.children != null) {
+  //       printLayerName(child);
+  //     }
+  //   });
+  // };
 
   const addPsdCanvas = (psd: Psd) => {
     if (psdRef.current != null && psd.canvas != null) {
