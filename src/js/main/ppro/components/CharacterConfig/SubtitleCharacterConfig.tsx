@@ -3,7 +3,7 @@ import { evalTS } from "../../../../lib/utils/bolt";
 import React, { useState } from "react";
 import Button from "../../../../components/Button";
 import { FaRegFolder } from "react-icons/fa6";
-import {Input} from "../../../../components/Input/Input";
+import { Input } from "../../../../components/Input/Input";
 
 export function SubtitleCharacterConfig(props: {
   character: Character;
@@ -14,7 +14,7 @@ export function SubtitleCharacterConfig(props: {
     setDisabledSelectButton(true);
     const mogrtPath = await evalTS("selectMogrtFile");
     setDisabledSelectButton(false);
-    if (mogrtPath !== "") {
+    if (mogrtPath !== "" && typeof mogrtPath === "string") {
       props.setCharacter({
         ...props.character,
         subtitleMogrtPath: mogrtPath,

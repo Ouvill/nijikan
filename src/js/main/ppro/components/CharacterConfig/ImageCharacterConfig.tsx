@@ -4,7 +4,7 @@ import { Character } from "../../store/settings/characters/type";
 import { evalTS } from "../../../../lib/utils/bolt";
 import { Switch } from "../../../../components/Switch";
 import { FaRegFolder } from "react-icons/fa6";
-import {Input} from "../../../../components/Input/Input";
+import { Input } from "../../../../components/Input/Input";
 
 type Props = {
   character: Character;
@@ -17,7 +17,7 @@ export const ImageCharacterConfig: React.FC<Props> = (props) => {
     setDisabledSelectButton(true);
     const imagePath = await evalTS("selectFile", "画像を選択してください");
     setDisabledSelectButton(false);
-    if (imagePath !== "") {
+    if (imagePath !== "" && typeof imagePath === "string") {
       props.setCharacter({
         ...props.character,
         imagePath: imagePath,

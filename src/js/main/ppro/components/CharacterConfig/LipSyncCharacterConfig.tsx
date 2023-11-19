@@ -24,7 +24,7 @@ export function LipSyncCharacterConfig(props: {
     const path = await evalTS("selectMogrtFile");
     setDisabledSelectButton(false);
 
-    if (path !== "") {
+    if (path !== "" && typeof path === "string") {
       props.setCharacter({
         ...props.character,
         lipSyncMogrtPath: path,
