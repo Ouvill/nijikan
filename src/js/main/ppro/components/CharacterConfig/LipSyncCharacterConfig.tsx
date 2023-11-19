@@ -32,17 +32,17 @@ export function LipSyncCharacterConfig(props: {
     }
   };
 
-  const insertLipSyncMogrt = async () => {
-    if (props.character.lipSyncMogrtPath === "") return;
-    evalTS(
-      "insertLabMogrt",
-      props.character.lipSyncMogrtPath,
-      props.character.lipSyncVidTrackIndex,
-      props.character.voiceTrackIndex,
-    ).catch((e) => {
-      alert(e.message);
-    });
-  };
+  // const insertLipSyncMogrt = async () => {
+  //   if (props.character.lipSyncMogrtPath === "") return;
+  //   evalTS(
+  //     "insertLabMogrt",
+  //     props.character.lipSyncMogrtPath,
+  //     props.character.lipSyncVidTrackIndex,
+  //     props.character.voiceTrackIndex,
+  //   ).catch((e) => {
+  //     alert(e.message);
+  //   });
+  // };
 
   return (
     <div className={"flex flex-col gap-2"}>

@@ -2,6 +2,8 @@ import React from "react";
 
 type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   children: React.ReactNode;
+  className?: string;
+  disabled?: boolean;
 };
 
 const Button: React.FC<Props> = ({

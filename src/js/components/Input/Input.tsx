@@ -1,4 +1,8 @@
-export type InputBaseProps = React.InputHTMLAttributes<HTMLInputElement> & {};
+import React from "react";
+
+export type InputBaseProps = React.InputHTMLAttributes<HTMLInputElement> & {
+  className?: string;
+};
 
 export const Input: React.FC<InputBaseProps> = ({ className, ...props }) => {
   return (

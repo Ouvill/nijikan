@@ -1,3 +1,4 @@
+import React from "react";
 import { SelectWatchFolder } from "./SelectWatchFolder";
 import { useAppSelector } from "../../hooks/useReduxHooks";
 import { watchFolderSelector } from "../../store/selectors";
