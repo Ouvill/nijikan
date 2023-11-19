@@ -48,7 +48,7 @@ export function LipSyncCharacterConfig(props: {
     <div className={"flex flex-col gap-2"}>
       <h2>口パク制御</h2>
       <div className={"flex justify-between items-center gap-4"}>
-        <p>字幕MOGRT</p>
+        <p>口パクMOGRT</p>
         <div className={"min-w-0"}>
           <div className={"flex items-center gap-2"}>
             <p className={"min-w-0 break-words text-xs"}>
