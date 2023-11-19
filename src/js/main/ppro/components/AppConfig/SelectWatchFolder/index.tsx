@@ -3,6 +3,7 @@ import { watchFolderActions } from "../../../store/settings/watchFolder";
 import Button from "../../../../../components/Button";
 import React from "react";
 import { WatchFolderState } from "../../../store/settings/watchFolder/state";
+import { FaRegFolder } from "react-icons/fa6";
 
 export function SelectWatchFolder(props: {
   watchFolderState: WatchFolderState;
@@ -43,7 +44,9 @@ export function SelectWatchFolder(props: {
       <p className={"min-w-0 text-xs text-right break-words"}>
         {props.watchFolderState.path}
       </p>
-      <Button onClick={onClickSelectFolder}>フォルダ選択</Button>
+      <Button onClick={onClickSelectFolder}>
+        <FaRegFolder className={"h-6"}></FaRegFolder>
+      </Button>
     </div>
   );
 }
