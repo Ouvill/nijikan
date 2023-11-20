@@ -1,0 +1,2 @@
+creation_rules:
+  - gcp_kms: projects/nijikan/locations/global/keyRings/sops/cryptoKeys/sops-key
