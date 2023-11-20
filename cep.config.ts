@@ -1,5 +1,6 @@
 import { CEP_Config } from "vite-cep-plugin";
 import { version } from "./package.json";
+import { password } from "./credential.json";
 
 const config: CEP_Config = {
   version,
@@ -56,7 +57,7 @@ const config: CEP_Config = {
     country: "JP",
     province: "Tokyo",
     org: "Ouvill",
-    password: "mypassword",
+    password: password,
     tsa: "http://timestamp.digicert.com/",
     sourceMap: false,
     jsxBin: "off",
