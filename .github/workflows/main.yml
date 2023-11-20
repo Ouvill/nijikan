@@ -27,8 +27,8 @@ jobs:
       - id: auth
         uses: 'google-github-actions/auth@v1'
         with:
-          workload_identity_provider: 'projects/567953453821/locations/global/workloadIdentityPools/github-action-pool/providers/github'
-          service_account: 'github-action@nijikan.iam.gserviceaccount.com'
+          workload_identity_provider: '/projects/215457846208/locations/global/workloadIdentityPools/github-action-pool/providers/github'
+          service_account: 'nijikan-github-actions@workload-identity-405716.iam.gserviceaccount.com'
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v1'
       - name: Install SOPS
