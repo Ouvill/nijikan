@@ -12,17 +12,39 @@ jobs:
   build:
     runs-on: windows-latest
 
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
     strategy:
       matrix:
         node-version: [18.x]
+
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+
+      # Decrypt encrypted file
+      - id: auth
+        uses: 'google-github-actions/auth@v1'
+        with:
+          workload_identity_provider: 'projects/567953453821/locations/global/workloadIdentityPools/github-action-pool/providers/github'
+          service_account: 'github-action@nijikan.iam.gserviceaccount.com'
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v1'
+      - name: Install SOPS
+        run: |
+          curl -L -O https://github.com/getsops/sops/releases/download/v3.8.1/sops-v3.8.1.exe
+          mv sops-v3.8.1.exe sops.exe
+      - name: Decrypt file
+        shell: bash
+        run: |
+          ./sops.exe -d credential.enc.json > credential.json
+        
+      # Build ZXP
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-        env:
-          ZXP_SIGNING_PASSWORD: ${{ secrets.ZXP_SIGNING_PASSWORD }}
       - run: npm i --legacy-peer-deps
       - run: npm run zxp
 
