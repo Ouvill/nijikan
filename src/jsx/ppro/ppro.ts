@@ -386,7 +386,11 @@ export const insertCharacterTrackItems = ({
       trackIndex: character.subtitleTrackIndex,
     }).clip;
     if (!subtitleMogrtClip) return;
+    // fill text
     fillMogrtText(subtitleMogrtClip, character.subtitleParamName, subtitle);
+    // rename clip
+    subtitleMogrtClip.name =
+      subtitle.length > 20 ? subtitle.slice(0, 20) : subtitle;
 
     if (features.linkSubtitleClip) {
       clips.push(subtitleMogrtClip);
