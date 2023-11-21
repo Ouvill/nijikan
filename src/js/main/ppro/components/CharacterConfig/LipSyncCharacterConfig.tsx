@@ -56,7 +56,7 @@ export function LipSyncCharacterConfig(props: {
             <div className={"min-w-0"}>
               <div className={"flex items-center gap-2"}>
                 <p className={"min-w-0 break-words text-xs"}>
-                  {props.character.subtitleMogrtPath}
+                  {props.character.lipSyncMogrtPath}
                 </p>
                 <Button
                   onClick={selectLipSyncMogrt}
