@@ -280,7 +280,10 @@ export const insertCharacterTrackItems = ({
     }).clip;
     if (!subtitleMogrtClip) return;
     fillMogrtText(subtitleMogrtClip, character.subtitleParamName, subtitle);
-    clips.push(subtitleMogrtClip);
+
+    if (features.linkSubtitleClip) {
+      clips.push(subtitleMogrtClip);
+    }
   }
   // image
   if (
@@ -326,6 +329,10 @@ export const insertCharacterTrackItems = ({
         index,
         ComponentMatchName.HorizontalFlip,
       );
+    }
+
+    if (features.linkImageClip) {
+      clips.push(imageClip);
     }
   }
 
@@ -379,12 +386,15 @@ export const insertCharacterTrackItems = ({
         ComponentMatchName.HorizontalFlip,
       );
     }
+
+    if (features.linkLipSyncClip) {
+      clips.push(lipSyncMogrtClip);
+    }
   }
 
   // link clips
-  if (features.linkSubtitleClip) {
-    linkClips(clips, seq);
-  }
+  linkClips(clips, seq);
+
   app.project.activeSequence.setPlayerPosition(audioClip.end.ticks);
 };
 
