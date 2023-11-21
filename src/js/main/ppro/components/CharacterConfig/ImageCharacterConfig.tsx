@@ -71,8 +71,8 @@ export const ImageCharacterConfig: React.FC<Props> = (props) => {
   };
 
   return (
-    <div className={"flex flex-col gap-2"}>
-      <h2>キャラ画像</h2>
+    <div className={"flex flex-col gap-2 border p-2"}>
+      <h2 className={"text-xl"}>キャラ画像</h2>
       <div className={"flex justify-between items-center gap-4"}>
         <p>キャラ画像パス</p>
         <div className={"min-w-0"}>
@@ -125,7 +125,7 @@ export const ImageCharacterConfig: React.FC<Props> = (props) => {
       <div className={"flex justify-between"}>
         <p>スケール</p>
         <Input
-          className={"text-black"}
+          className={"w-20 text-black"}
           type={"number"}
           value={props.character.imageScale}
           min={0}

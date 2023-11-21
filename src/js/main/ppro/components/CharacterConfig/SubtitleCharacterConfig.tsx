@@ -43,8 +43,8 @@ export function SubtitleCharacterConfig(props: {
   };
 
   return (
-    <div className={"flex flex-col gap-2"}>
-      <h2>字幕設定</h2>
+    <div className={"flex flex-col gap-2 border p-2"}>
+      <h2 className={"text-xl"}>字幕設定</h2>
       <div className={"flex justify-between items-center gap-4"}>
         <p>字幕MOGRT</p>
         <div className={"min-w-0"}>

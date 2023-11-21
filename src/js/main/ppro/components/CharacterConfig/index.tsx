@@ -58,9 +58,10 @@ export function CharacterConfig(props: {
   return (
     <div>
       <div className={"not-prose"}>
-        <p>キャラクター設定</p>
+        <p className={"text-2xl mb-4"}>キャラクター設定</p>
         <div className={"flex flex-col gap-4"}>
-          <div className={"flex flex-col gap-2"}>
+          <div className={"flex flex-col gap-2 border p-2"}>
+            <p className={"text-xl"}>基本設定</p>
             <div className={"flex justify-between"}>
               <p>名前</p>
               <Input
