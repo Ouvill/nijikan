@@ -257,29 +257,37 @@ export const insertCharacterTrackItems = ({
   clips.push(audioClip);
 
   // subtitle
-  let subtitleMogrtItem: ProjectItem;
-  try {
-    subtitleMogrtItem = getMogrtProjectItem(
-      character.subtitleMogrtPath,
-      mogrtStore,
-    );
-  } catch (e) {
-    return;
+  if (
+    features.insertSubtitle &&
+    character.enableSubtitle &&
+    character.subtitleMogrtPath
+  ) {
+    let subtitleMogrtItem: ProjectItem;
+    try {
+      subtitleMogrtItem = getMogrtProjectItem(
+        character.subtitleMogrtPath,
+        mogrtStore,
+      );
+    } catch (e) {
+      return;
+    }
+    const subtitleMogrtClip = insertVideoToSequence({
+      overwriteTrack: features.overwriteTrack,
+      targetTime: playerPosition,
+      videoItem: subtitleMogrtItem,
+      duration,
+      trackIndex: character.subtitleTrackIndex,
+    }).clip;
+    if (!subtitleMogrtClip) return;
+    fillMogrtText(subtitleMogrtClip, character.subtitleParamName, subtitle);
+    clips.push(subtitleMogrtClip);
   }
-
-  const subtitleMogrtClip = insertVideoToSequence({
-    overwriteTrack: features.overwriteTrack,
-    targetTime: playerPosition,
-    videoItem: subtitleMogrtItem,
-    duration,
-    trackIndex: character.subtitleTrackIndex,
-  }).clip;
-  if (!subtitleMogrtClip) return;
-  fillMogrtText(subtitleMogrtClip, character.subtitleParamName, subtitle);
-  clips.push(subtitleMogrtClip);
-
   // image
-  if (features.insertImage && character.imagePath !== "") {
+  if (
+    features.insertImage &&
+    character.enableImage &&
+    character.imagePath !== ""
+  ) {
     const extensionBin = findOrCreateBin(ns.split(".").slice(-1)[0]);
     let image = findItemByPath(extensionBin, character.imagePath);
     if (image === undefined) {
@@ -322,7 +330,11 @@ export const insertCharacterTrackItems = ({
   }
 
   // lip sync
-  if (features.insertLipSync && character.lipSyncMogrtPath) {
+  if (
+    features.insertLipSync &&
+    character.enableLipSync &&
+    character.lipSyncMogrtPath
+  ) {
     let lipSyncMogrtItem: ProjectItem;
     try {
       lipSyncMogrtItem = getMogrtProjectItem(

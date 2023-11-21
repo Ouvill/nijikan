@@ -14,23 +14,29 @@ export async function insertCharacterTrackItems(
   });
   if (!isOk) return;
 
-  if (!fs.existsSync(character.subtitleMogrtPath)) {
-    alert("字幕のモーショングラフィックステンプレートがありません");
-    return;
-  }
-
-  let subtitle;
-  try {
-    const subtitlePath = replaceExt(voicePath, ".txt");
-    const b = await fs.promises.readFile(subtitlePath);
-    subtitle = b.toString();
-  } catch (e) {
-    alert("字幕ファイルの読み取りに失敗しました");
-    return;
+  let subtitle = "";
+  if (
+    features.insertSubtitle &&
+    character.enableSubtitle &&
+    character.subtitleMogrtPath !== ""
+  ) {
+    if (!fs.existsSync(character.subtitleMogrtPath)) {
+      alert("字幕のモーショングラフィックステンプレートがありません");
+      return;
+    }
+    try {
+      const subtitlePath = replaceExt(voicePath, ".txt");
+      const b = await fs.promises.readFile(subtitlePath);
+      subtitle = b.toString();
+    } catch (e) {
+      alert("字幕ファイルの読み取りに失敗しました");
+      return;
+    }
   }
 
   if (
     features.insertImage &&
+    character.enableImage &&
     character.imagePath !== "" &&
     !fs.existsSync(character.imagePath)
   ) {
@@ -38,25 +44,27 @@ export async function insertCharacterTrackItems(
     return;
   }
 
+  let lab = "";
   if (
     features.insertLipSync &&
-    character.lipSyncMogrtPath !== "" &&
-    !fs.existsSync(character.lipSyncMogrtPath)
+    character.enableLipSync &&
+    character.lipSyncMogrtPath !== ""
   ) {
-    alert("口パクのモーショングラフィックステンプレートがありません");
-    return;
-  }
-  let lab = "";
-  try {
-    if (features.insertLipSync) {
+    if (!fs.existsSync(character.lipSyncMogrtPath)) {
+      alert("口パクのモーショングラフィックステンプレートがありません");
+      return;
+    }
+
+    try {
       const lipSyncPath = replaceExt(voicePath, ".lab");
       const b = await fs.promises.readFile(lipSyncPath);
       lab = b.toString();
+    } catch (e) {
+      alert("labファイルの読み取りに失敗しました");
+      return;
     }
-  } catch (e) {
-    alert("labファイルの読み取りに失敗しました");
-    return;
   }
+
   evalTS("insertCharacterTrackItems", {
     voicePath,
     character,
