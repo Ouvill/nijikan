@@ -256,35 +256,6 @@ export const insertCharacterTrackItems = ({
   if (!audioClip) return;
   clips.push(audioClip);
 
-  // subtitle
-  if (
-    features.insertSubtitle &&
-    character.enableSubtitle &&
-    character.subtitleMogrtPath
-  ) {
-    let subtitleMogrtItem: ProjectItem;
-    try {
-      subtitleMogrtItem = getMogrtProjectItem(
-        character.subtitleMogrtPath,
-        mogrtStore,
-      );
-    } catch (e) {
-      return;
-    }
-    const subtitleMogrtClip = insertVideoToSequence({
-      overwriteTrack: features.overwriteTrack,
-      targetTime: playerPosition,
-      videoItem: subtitleMogrtItem,
-      duration,
-      trackIndex: character.subtitleTrackIndex,
-    }).clip;
-    if (!subtitleMogrtClip) return;
-    fillMogrtText(subtitleMogrtClip, character.subtitleParamName, subtitle);
-
-    if (features.linkSubtitleClip) {
-      clips.push(subtitleMogrtClip);
-    }
-  }
   // image
   if (
     features.insertImage &&
@@ -389,6 +360,36 @@ export const insertCharacterTrackItems = ({
 
     if (features.linkLipSyncClip) {
       clips.push(lipSyncMogrtClip);
+    }
+  }
+
+  // subtitle
+  if (
+    features.insertSubtitle &&
+    character.enableSubtitle &&
+    character.subtitleMogrtPath
+  ) {
+    let subtitleMogrtItem: ProjectItem;
+    try {
+      subtitleMogrtItem = getMogrtProjectItem(
+        character.subtitleMogrtPath,
+        mogrtStore,
+      );
+    } catch (e) {
+      return;
+    }
+    const subtitleMogrtClip = insertVideoToSequence({
+      overwriteTrack: features.overwriteTrack,
+      targetTime: playerPosition,
+      videoItem: subtitleMogrtItem,
+      duration,
+      trackIndex: character.subtitleTrackIndex,
+    }).clip;
+    if (!subtitleMogrtClip) return;
+    fillMogrtText(subtitleMogrtClip, character.subtitleParamName, subtitle);
+
+    if (features.linkSubtitleClip) {
+      clips.push(subtitleMogrtClip);
     }
   }
 
