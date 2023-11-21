@@ -93,9 +93,9 @@ function overwriteVideoClip(
   trackIndex: number,
 ) {
   // @ts-ignore
-  const originInPoint: Time = videoItem.getInPoint(1);
+  const originInPoint: Time = videoItem.getInPoint();
   // @ts-ignore
-  const originOutPoint: Time = videoItem.getOutPoint(1);
+  const originOutPoint: Time = videoItem.getOutPoint();
   const zeroTime = new Time();
   zeroTime.seconds = 0;
 
