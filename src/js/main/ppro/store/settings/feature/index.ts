@@ -5,6 +5,9 @@ const feature = createSlice({
   name: "setting/feature",
   initialState: featureDefaultState,
   reducers: {
+    setMovePlayerPosition: (state, action: PayloadAction<boolean>) => {
+      state.movePlayerPosition = action.payload;
+    },
     setOverwriteTrack: (state, action: PayloadAction<boolean>) => {
       state.overwriteTrack = action.payload;
     },

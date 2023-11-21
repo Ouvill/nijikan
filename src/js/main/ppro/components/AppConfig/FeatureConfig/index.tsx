@@ -19,6 +19,12 @@ export const FeatureConfig = () => {
       },
       [dispatch],
     );
+    const onChangeMovePlayerPosition = useCallback(
+      (event: React.ChangeEvent<HTMLInputElement>) => {
+        dispatch(featureActions.setMovePlayerPosition(event.target.checked));
+      },
+      [dispatch],
+    );
 
   const onChangeOverwriteTrack = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(featureActions.setOverwriteTrack(e.target.checked));
@@ -36,47 +42,57 @@ export const FeatureConfig = () => {
       dispatch(featureActions.setInsertLipSync(e.target.checked));
     };
 
-  return (
-    <div className={"flex flex-col gap-y-2"}>
-      <div className={"flex justify-between hover:bg-gray-600"}>
-        <p>字幕と音声をリンクする</p>
-        <Switch
-          onChange={onChangeLinkSubtitleClip}
-          checked={features.linkSubtitleClip}
-        ></Switch>
+    return (
+      <div className={"flex flex-col gap-y-2"}>
+        <div className={"flex justify-between hover:bg-gray-600"}>
+          <p>字幕と音声をリンクする</p>
+          <Switch
+            onChange={onChangeLinkSubtitleClip}
+            checked={features.linkSubtitleClip}
+          ></Switch>
+        </div>
+        <div className={"flex justify-between hover:bg-gray-600"}>
+          <p>立ち絵を挿入する</p>
+          <Switch
+            onChange={onChangeInsertImage}
+            checked={features.insertImage}
+          />
+        </div>
+        <div className={"flex justify-between hover:bg-gray-600 "}>
+          <p>立ち絵を音声にリンクする</p>
+          <Switch
+            onChange={onChangeLinkImage}
+            checked={features.linkImageClip}
+          ></Switch>
+        </div>
+        <div className={"flex justify-between hover:bg-gray-600 "}>
+          <p>口パクを挿入する</p>
+          <Switch
+            onChange={onChangeInsertLipSync}
+            checked={features.insertLipSync}
+          />
+        </div>
+        <div className={"flex justify-between hover:bg-gray-600 "}>
+          <p>口パクを音声にリンクする</p>
+          <Switch
+            onChange={onChangeLinkLypSync}
+            checked={features.linkLipSyncClip}
+          />
+        </div>
+        <div className={"flex justify-between hover:bg-gray-600 "}>
+          <p>トラックを上書きする</p>
+          <Switch
+            onChange={onChangeOverwriteTrack}
+            checked={features.overwriteTrack}
+          ></Switch>
+        </div>
+        <div className={"flex justify-between hover:bg-gray-600"}>
+          <p>挿入後再生位置を移動する</p>
+          <Switch
+            onChange={onChangeMovePlayerPosition}
+            checked={features.movePlayerPosition}
+          ></Switch>
+        </div>
       </div>
-      <div className={"flex justify-between hover:bg-gray-600"}>
-        <p>立ち絵を挿入する</p>
-        <Switch onChange={onChangeInsertImage} checked={features.insertImage} />
-      </div>
-      <div className={"flex justify-between hover:bg-gray-600 "}>
-        <p>立ち絵を音声にリンクする</p>
-        <Switch
-          onChange={onChangeLinkImage}
-          checked={features.linkImageClip}
-        ></Switch>
-      </div>
-      <div className={"flex justify-between hover:bg-gray-600 "}>
-        <p>口パクを挿入する</p>
-        <Switch
-          onChange={onChangeInsertLipSync}
-          checked={features.insertLipSync}
-        />
-      </div>
-      <div className={"flex justify-between hover:bg-gray-600 "}>
-        <p>口パクを音声にリンクする</p>
-        <Switch
-          onChange={onChangeLinkLypSync}
-          checked={features.linkLipSyncClip}
-        />
-      </div>
-      <div className={"flex justify-between hover:bg-gray-600 "}>
-        <p>トラックを上書きする</p>
-        <Switch
-          onChange={onChangeOverwriteTrack}
-          checked={features.overwriteTrack}
-        ></Switch>
-      </div>
-    </div>
-  );
+    );
 };

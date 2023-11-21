@@ -395,7 +395,9 @@ export const insertCharacterTrackItems = ({
   // link clips
   linkClips(clips, seq);
 
-  app.project.activeSequence.setPlayerPosition(audioClip.end.ticks);
+  if (features.movePlayerPosition) {
+    app.project.activeSequence.setPlayerPosition(audioClip.end.ticks);
+  }
 };
 
 export const moveClip = (targetSec: number) => {

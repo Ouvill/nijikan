@@ -1,6 +1,7 @@
 import { JSONSchemaType } from "ajv";
 
 export type FeatureState = {
+  movePlayerPosition: boolean;
   overwriteTrack: boolean;
   insertVoice: boolean;
   insertSubtitle: boolean;
@@ -12,6 +13,7 @@ export type FeatureState = {
 };
 
 export const featureDefaultState: FeatureState = {
+  movePlayerPosition: true,
   overwriteTrack: false,
   insertVoice: true,
   insertSubtitle: true,
@@ -25,6 +27,7 @@ export const featureDefaultState: FeatureState = {
 export const featureSchema: JSONSchemaType<FeatureState> = {
   type: "object",
   properties: {
+    movePlayerPosition: { type: "boolean" },
     overwriteTrack: { type: "boolean" },
     insertVoice: { type: "boolean" },
     insertSubtitle: { type: "boolean" },
@@ -35,6 +38,7 @@ export const featureSchema: JSONSchemaType<FeatureState> = {
     linkLipSyncClip: { type: "boolean" },
   },
   required: [
+    "movePlayerPosition",
     "overwriteTrack",
     "insertVoice",
     "insertSubtitle",
