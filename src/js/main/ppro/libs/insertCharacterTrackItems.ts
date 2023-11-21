@@ -3,6 +3,7 @@ import { evalTS } from "../../../lib/utils/bolt";
 import { fs } from "../../../lib/cep/node";
 import { replaceExt } from "./replaceExt";
 import { FeatureState } from "../store/settings/feature/state";
+import { retry } from "./retry";
 
 export async function insertCharacterTrackItems(
   voicePath: string,
@@ -26,7 +27,7 @@ export async function insertCharacterTrackItems(
     }
     try {
       const subtitlePath = replaceExt(voicePath, ".txt");
-      const b = await fs.promises.readFile(subtitlePath);
+      const b = await retry(() => fs.promises.readFile(subtitlePath), 5, 100);
       subtitle = b.toString();
     } catch (e) {
       alert("字幕ファイルの読み取りに失敗しました");
@@ -57,7 +58,7 @@ export async function insertCharacterTrackItems(
 
     try {
       const lipSyncPath = replaceExt(voicePath, ".lab");
-      const b = await fs.promises.readFile(lipSyncPath);
+      const b = await retry(() => fs.promises.readFile(lipSyncPath), 5, 100);
       lab = b.toString();
     } catch (e) {
       alert("labファイルの読み取りに失敗しました");
