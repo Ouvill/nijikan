@@ -2,7 +2,12 @@ import { Connection, initCache } from "./cache";
 import { getTrackEndTime } from "./getTrackEndTime";
 import { findItemByPath, getParentItem } from "../ppro-utils";
 
-type MogrtStore = { [key: string]: string };
+type MogrtStore = {
+  [key: string]: {
+    projectMogrtPath: string;
+    originModified: Date;
+  };
+};
 export const mogrtStore = initCache<MogrtStore>({});
 
 type BinStore = { [key: string]: ProjectItem };
@@ -21,11 +26,18 @@ function importMgtToProject(mogrtPath: string, store: Connection<MogrtStore>) {
     0,
     0,
   );
+  // cache mogrt bin
   const mogrtBin = getParentItem(tmpMGT.projectItem);
   mogrtBins.set(app.project.documentID, mogrtBin);
 
+  // cache project mogrt path
   const key = cacheKey(mogrtPath);
-  store.set(key, tmpMGT.projectItem.getMediaPath());
+  const modified = new File(mogrtPath).modified;
+
+  store.set(key, {
+    projectMogrtPath: tmpMGT.projectItem.getMediaPath(),
+    originModified: modified,
+  });
   const item = tmpMGT.projectItem;
   tmpMGT.remove(false, false);
   return item;
@@ -35,14 +47,22 @@ export function getMogrtProjectItem(
   mogrtPath: string,
   store: Connection<MogrtStore>,
 ) {
+  // check cache
   const key = cacheKey(mogrtPath);
-  const cachedPath = store.get(key);
+  const cacheData = store.get(key);
   const mogrtBin = mogrtBins.get(app.project.documentID);
-  if (cachedPath !== undefined && mogrtBin !== undefined) {
-    const item = findItemByPath(mogrtBin, cachedPath);
-    if (item !== undefined) {
-      return item;
+  if (cacheData !== undefined && mogrtBin !== undefined) {
+    // check modified
+    const modified = new File(mogrtPath).modified;
+    if (modified.getTime() > cacheData.originModified.getTime()) {
+      return importMgtToProject(mogrtPath, store);
+    } else {
+      const item = findItemByPath(mogrtBin, cacheData.projectMogrtPath);
+      if (item !== undefined) {
+        return item;
+      }
     }
   }
+  // cache not found
   return importMgtToProject(mogrtPath, store);
 }
