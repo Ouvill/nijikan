@@ -40,13 +40,16 @@ export function SelectWatchFolder(props: {
   };
 
   return (
-    <div className={"flex justify-between items-center gap-2"}>
-      <p className={"min-w-0 text-xs text-right break-words"}>
-        {props.watchFolderState.path}
-      </p>
-      <Button onClick={onClickSelectFolder}>
-        <FaRegFolder className={"h-6"}></FaRegFolder>
-      </Button>
+    <div className={"flex justify-between items-center gap-4"}>
+      <p>監視フォルダ</p>
+      <div className={"min-w-0 flex items-center gap-2"}>
+        <p className={"min-w-0 text-xs text-right break-words"}>
+          {props.watchFolderState.path}
+        </p>
+        <Button onClick={onClickSelectFolder}>
+          <FaRegFolder className={"h-6"}></FaRegFolder>
+        </Button>
+      </div>
     </div>
   );
 }
