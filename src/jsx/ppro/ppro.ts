@@ -382,7 +382,7 @@ export const insertCharacterTrackItems = ({
   }
 
   // link clips
-  if (features.linkClips) {
+  if (features.linkSubtitleClip) {
     linkClips(clips, seq);
   }
   app.project.activeSequence.setPlayerPosition(audioClip.end.ticks);

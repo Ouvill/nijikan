@@ -11,8 +11,8 @@ const feature = createSlice({
     setInsertLipSync(state, action: PayloadAction<boolean>) {
       state.insertLipSync = action.payload;
     },
-    setLinkClips(state, action: PayloadAction<boolean>) {
-      state.linkClips = action.payload;
+    setLinkSubtitleClip(state, action: PayloadAction<boolean>) {
+      state.linkSubtitleClip = action.payload;
     },
     setInsertImage(state, action: PayloadAction<boolean>) {
       state.insertImage = action.payload;

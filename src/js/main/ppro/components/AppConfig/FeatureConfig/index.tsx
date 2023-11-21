@@ -9,7 +9,7 @@ export const FeatureConfig = () => {
   const features = useAppSelector(featureSelector);
   const onChangeLinkClip = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      dispatch(featureActions.setLinkClips(event.target.checked));
+        dispatch(featureActions.setLinkSubtitleClip(event.target.checked));
     },
     [dispatch],
   );
@@ -32,7 +32,7 @@ export const FeatureConfig = () => {
         <p>字幕と音声をリンクする</p>
         <Switch
           onChange={onChangeLinkClip}
-          checked={features.linkClips}
+          checked={features.linkSubtitleClip}
         ></Switch>
       </div>
       <div className={"flex justify-between"}>
