@@ -44,8 +44,8 @@ export const CharactersConfig = () => {
         <div className={"flex flex-col"}>
           <label>
             <div className={""}>
-              <p>キャラクター選択</p>
-              <div className={"grid grid-cols-3 gap-0.5"}>
+              <p className={"text-2xl"}>キャラクター選択</p>
+              <div className={"grid grid-cols-3 gap-0.5 mt-2"}>
                 {Object.entries(characters).map(([id, character]) => (
                   <div
                     key={id}

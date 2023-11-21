@@ -75,7 +75,7 @@ const PproApp = () => {
 
       {page === "feature" && !watchFolderState.isWatching && (
         <div className={"flex flex-col my-4 gap-2"}>
-          <p>アプリ設定</p>
+          <p className={"text-2xl"}>アプリ設定</p>
           <AppConfig />
           <div className={"flex justify-end"}>
             <Button onClick={closePage}>閉じる</Button>
