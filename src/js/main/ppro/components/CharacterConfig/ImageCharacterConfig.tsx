@@ -70,75 +70,93 @@ export const ImageCharacterConfig: React.FC<Props> = (props) => {
     });
   };
 
+  const onChangeImageSwitch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    props.setCharacter({
+      ...props.character,
+      enableImage: e.target.checked,
+    });
+  };
+
   return (
     <div className={"flex flex-col gap-2 border p-2"}>
-      <h2 className={"text-xl"}>キャラ画像</h2>
-      <div className={"flex justify-between items-center gap-4"}>
-        <p>キャラ画像パス</p>
-        <div className={"min-w-0"}>
-          <div className={"flex items-center gap-2"}>
-            <p className={"min-w-0 break-words text-xs"}>
-              {props.character.imagePath}
-            </p>
-            <Button
-              onClick={onClickSelectImage}
-              disabled={disabledSelectButton}
-            >
-              <FaRegFolder className={"h-6"}></FaRegFolder>
-            </Button>
-          </div>
-        </div>
+      <div className={"flex justify-between items-center"}>
+        <h2 className={"text-xl"}>キャラ画像</h2>
+        <Switch
+          checked={props.character.enableImage}
+          onChange={onChangeImageSwitch}
+        ></Switch>
       </div>
-      <div className={"flex justify-between"}>
-        <p>キャラ画像トラック番号</p>
-        <Input
-          className={"text-black"}
-          type={"number"}
-          value={props.character.imageVidTrackIndex + 1}
-          min={1}
-          onChange={onChangeImageTrackIndex}
-        />
-      </div>
-      <div className={"flex justify-between"}>
-        <p>位置</p>
+
+      {props.character.enableImage && (
         <div className={"flex flex-col gap-2"}>
-          <div className={"flex gap-2"}>
-            <p>X: </p>
+          <div className={"flex justify-between items-center gap-4"}>
+            <p>キャラ画像パス</p>
+            <div className={"min-w-0"}>
+              <div className={"flex items-center gap-2"}>
+                <p className={"min-w-0 break-words text-xs"}>
+                  {props.character.imagePath}
+                </p>
+                <Button
+                  onClick={onClickSelectImage}
+                  disabled={disabledSelectButton}
+                >
+                  <FaRegFolder className={"h-6"}></FaRegFolder>
+                </Button>
+              </div>
+            </div>
+          </div>
+          <div className={"flex justify-between"}>
+            <p>キャラ画像トラック番号</p>
             <Input
+              className={"text-black"}
               type={"number"}
-              className={"w-20 text-stone-900"}
-              value={props.character.imagePosition.x}
-              onChange={onChangeImagePositionX}
+              value={props.character.imageVidTrackIndex + 1}
+              min={1}
+              onChange={onChangeImageTrackIndex}
             />
           </div>
-          <div className={"flex gap-2"}>
-            <p>Y: </p>
+          <div className={"flex justify-between"}>
+            <p>位置</p>
+            <div className={"flex flex-col gap-2"}>
+              <div className={"flex gap-2"}>
+                <p>X: </p>
+                <Input
+                  type={"number"}
+                  className={"w-20 text-stone-900"}
+                  value={props.character.imagePosition.x}
+                  onChange={onChangeImagePositionX}
+                />
+              </div>
+              <div className={"flex gap-2"}>
+                <p>Y: </p>
+                <Input
+                  type={"number"}
+                  className={"w-20 text-stone-900"}
+                  value={props.character.imagePosition.y}
+                  onChange={onChangeImagePositionY}
+                ></Input>
+              </div>
+            </div>
+          </div>
+          <div className={"flex justify-between"}>
+            <p>スケール</p>
             <Input
+              className={"w-20 text-black"}
               type={"number"}
-              className={"w-20 text-stone-900"}
-              value={props.character.imagePosition.y}
-              onChange={onChangeImagePositionY}
-            ></Input>
+              value={props.character.imageScale}
+              min={0}
+              onChange={onChangeScale}
+            />
+          </div>
+          <div className={"flex justify-between"}>
+            <p>左右反転</p>
+            <Switch
+              checked={props.character.imageHorizontalFlip}
+              onChange={onChangeHorizontalFlip}
+            />
           </div>
         </div>
-      </div>
-      <div className={"flex justify-between"}>
-        <p>スケール</p>
-        <Input
-          className={"w-20 text-black"}
-          type={"number"}
-          value={props.character.imageScale}
-          min={0}
-          onChange={onChangeScale}
-        />
-      </div>
-      <div className={"flex justify-between"}>
-        <p>左右反転</p>
-        <Switch
-          checked={props.character.imageHorizontalFlip}
-          onChange={onChangeHorizontalFlip}
-        />
-      </div>
+      )}
     </div>
   );
 };
