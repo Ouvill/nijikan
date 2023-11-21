@@ -50,7 +50,7 @@ export function LipSyncCharacterConfig(props: {
         ></Switch>
       </div>
       {props.character.enableLipSync && (
-        <div>
+        <div className={"flex flex-col gap-2"}>
           <div className={"flex justify-between items-center gap-4"}>
             <p>口パクMOGRT</p>
             <div className={"min-w-0"}>
