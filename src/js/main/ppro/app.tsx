@@ -22,7 +22,7 @@ const PproApp = () => {
   const watchFolderState = useAppSelector(watchFolderSelector);
 
   return (
-    <div className={"mx-2 not-prose"}>
+    <div className={"mx-2 not-prose mt-4"}>
       <div className={"flex flex-col gap-4"}>
         <WatchFolder />
         <div
