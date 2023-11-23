@@ -40,12 +40,17 @@ jobs:
 
       # Build ZXP
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm i --legacy-peer-deps
       - run: npm run zxp
 
+      - name: Upload ZXP
+        uses: actions/upload-artifact@v3
+        with:
+          name: zxp
+          path: ./dist/zxp/net.ouvill.nijikan.zxp
       - name: GitHub Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
