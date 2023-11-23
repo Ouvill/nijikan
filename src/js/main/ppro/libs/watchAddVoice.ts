@@ -26,10 +26,11 @@ export function watchAddVoice(
       // キャラクターに関連するファイルのみか判定
       const targetChara = Object.values(characters).find((character) => {
         if (character.regex) {
-          if (!character.regexStr) return false;
+          if (character.regexStr == "") return false;
           try {
-            new RegExp(character.regexStr).test(path);
+            return new RegExp(character.regexStr).test(path);
           } catch (e) {
+            alert(`${character.name}の検索が不正です。`);
             return false;
           }
         } else {
