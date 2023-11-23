@@ -4,21 +4,19 @@ on:
   push:
     tags:
       - "v*.*.*"
-
-permissions:
-  contents: write
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-latest
 
     permissions:
-      contents: 'read'
+      contents: 'write'
       id-token: 'write'
 
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [ 18.x ]
 
     steps:
       - uses: actions/checkout@v4
@@ -39,7 +37,7 @@ jobs:
         shell: bash
         run: |
           ./sops.exe -d credential.enc.json > credential.json
-        
+
       # Build ZXP
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
