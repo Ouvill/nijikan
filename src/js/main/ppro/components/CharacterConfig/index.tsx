@@ -72,7 +72,7 @@ export function CharacterConfig(props: {
               />
             </div>
             <div className={"flex justify-between"}>
-              <p>名前以外で音声検索</p>
+              <p>名前以外でファイル検索(正規表現)</p>
               <div className={"flex items-center gap-2"}>
                 <Switch
                   checked={props.character.regex}
