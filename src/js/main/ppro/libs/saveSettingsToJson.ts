@@ -14,13 +14,11 @@ export const readJsonFile = (filePath: string) => {
 export const getSavePath = () => {
   // win : %USERPROFILE%\AppData\Roaming\%
   const userDataFolder: string = csi.getSystemPath("userData");
-  return path.join(userDataFolder, config.displayName, "data.json");
+  return path.join(userDataFolder, config.displayName, "config.json");
 };
 const ensureDirectoryExistence = (filePath: string) => {
   const dir = path.dirname(filePath);
-  try {
-    fs.existsSync(dir);
-  } catch {
+  if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
   }
 };
