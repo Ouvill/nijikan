@@ -211,7 +211,7 @@ function insertVideoToSequence({
       trackIndex,
     );
     if (targetIndex === -1) {
-      targetIndex = seq.audioTracks.numTracks;
+      targetIndex = seq.videoTracks.numTracks;
       addVideoTrack(1, targetIndex);
     }
     return {
