@@ -46,28 +46,28 @@ const overwriteAudioClip = (
   }
 };
 
-const searchInsertableAudioTrack = (
+const searchInsertableTrack = (
   targetTime: Time,
   duration: Time,
   defaultIndex: number,
-) => {
-  const num = app.project.activeSequence.audioTracks.numTracks;
+  trackType: "audioTracks" | "videoTracks",
+): number => {
+  const num = app.project.activeSequence[trackType].numTracks;
   for (let i = defaultIndex; i < num; i++) {
-    const track = app.project.activeSequence.audioTracks[i];
+    const track = app.project.activeSequence[trackType][i];
     if (checkInsertable(targetTime, duration, track) !== -1) {
       return i;
     }
   }
-
   return -1;
 };
 
-const haveEnoughAudioTrack = (seq: Sequence, trackIndex: number) => {
-  return seq.audioTracks.numTracks > trackIndex;
-};
-
-const haveEnoughVideoTrack = (seq: Sequence, trackIndex: number) => {
-  return seq.videoTracks.numTracks > trackIndex;
+const haveEnoughTrack = (
+  seq: Sequence,
+  trackIndex: number,
+  trackType: "audioTracks" | "videoTracks",
+) => {
+  return seq[trackType].numTracks > trackIndex;
 };
 
 const addAudioTrack = (numAudio: number, audioIndex: number) => {
@@ -138,7 +138,7 @@ function insertAudioToSequence({
   const seq = app.project.activeSequence;
 
   // add audio track if needed
-  if (!haveEnoughAudioTrack(seq, trackIndex)) {
+  if (!haveEnoughTrack(seq, trackIndex, "audioTracks")) {
     const numAudio = trackIndex - seq.audioTracks.numTracks + 1;
     addAudioTrack(numAudio, seq.audioTracks.numTracks);
   }
@@ -146,10 +146,11 @@ function insertAudioToSequence({
   if (overwriteTrack) {
     return overwriteAudioClip(audioItem, targetTime, trackIndex);
   } else {
-    let targetIndex = searchInsertableAudioTrack(
+    let targetIndex = searchInsertableTrack(
       targetTime,
       duration,
       trackIndex,
+      "audioTracks",
     );
     if (targetIndex === -1) {
       targetIndex = seq.audioTracks.numTracks;
@@ -157,22 +158,6 @@ function insertAudioToSequence({
     }
     return overwriteAudioClip(audioItem, targetTime, targetIndex);
   }
-}
-
-function searchInsertableVideoTrack(
-  targetTime: Time,
-  duration: Time,
-  defaultIndex: number,
-): number {
-  const num = app.project.activeSequence.videoTracks.numTracks;
-  for (let i = defaultIndex; i < num; i++) {
-    const track = app.project.activeSequence.videoTracks[i];
-    if (checkInsertable(targetTime, duration, track) !== -1) {
-      return i;
-    }
-  }
-
-  return -1;
 }
 
 function insertVideoToSequence({
@@ -194,7 +179,7 @@ function insertVideoToSequence({
   const seq = app.project.activeSequence;
 
   // add audio track if needed
-  if (!haveEnoughVideoTrack(seq, trackIndex)) {
+  if (!haveEnoughTrack(seq, trackIndex, "videoTracks")) {
     const needTrackNum = trackIndex - seq.videoTracks.numTracks + 1;
     addVideoTrack(needTrackNum, seq.videoTracks.numTracks);
   }
@@ -205,10 +190,11 @@ function insertVideoToSequence({
       trackIndex: trackIndex,
     };
   } else {
-    let targetIndex = searchInsertableVideoTrack(
+    let targetIndex = searchInsertableTrack(
       targetTime,
       duration,
       trackIndex,
+      "videoTracks",
     );
     if (targetIndex === -1) {
       targetIndex = seq.videoTracks.numTracks;
