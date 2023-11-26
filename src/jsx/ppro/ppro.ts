@@ -16,6 +16,8 @@ import { ns } from "../../shared/shared";
 import { getMogrtProjectItem, mogrtStore } from "./scripts/mogrt";
 import { applyEffect } from "./scripts/qe/applyEffect";
 import { ComponentMatchName } from "./constant";
+import { JsxError, Result } from "./scripts/results";
+import { JsxErrors } from "./scripts/jsxErrors";
 
 export { selectFolder } from "./scripts/selectFolder";
 export { checkBeforeInsert } from "./scripts/checkBeforeInsert";
@@ -219,7 +221,7 @@ export const insertCharacterTrackItems = ({
   features: FeatureState;
   subtitle: string;
   lab: string;
-}) => {
+}): Result<void, JsxError> => {
   const seq = app.project.activeSequence;
   const playerPosition = seq.getPlayerPosition();
   const targetBin = findOrCreateBin("voice");
@@ -227,10 +229,11 @@ export const insertCharacterTrackItems = ({
 
   // audio
   const audioItem = importFile(targetBin, voicePath);
-  if (!audioItem) return;
+  // ファイルの読み込みにエラーが発生しました
+  if (!audioItem) return { isSuccess: false, error: JsxErrors.ImportFileError };
 
   const duration = getAudioDuration(audioItem);
-  if (!duration) return;
+  if (!duration) return { isSuccess: false, error: JsxErrors.GetDurationError };
 
   const audioClip = insertAudioToSequence({
     overwriteTrack: features.overwriteTrack,
@@ -239,7 +242,7 @@ export const insertCharacterTrackItems = ({
     duration,
     trackIndex: character.voiceTrackIndex,
   });
-  if (!audioClip) return;
+  if (!audioClip) return { isSuccess: false, error: JsxErrors.InsertError };
   clips.push(audioClip);
 
   // image
@@ -253,7 +256,7 @@ export const insertCharacterTrackItems = ({
     if (image === undefined) {
       image = importFile(extensionBin, character.imagePath);
     }
-    if (!image) return;
+    if (!image) return { isSuccess: false, error: JsxErrors.ImportFileError };
 
     // insert image to sequence
     const insertedImageInfo = insertVideoToSequence({
@@ -266,7 +269,7 @@ export const insertCharacterTrackItems = ({
     const imageClip = insertedImageInfo.clip;
 
     // set position & scale
-    if (!imageClip) return;
+    if (!imageClip) return { isSuccess: false, error: JsxErrors.InsertError };
     setClipMotionValue({
       seq: app.project.activeSequence,
       clip: imageClip,
@@ -280,7 +283,8 @@ export const insertCharacterTrackItems = ({
         app.project.activeSequence.videoTracks[insertedImageInfo.trackIndex],
         playerPosition,
       );
-      if (index === -1) return;
+      if (index === -1)
+        return { isSuccess: false, error: JsxErrors.ApplyEffectError };
       applyEffect(
         insertedImageInfo.trackIndex,
         index,
@@ -306,7 +310,7 @@ export const insertCharacterTrackItems = ({
         mogrtStore,
       );
     } catch (e) {
-      return;
+      return { isSuccess: false, error: JsxErrors.ImportMogrtError };
     }
 
     const insertedLipSyncMogrtInfo = insertVideoToSequence({
@@ -317,7 +321,11 @@ export const insertCharacterTrackItems = ({
       trackIndex: character.lipSyncVidTrackIndex,
     });
     const lipSyncMogrtClip = insertedLipSyncMogrtInfo.clip;
-    if (!lipSyncMogrtClip) return;
+    if (!lipSyncMogrtClip)
+      return {
+        isSuccess: false,
+        error: JsxErrors.InsertError,
+      };
     fillMogrtText(lipSyncMogrtClip, "lab", lab);
 
     // set position & scale
@@ -336,7 +344,8 @@ export const insertCharacterTrackItems = ({
         ],
         playerPosition,
       );
-      if (index === -1) return;
+      if (index === -1)
+        return { isSuccess: false, error: JsxErrors.ApplyEffectError };
       applyEffect(
         insertedLipSyncMogrtInfo.trackIndex,
         index,
@@ -362,7 +371,7 @@ export const insertCharacterTrackItems = ({
         mogrtStore,
       );
     } catch (e) {
-      return;
+      return { isSuccess: false, error: JsxErrors.ImportMogrtError };
     }
     const subtitleMogrtClip = insertVideoToSequence({
       overwriteTrack: features.overwriteTrack,
@@ -371,7 +380,8 @@ export const insertCharacterTrackItems = ({
       duration,
       trackIndex: character.subtitleTrackIndex,
     }).clip;
-    if (!subtitleMogrtClip) return;
+    if (!subtitleMogrtClip)
+      return { isSuccess: false, error: JsxErrors.InsertError };
     // fill text
     fillMogrtText(subtitleMogrtClip, character.subtitleParamName, subtitle);
     // rename clip
@@ -389,6 +399,7 @@ export const insertCharacterTrackItems = ({
   if (features.movePlayerPosition) {
     app.project.activeSequence.setPlayerPosition(audioClip.end.ticks);
   }
+  return { isSuccess: true, value: undefined };
 };
 
 export const moveClip = (targetSec: number) => {

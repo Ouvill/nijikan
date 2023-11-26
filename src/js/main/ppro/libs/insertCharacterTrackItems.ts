@@ -72,7 +72,13 @@ export async function insertCharacterTrackItems(
     features,
     subtitle,
     lab,
-  }).catch((e) => {
-    alert(e.message);
-  });
+  })
+    .then((result) => {
+      if (!result.isSuccess) {
+        alert(result.error.message);
+      }
+    })
+    .catch((e) => {
+      alert(e.message);
+    });
 }
