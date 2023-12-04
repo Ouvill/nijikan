@@ -4,7 +4,7 @@ type Props = Omit<React.ButtonHTMLAttributes<HTMLInputElement>, "type"> & {
   checked: boolean;
 };
 
-export const Switch: React.FC<Props> = ({ className, ...props }) => {
+export const Switch: React.FC<Props> = ({ className, checked, ...props }) => {
   return (
     <label
       className={[
@@ -15,7 +15,7 @@ export const Switch: React.FC<Props> = ({ className, ...props }) => {
         "rounded-2xl",
         "cursor-pointer",
         "transition",
-        props.checked ? "bg-green-500 " : "bg-gray-600",
+        checked ? "bg-green-500 " : "bg-gray-600",
         "after:absolute",
         "after:top-0",
         "after:left-0",
@@ -26,11 +26,11 @@ export const Switch: React.FC<Props> = ({ className, ...props }) => {
         "after:bg-white",
         "after:content-['']",
         "after:transition-all",
-        props.checked ? "after:left-6" : "",
+        checked ? "after:left-6" : "",
         className ?? "",
       ].join(" ")}
     >
-      <input type="checkbox" className="hidden" {...props} />
+      <input type="checkbox" className="hidden" checked={checked} {...props} />
     </label>
   );
 };
