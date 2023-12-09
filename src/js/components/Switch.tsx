@@ -1,10 +1,15 @@
 import React from "react";
 
-type Props = Omit<React.ButtonHTMLAttributes<HTMLInputElement>, "type"> & {
+type Props = Omit<React.InputHTMLAttributes<HTMLInputElement>, "type"> & {
   checked: boolean;
 };
 
-export const Switch: React.FC<Props> = ({ className, checked, ...props }) => {
+export const Switch: React.FC<Props> = ({
+  className,
+  checked,
+  onChange,
+  ...props
+}) => {
   return (
     <label
       className={[
@@ -30,7 +35,13 @@ export const Switch: React.FC<Props> = ({ className, checked, ...props }) => {
         className ?? "",
       ].join(" ")}
     >
-      <input type="checkbox" className="hidden" checked={checked} {...props} />
+      <input
+        type="checkbox"
+        className="hidden"
+        checked={checked}
+        onChange={onChange}
+        {...props}
+      />
     </label>
   );
 };
